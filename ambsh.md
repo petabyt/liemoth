@@ -4,6 +4,7 @@ cameras. You can often run Ambsh code with an autoexec.ash file in the
 root directory of the SD card.
 
 ## Reserved Keywords:
+```
 IF
 FI
 WHILE
@@ -13,6 +14,7 @@ DONE
 ELSE
 DO
 THEN
+```
 
 ## Syntax
 - For strings, always use single quotes.
@@ -37,20 +39,25 @@ done
 ```
 
 ## Conditions
-true/false also seem to be commands.
+`if` tests the return value of a command.  
+True and false are both commands.
 ```
 if true; then
 	echo Hello, world
 else
 	echo Goodbye
 fi
-
-if false; then
-	echo This will not show
+```
+When a command returns an error, this means  
+it should return false.
+```
+if rm foo.txt; then
+	echo Failed to remove foo.txt
 fi
 ```
 
 ## Pipes
+```
 >>
 <<
 >
@@ -58,10 +65,12 @@ fi
 &
 |
 ```
+
+```
 echo Hello, World >> foo.txt
 echo 'Hi' > foo.txt # buggy
 ```
 
 ## Variables
-I couldn't find any evidence for variables in ambsh.
+I couldn't find any evidence for variables in ambsh.  
 `foo=1` return a syntax error.
