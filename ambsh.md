@@ -1,7 +1,7 @@
 # Ambsh Unofficial Documentation
 Ambsh/Ambashell is a programming language built into Ambarella based  
-cameras. They can often be run with an autoexec.ash file on the root
-of the SD card.
+cameras. You can often run Ambsh code with an autoexec.ash file in the  
+root directory of the SD card.
 
 ## Reserved Keywords:
 IF
