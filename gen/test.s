@@ -1,0 +1,2 @@
+# Crash test
+b .
