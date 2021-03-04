@@ -52,7 +52,9 @@ When a command returns an error, this means
 it should return false.
 ```
 if rm foo.txt; then
-	echo Failed to remove foo.txt
+	echo Removed foo.txt
+else
+	echo Can't remove foo.txt
 fi
 ```
 
