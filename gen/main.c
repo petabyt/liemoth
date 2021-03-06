@@ -39,12 +39,7 @@ void writeBin(char file[], long location) {
 }
 
 int main() {
-	// Hack some text
-	genUnicode("Hello", MEM_TITLE1);
-
-	// Write assembly
-	writeBin("test.o", MEM_PRINT);
-
-	// Trigger invalid command, crash
-	printf("poopies\n");
+	// Inject assembly into cardmgr command
+	writeBin("test.o", MEM_CARDMGR);
+	printf("cardmgr\n");
 }
