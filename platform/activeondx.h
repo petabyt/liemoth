@@ -16,8 +16,13 @@ Activeon DX forum: https://www.goprawn.com/forum/ambarella-cams/363-isaw-extreme
 // Code triggered on invalid command
 #define MEM_PRINT 0xc0273a00
 
-// Code a bunch of prints run with "cardmgr"
-#define MEM_CARDMGR 0xc012d5d8
+// Run on command "cardmgr", a bunch of prints
+#define MEM_CARDMGR 0xc012d5d4
 
-// Attempt payload location
+// Attempt payload location ?
 #define MEM_LOAD 0xc0273860
+
+// Command exec location?
+#define MEM_EXEC 0xc026e4b8
+
+#define PRINTF 0xc0272996

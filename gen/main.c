@@ -41,5 +41,6 @@ void writeBin(char file[], long location) {
 int main() {
 	// Inject assembly into cardmgr command
 	writeBin("test.o", MEM_CARDMGR);
-	printf("cardmgr\n");
+	printf("touch fart\n");
+	printf("cardmgr >> fart\n");
 }

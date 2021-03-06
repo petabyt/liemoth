@@ -4,8 +4,8 @@ Unofficial documentation and hacks for Ambarella based cameras.
 [Extensive AmbaShell/Ambsh Documentation](ambsh.md)  
 
 ## Autoexec generator
-In gen/, there is some code that generates autoexec.ash files that mess with  
-the camera's memory.  
+In gen/, there is some code that generates autoexec.ash files that inject  
+assembly into the camera's memory.
 
 ## Other
 - Currently, I'm working with the Activeon DX, but I also have a Gopro Hero 3+.  
@@ -15,4 +15,7 @@ the camera's memory.
 - Extensive Ambsh documentation
 - Magic lantern like program (written in C)
 - Quick introduction document to Ambarella software/hardware
-- Ambsh interpreter
+- Ambsh interpreter/minimizer (with macros and stuff?)
+
+# TODO/help needed:
+- Better build system (with make)

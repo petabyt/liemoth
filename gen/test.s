@@ -1,9 +1,12 @@
-# Load address of menu text
-ldr r0, =0xc156bea6
-mov r1, #'A'
+.thumb
+.global _start
 
-# Store r1 into address in r0
-strb r1, [r0]
+_start:
+	
+	adr r1, foo
+	bl 0xc0272996 @ printf
 
-# Hack an early return.
-pop {r4, pc}
+	@ Hack an early return.
+	pop {r4, pc}
+
+foo: .string "Hey Vsauce, Michael here"
