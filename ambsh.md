@@ -76,4 +76,39 @@ echo 'Hi' > foo.txt # buggy
 
 ## Variables
 I couldn't find any evidence for variables in ambsh.  
-`foo=1` return a syntax error.
+`foo=1` return a syntax error. You could in theory use  
+writeb and getb, but you don't have any way of testing it.  
+
+## Standard Commands
+These commands are common on all platforms.
+```
+cardmgr
+cat
+chdir
+chmod
+cleandir
+copy
+date
+dmesg
+echo
+format
+fwprog
+help
+hotboot
+list
+ls
+mkdir
+move
+ntfl
+priv
+ps
+pwd
+reboot
+rm
+rw
+savebin
+sleep
+suspend
+ver
+vol
+```

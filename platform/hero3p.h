@@ -1,8 +1,8 @@
 /*
 Gopro Hero 3+
-Firmware: https://device-firmware.gp-static.com/11/HD3.11/camera_fw/03.03/UPDATE.zip
-3.03
-
+	Firmware Version 3.03
+	Firmware: https://device-firmware.gp-static.com/11/HD3.11/camera_fw/03.03/UPDATE.zip
+	
 */
 
 #define P_NAME "GoPro Hero 3+"

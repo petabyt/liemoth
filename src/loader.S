@@ -6,13 +6,12 @@
 .global _start
 
 _start:
-	// r0 has r4, env
-	adr r1, fart
+	adr r1, foo
+	b a
 	bl AMBSH_PRINTF
-
-	bl MEM_MAIN
+	a:
 		
 	// Hack an early return.
 	pop {r4, pc}
-
-fart: .string "Hey vsauce, michael here. Or am I?\n"
+.byte 0, 0 // Function padding required
+foo: .string ":-)"
