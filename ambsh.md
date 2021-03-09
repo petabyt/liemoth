@@ -22,6 +22,7 @@ THEN
 - Use `#` for comments.
 - Spaces not required (?) `echo'Hello, World'`
 
+- File MUST end with trailing newline, then EOF.
 
 ## Loops
 ```

@@ -1,5 +1,9 @@
 #include <stdio.h>
-#include "../platform/activeondx.h"
+
+// Default platform
+#ifndef P_NAME
+	#include "../platform/activeondx.h"
+#endif
 
 // Generate a unicode string at address.
 // (seperated by spaces)
@@ -25,6 +29,7 @@ void writeBytes(short opcode[], long location) {
 void writeBin(char file[], long location) {
 	FILE *reader = fopen(file, "r");
 	if (reader == NULL) {
+		printf("# FILE %s NOT FOUND!", file);
 		return;
 	}
 	
@@ -38,9 +43,28 @@ void writeBin(char file[], long location) {
 	fclose(reader);
 }
 
+void writeFile(char file[]) {
+	FILE *reader = fopen(file, "r");
+	if (reader == NULL) {
+		printf("# FILE %s NOT FOUND!", file);
+		return;
+	}
+	
+	int c = fgetc(reader);
+	while (!feof(reader)) {
+		putchar((char)c);
+		c = fgetc(reader);
+	}
+
+	fclose(reader);
+}
+
+// 0xc0000000
+
 int main() {
 	// Inject assembly into cardmgr command
-	writeBin("test.o", MEM_CARDMGR);
-	printf("touch fart\n");
-	printf("cardmgr >> fart\n");
+	writeBin("loader.o", MEM_LOADER);
+	writeBin("main.o", MEM_MAIN);
+	puts("touch fart");
+	puts("cardmgr >> fart");	
 }

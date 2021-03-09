@@ -5,7 +5,7 @@ Download: https://mega.nz/file/SzhRHQDD#pWM_ITpojXTpYEMiKPsm67UROwmpjCg-XZg7kvAi
 Activeon DX forum: https://www.goprawn.com/forum/ambarella-cams/363-isaw-extreme-actionpro-x7-activeon-dx-a7-imx117
 */
 
-#define MEM_BASE 0xc0000000
+#define P_NAME "Activeon DX"
 
 // Text flashed when card removed
 #define MEM_NOCARD 0xc156bfaa
@@ -17,12 +17,12 @@ Activeon DX forum: https://www.goprawn.com/forum/ambarella-cams/363-isaw-extreme
 #define MEM_PRINT 0xc0273a00
 
 // Run on command "cardmgr", a bunch of prints
-#define MEM_CARDMGR 0xc012d5d4
+#define MEM_LOADER 0xc012d5d4
 
-// Attempt payload location ?
-#define MEM_LOAD 0xc0273860
+// Attempt payload location?
+#define MEM_MAIN 0xc0273860
 
-// Command exec location?
-#define MEM_EXEC 0xc026e4b8
+#define AMBSH_PRINTF 0xc0272996
 
-#define PRINTF 0xc0272996
+// Untested
+#define FOPEN 0xc02749a4

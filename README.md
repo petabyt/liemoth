@@ -19,3 +19,7 @@ assembly into the camera's memory.
 
 # TODO/help needed:
 - Better build system (with make)
+
+# Credits
+http://spritesmods.com/?art=zx3hack&page=4 for the work done back in 2010.  
+The entire Autoexec.ash/Ambarella hacking community.
