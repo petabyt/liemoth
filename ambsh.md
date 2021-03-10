@@ -21,8 +21,12 @@ THEN
 - `;` can be used instead of a newline.
 - Use `#` for comments.
 - Spaces not required (?) `echo'Hello, World'`
-
 - File MUST end with trailing newline, then EOF.
+
+- You can use parenthesis around commands.
+```
+(echo Hello, World)
+```
 
 ## Loops
 ```
