@@ -1,10 +1,5 @@
 #include <stdio.h>
 
-// Default platform
-#ifndef P_NAME
-	#include "../platform/activeondx.h"
-#endif
-
 // Generate a unicode string at address.
 // (seperated by spaces)
 void genUnicode(char string[], long location) {
@@ -60,11 +55,3 @@ void writeFile(char file[]) {
 }
 
 // 0xc0000000
-
-int main() {
-	// Inject assembly into cardmgr command
-	writeBin("loader.o", MEM_LOADER);
-	//writeBin("main.o", MEM_MAIN);
-	puts("touch fart");
-	puts("cardmgr >> fart");	
-}
