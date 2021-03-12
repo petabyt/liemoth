@@ -30,10 +30,11 @@ CPU INFO:
 #define MEM_PRINT 0xc0273a00
 
 // Run on command "cardmgr", a bunch of prints
+// including the strings, about 1.3 is free to use.
 #define MEM_LOADER 0xc012d5d4
 
 // Attempt payload location?
-#define MEM_MAIN 0xc0273860
+#define MEM_MAIN 0xc012d73c
 
 #define AMBSH_PRINTF 0xc0272996
 

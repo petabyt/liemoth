@@ -23,6 +23,6 @@ hexdump -C loader.o
 echo "Main:"
 hexdump -C main.o
 
-gcc ../gen.c script.c -include "../../platform/$1.h" -o gen
+gcc ../main.c script.c -include "../../platform/$1.h" -o gen
 ./gen > /media/dan/8765-4321/autoexec.ash
 rm gen loader.o loader.elf main.o main.elf

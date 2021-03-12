@@ -6,12 +6,13 @@
 .global _start
 
 _start:
-	adr r1, foo
-	b a
-	bl AMBSH_PRINTF
-	a:
-		
+	ldr r1, =foo
+	bl MEM_MAIN
+	
 	// Hack an early return.
 	pop {r4, pc}
-.byte 0, 0 // Function padding required
-foo: .string ":-)"
+
+// Note: distance must be multiple of 4
+//.byte 0, 0
+foo: .string "Testing"
+

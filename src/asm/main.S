@@ -5,11 +5,8 @@
 
 .global _start
 
-// Why crash? Thumb bad?
 _start:
-	adr r1, fart
+	push {r4, lr}
 	bl AMBSH_PRINTF
-	bx lr
-
-fart: .string "fasdss\n"
+	pop {r4, pc}
 

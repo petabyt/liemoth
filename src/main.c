@@ -1,5 +1,36 @@
+// This an Ambsh/Ambashell parser, with a sort of
+// "preprocessor" built in. It can be used to generate
+// ASH scripts.
+
 #include <stdio.h>
 #include <string.h>
+#include "main.h"
+
+struct Memory mem;
+
+int writeLong(char buffer[], int length, int location) {
+	long a;
+	int i = 0;
+
+	while (!((length - i) % 4)) {
+		printf("writeb 0x%x 0x%x\n", location, buffer[i]);
+		location++;
+		i++;
+	}
+	
+	while (i < length) {
+		a = buffer[i];
+		i++;
+		a |= buffer[i] << 8;
+		i++;
+		a |= buffer[i] << 16;
+		i++;
+		a |= buffer[i] << 24;
+		printf("writel 0x%x 0x%lx\n", location, a);
+		i++;
+		location += 4;
+	}
+}
 
 // Generate a unicode string at address.
 // (seperated by spaces)
@@ -55,6 +86,7 @@ void writeFile(char file[]) {
 	fclose(reader);
 }
 
+// Lexer Functions
 int isChar(char a) {
 	return ((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || a == '_');
 }
@@ -66,28 +98,6 @@ int isDec(char a) {
 int isHex(char a) {
 	return (a >= '0' && a <= '9') || (a >= 'a' && a <= 'f') || (a >= 'A' && a <= 'F');
 }
-
-enum Types {
-	TEXT,
-	INTEGER,
-	STRING,
-};
-
-struct Token {
-	char text[500];
-	int len;
-	int type;
-	long value;
-}tokens[5];
-
-struct Memory {
-	int len;
-	struct T {
-		char name[100];
-		char value[100];
-		long integer;
-	}t[100];
-}mem;
 
 void parseStatement(char *buffer) {
 	// A simple token parser. Overkill, but flexible
@@ -111,6 +121,8 @@ void parseStatement(char *buffer) {
 				c++;
 			}
 
+			// Once a text token is parsed, check to see if
+			// it was define'd.
 			for (int i = 0; i < mem.len; i++) {
 				if (!strcmp(mem.t[i].name, tokens[len].text)) {
 					strcpy(tokens[len].text, mem.t[i].value);
@@ -173,9 +185,7 @@ void parseStatement(char *buffer) {
 	}
 }
 
-int parse(char *file) {
-	mem.len = 0;
-
+int parseAmbsh(char *file) {
 	char buffer[500];
 	int len;
 	
@@ -186,14 +196,14 @@ int parse(char *file) {
 		if (c == EOF) {
 			break;
 		}
-		
+
 		if (c == '#') {
 			while ((char)c != '\n') {
 				c = fgetc(reader);
 			}
 			
 			continue;
-		} else if (c == '\t') {
+		} if (c == '\t') {
 			continue;
 		} else if (c == '[') {
 			c = fgetc(reader);
@@ -242,13 +252,11 @@ int parse(char *file) {
 			putchar((char)c);
 		}
 	}
+
+	return 0;
 }
 
 int main(int argc, char *argv[]) {
-	if (argc != 2) {
-		puts("No arg");
-		return -1;
-	}
-
-	parse(argv[1]);
+	return parseAmbsh(argv[1]);
+	return 0;
 }
