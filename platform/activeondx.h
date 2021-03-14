@@ -16,6 +16,47 @@ CPU INFO:
 	CPU revision    : 5
 
 	Hardware        : (null)
+Display Info:
+	[0;32m[00002938] DISP: ====<< DISPLAY INFO >>=====[0m
+	[0;32m[00002938] DISP: vout->w	= 176[0m
+	[0;32m[00002938] DISP: vout->h	= 320[0m
+	[0;32m[00002938] DISP: vout->offx	= 32[0m
+	[0;32m[00002938] DISP: vout->offy	= 0[0m
+	[0;32m[00002938] DISP: vout->fps(field_rate)	= 1[0m
+	[0;32m[00002938] DISP: vout->fmt	= 2[0m
+	[0;32m[00002938] DISP: vout->enable	= 3[0m
+	[0;32m[00002938] DISP: vout->state	= 1[0m
+	[0;32m[00002938] DISP: [0m
+	[0;32m[00002938] DISP: scene->vid = (0, 0, 240, 320)[0m
+	[0;32m[00002938] DISP: scene->pip = (160, 170, 120, 80)[0m
+	[0;32m[00002938] DISP: scene->osd = (0, 0, 240, 320)[0m
+	[0;32m[00002938] DISP: [0m
+	[0;32m[00002940] DISP: ======> disp_ch: 0 [0m
+	[0;32m[00002941] DISP: [0m
+	[0;32m[00002941] DISP: ====<< CSC INFO >>=====[0m
+	[0;32m[00002941] DISP: csc_in	(0 :CSC_YCBCR, 1 :CSC_RGB)	= 0[0m
+	[0;32m[00002941] DISP: csc_out	(0 :CSC_YCBCR, 1 :CSC_RGB)	= 1[0m
+	[0;32m[00002941] DISP: csc_dev	(0 :Dchan, 1 :Fchan)		= 0[0m
+	[0;32m[00002941] DISP: csc_sdhd	= 0[0m
+	[0;32m[00002941] DISP: csc_idx	= 2[0m
+	[0;32m[00002941] DISP: [0m
+	[0;32m[00002941] DISP: csc table[0m
+	[0;32m[00002941] DISP: 0x1ea70400 0x04001d35 0x000006ed[0m
+	[0;32m[00002941] DISP: 0x00000400 0x0084057b 0x7f507f22[0m
+	[0;32m[00002941] DISP: 0x00ff0000 0x00ff0000 0x00ff0000[0m
+	[0;32m[00002941] DISP: =======================[0m
+
+Finding screen buffer:
+	touch foo
+	echo '' > foo
+	t disp >> foo
+	t disp info >> foo
+	t disp csc_info >> foo
+	dmesg dsp_debug -100 >> foo
+	dmesg dsp -100 >> foo
+	dmesg rtos -100 >> foo
+	
+	find "0xc" in foo
 */
 
 #define P_NAME "Activeon DX"
@@ -36,7 +77,12 @@ CPU INFO:
 // Attempt payload location?
 #define MEM_MAIN 0xc012d73c
 
+// Printf for ambsh command output.
+// AMBSH_PRINTF(void *env, char *format, ...)
 #define AMBSH_PRINTF 0xc0272996
+
+// int result = MKDIR(char *folder)
+#define MKDIR 0xc0275804
 
 // Untested
 #define FOPEN 0xc02749a4

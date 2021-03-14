@@ -256,7 +256,7 @@ int parseAmbsh(char *file) {
 	return 0;
 }
 
-int main(int argc, char *argv[]) {
-	return parseAmbsh(argv[1]);
-	return 0;
-}
+// int main(int argc, char *argv[]) {
+	// return parseAmbsh(argv[1]);
+	// return 0;
+// }
