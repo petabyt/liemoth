@@ -24,3 +24,5 @@ assembly into the camera's memory.
 ## Other
 - Currently, I'm working with the Activeon DX, but I also have a Gopro Hero 3+.  
 - Any help and/or questions are welcome.
+
+![Screen hacks](screen.jpg)
