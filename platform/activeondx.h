@@ -85,9 +85,15 @@ Finding screen buffer:
 #define MKDIR 0xc0275804
 
 // Untested
-#define FOPEN 0xc02749a4
+#define FOPEN 0xc02749a4 0xc02749a4
+#define FCLOSE 0xc0274a92
+#define FREAD 0xc0274c22
+// fclose ?? 0xc0274cbe
+// fread ?? 0xc028cb70
 
 #define STRCMP 0xc012de02
 
 // Main cardmgr command. Very big
 #define CARDMGR 0xc012db92
+
+#define GPIO 0xc0107f64
