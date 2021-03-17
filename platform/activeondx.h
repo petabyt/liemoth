@@ -45,18 +45,6 @@ Display Info:
 	[0;32m[00002941] DISP: 0x00000400 0x0084057b 0x7f507f22[0m
 	[0;32m[00002941] DISP: 0x00ff0000 0x00ff0000 0x00ff0000[0m
 	[0;32m[00002941] DISP: =======================[0m
-
-Finding screen buffer:
-	touch foo
-	echo '' > foo
-	t disp >> foo
-	t disp info >> foo
-	t disp csc_info >> foo
-	dmesg dsp_debug -100 >> foo
-	dmesg dsp -100 >> foo
-	dmesg rtos -100 >> foo
-	
-	find "0xc" in foo
 */
 
 #define P_NAME "Activeon DX"
@@ -67,14 +55,8 @@ Finding screen buffer:
 #define MEM_BUFFER 0xc2413880
 #define MEM_PARAM 0xc012d5ac
 
-// Text flashed when card removed
-#define MEM_NOCARD 0xc156bfaa
-
-// Text shown on viewer mode menu
-#define MEM_MENU 0xc156bea6
-
 // Run on command "cardmgr", a bunch of prints
-// including the strings, about 1.3 is free to use.
+// including the strings, about 1.3k is free to use.
 #define MEM_LOADER 0xc012d5d4
 
 // Attempt payload location
@@ -84,7 +66,16 @@ Finding screen buffer:
 // AMBSH_PRINTF(void *env, char *format, ...)
 #define AMBSH_PRINTF 0xc0272996
 
+#define AMBSH_MSLEEP 0xc026cc9c
+
+
 // Experiments
+
+// Text flashed when card removed
+#define MEM_NOCARD 0xc156bfaa
+
+// Text shown on viewer mode menu
+#define MEM_MENU 0xc156bea6
 
 // int result = MKDIR(char *folder)
 #define MKDIR 0xc0275804

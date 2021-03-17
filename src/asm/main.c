@@ -11,8 +11,10 @@ void clearScreen();
 void _start(void *env) {
 	unsigned char *param = (unsigned char*)MEM_PARAM;
 	if (*param == 0) {
-		for (int a = 0; a < 100; a++) {
+		for (int a = 0; a < 256; a++) {
 			drawPixel(a, a);
+			// TODO: reference functions with linker
+			__asm__("ldr r0, =50\nbl 0xc026cc9c");
 		}
 	} else {
 		clearScreen();
