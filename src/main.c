@@ -6,6 +6,8 @@
 #include <string.h>
 #include "main.h"
 
+// TODO: Actual error handling
+
 struct Memory mem;
 
 int writeLong(char buffer[], int length, int location) {

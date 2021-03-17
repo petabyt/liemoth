@@ -13,7 +13,7 @@ arm-none-linux-gnueabi-ld -Bstatic loader.o -Ttext $MEM_LOADER -o loader.elf
 arm-none-linux-gnueabi-objcopy -O binary loader.elf loader.o
 
 # -mthumb -nostartfiles -nostdlib
-arm-none-linux-gnueabi-gcc -c -Wa,-mthumb -include "../../platform/$1.h" -o main.o main.S
+arm-none-linux-gnueabi-gcc -std=c99 -c -mthumb -nostartfiles -nostdlib -include "../../platform/$1.h" -o main.o main.c
 arm-none-linux-gnueabi-ld -Bstatic main.o -Ttext $MEM_MAIN -o main.elf
 arm-none-linux-gnueabi-objcopy -O binary main.elf main.o
 

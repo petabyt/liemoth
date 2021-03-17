@@ -61,25 +61,30 @@ Finding screen buffer:
 
 #define P_NAME "Activeon DX"
 
+#define SCREEN_HEIGHT 256
+#define SCREEN_WIDTH 320
+
+#define MEM_BUFFER 0xc2413880
+#define MEM_PARAM 0xc012d5ac
+
 // Text flashed when card removed
 #define MEM_NOCARD 0xc156bfaa
 
 // Text shown on viewer mode menu
 #define MEM_MENU 0xc156bea6
 
-// Code triggered on invalid command
-#define MEM_PRINT 0xc0273a00
-
 // Run on command "cardmgr", a bunch of prints
 // including the strings, about 1.3 is free to use.
 #define MEM_LOADER 0xc012d5d4
 
-// Attempt payload location?
+// Attempt payload location
 #define MEM_MAIN 0xc012d73c
 
 // Printf for ambsh command output.
 // AMBSH_PRINTF(void *env, char *format, ...)
 #define AMBSH_PRINTF 0xc0272996
+
+// Experiments
 
 // int result = MKDIR(char *folder)
 #define MKDIR 0xc0275804
