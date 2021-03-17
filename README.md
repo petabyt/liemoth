@@ -2,10 +2,9 @@
 Unofficial documentation and hacks for Ambarella based cameras.  
 
 [Extensive AmbaShell/Ambsh Documentation](ambsh.md)  
-
-## Autoexec generator
-In gen/, there is some code that generates autoexec.ash files that inject  
-assembly into the camera's memory.
+[Ambsh parser with preprocessor](src/main.c)  
+[Code injection experiments](src/asm)  
+[Cool Ambsh loader scripts](src/loader)  
 
 # Goals
 - Extensive Ambsh documentation
@@ -14,8 +13,8 @@ assembly into the camera's memory.
 - Ambsh interpreter/minimizer (with macros and stuff?) (parse/)
 - If absolutely necessary, a custom firmware (for newer GoPros)
 
-# TODO/help needed
-- Better build system (with make)
+# Help Needed
+- Better build system (with gnu make, linker)
 
 # Thanks to
 - http://spritesmods.com/?art=zx3hack&page=4 for the work done back in 2010.
