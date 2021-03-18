@@ -81,9 +81,9 @@ Display Info:
 #define MKDIR 0xc0275804
 
 // Untested
-#define FOPEN 0xc02749a4 0xc02749a4
-#define FCLOSE 0xc0274a92
-#define FREAD 0xc0274c22
+#define AMBSH_FOPEN 0xc02749a4
+#define AMBSH_FCLOSE 0xc0274a92
+#define AMBSH_FREAD 0xc0274c22
 // fclose ?? 0xc0274cbe
 // fread ?? 0xc028cb70
 

@@ -3,12 +3,12 @@
 
 int main() {
 	// Inject assembly into cardmgr command
+	puts("touch log");
 	writeBin("loader.o", MEM_LOADER);
-	writeBin("main.o", MEM_MAIN);
-	puts("writeb 0xc012d5ac 0x0");
+	puts("writeb 0xc012d5ac 0x0"); // main
 	puts("suspend 18");
-	puts("cardmgr");
-	puts("writeb 0xc012d5ac 0x1");
+	puts("cardmgr >> log");
+	puts("writeb 0xc012d5ac 0x1"); // clear screen
 	puts("cardmgr");
 	puts("resume 18");
 }
