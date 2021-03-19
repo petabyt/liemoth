@@ -58,7 +58,7 @@ void writeBytes(short opcode[], long location) {
 void writeBin(char file[], long location) {
 	FILE *reader = fopen(file, "r");
 	if (reader == NULL) {
-		printf("# FILE %s NOT FOUND!", file);
+		printf("# FILE %s NOT FOUND!\n", file);
 		return;
 	}
 	
@@ -75,7 +75,7 @@ void writeBin(char file[], long location) {
 void writeFile(char file[]) {
 	FILE *reader = fopen(file, "r");
 	if (reader == NULL) {
-		printf("# FILE %s NOT FOUND!", file);
+		printf("# FILE %s NOT FOUND!\n", file);
 		return;
 	}
 	
@@ -186,6 +186,8 @@ void parseStatement(char *buffer) {
 		genUnicode(tokens[1].text, tokens[2].value);
 	} else if (!strcmp(tokens[0].text, "writeBin")) {
 		writeBin(tokens[1].text, tokens[2].value);
+	} else if (!strcmp(tokens[0].text, "writeFile")) {
+		writeFile(tokens[1].text);
 	}
 }
 

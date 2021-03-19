@@ -1,5 +1,7 @@
 # Early Gopro models script chooser
-# 7x7 screen
+# Needs 7x7 front panel and commands.
+# If files aren't found, it's okay,
+# comments will be left in the output.
 t app fp_string 'AHDK'
 loop 5; do
 	# Wait if SD in
@@ -11,7 +13,7 @@ loop 5; do
 		sleep 3
 		if (cd d:\); then
 			sleep 2
-			t app fp_string 'script 1'
+			[writeFile "scr_1.ash"]
 			while true; do
 				sleep 100
 			done
@@ -20,7 +22,7 @@ loop 5; do
 		sleep 3
 		if (cd d:\); then
 			sleep 2
-			t app fp_string 'script 2'
+			[writeFile "scr_2.ash"]
 			while true; do
 				sleep 100
 			done
@@ -29,7 +31,7 @@ loop 5; do
 		sleep 3
 		if (cd d:\); then
 			sleep 2
-			t app fp_string 'script 3'
+			[writeFile "scr_3.ash"]
 			while true; do
 				sleep 100
 			done
