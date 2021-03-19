@@ -3,7 +3,13 @@
 	#include "../platform/activeondx.h"
 #endif
 
-#include "font.h"
+struct Font {
+    char letter;
+    char code[7][5];
+};
+
+// FONT.BIN will be loaded into this
+struct Font font[100];
 
 int line;
 
@@ -43,7 +49,6 @@ int getGPIO() {
 		return 200;
 	}
 }
-
 
 // Screen weird, needs magic numbers
 void drawPixel(int x, int y, unsigned char col) {
@@ -127,12 +132,12 @@ void print(char *string) {
 
 // Use https://codepen.io/Pufflegamerz/pen/abBgLeG?editors=1010
 // To convert typical images to AHDK image.
-void drawImage(int x, int y, int width, int height) {
+void drawImage(int x, int y, int width, int height, char image[]) {
 	width += x;
 	height += y;
 	
 	char c;
-	int file = ambsh_fopen("d:\\LOGO.BIN", "r");
+	int file = ambsh_fopen(image, "r");
 	int i = 0;
 
 	for (;y < height; y++) {
@@ -147,49 +152,51 @@ void drawImage(int x, int y, int width, int height) {
 	}
 }
 
+void drawGUI() {
+	// Draw main box
+	fillRect(10, 10, SCREEN_WIDTH - 20, SCREEN_HEIGHT - 40, 0x5d);
+		
+	// Horizontal lines
+	for (int i = 10; i < SCREEN_WIDTH - 20; i++) {
+		drawPixel(i, 10, 0x1);
+		drawPixel(i, 215, 0x1);
+	}
+
+	// Vertical lines
+	for (int i = 10; i < SCREEN_HEIGHT - 40; i++) {
+		drawPixel(10, i, 0x1);
+		drawPixel(300, i, 0x1);
+	}
+
+	// Draw selector box
+	//fillRect(20, 20, SCREEN_WIDTH - 30, 40 + (sel * 10), 0x20);
+}
+
 void start(void *env) {
 	char buffer[100];
 	line = 0;
 	unsigned char *param = (unsigned char*)MEM_PARAM;
 
 	if (*param == 0) {
-		// This will be sent into log
-		ambsh_printf(env, "Hello, World");
+		ambsh_printf(env, "Loading FONT.BIN...\n");
+		int file = ambsh_fopen("d:\\FONT.BIN", "r");
+		ambsh_fread(font, 2737, 2737, file);
+		ambsh_printf(env, "Loaded FONT.BIN result is %d\n", file);
 
-		//int a = getGPIO();
-
-		// Draw main box
-		fillRect(10, 10, SCREEN_WIDTH - 20, SCREEN_HEIGHT - 40, 0x5d);
-
-		// Draw selector box
-		//fillRect(20, 20, SCREEN_WIDTH - 30, 40 + (sel * 10), 0x20);
-
-		// Horizontal lines
-		for (int i = 10; i < SCREEN_WIDTH - 20; i++) {
-			drawPixel(i, 10, 0x1);
-			drawPixel(i, 215, 0x1);
-		}
-
-		// Vertical lines
-		for (int i = 10; i < SCREEN_HEIGHT - 40; i++) {
-			drawPixel(10, i, 0x1);
-			drawPixel(300, i, 0x1);
-		}
+		drawGUI();
 
 		ambsh_sprintf(buffer, "AHDK Console. Model: %s", P_NAME);
 		print(buffer);
-
 		ambsh_sprintf(buffer, "Sprintf test = %d", 123456);
 		print(buffer);
-
 		ambsh_sprintf(buffer, "Parameter = %d", (int)(*param));
 		print(buffer);
+		ambsh_msleep(1000);
+		drawImage(100, 70, 150, 150, "d:\\LOGO.BIN");
 
-		print("Drawing ML...");
+		//drawImage(120, 60, 150, 150);
 
-		drawImage(120, 60, 150, 150);
-
-		ambsh_msleep(60000);
+		ambsh_msleep(10000);
 	} else {
 		clearScreen();
 	}

@@ -32,6 +32,10 @@ all:
 	@hexdump -C main.o | head
 	@ls -l main.o
 
+# Build font
+	@${CC}gcc ${CFLAGS} font.c -o font.o
+	@${CC}objcopy -O binary font.o ${d}FONT.BIN
+
 # Write AHDK
 	@cat main.o > ${d}AHDK.BIN
 	@gcc ../ashp/main.c script.c ${INCLUDE} -o gen

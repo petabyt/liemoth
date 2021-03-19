@@ -1,4 +1,4 @@
-// From https://github.com/petabyt/font/
+// This is built loaded into RAM.
 struct Font {
     char letter;
     char code[7][5];
