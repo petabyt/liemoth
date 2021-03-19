@@ -2,9 +2,9 @@
 Unofficial documentation and hacks for Ambarella based cameras.  
 
 [Extensive AmbaShell/Ambsh Documentation](ambsh.md)  
-[Ambsh parser with preprocessor](src/main.c)  
-[Code injection experiments](src/asm)  
-[Cool Ambsh loader scripts](src/loader)  
+[Ambsh parser with preprocessor](ashp)  
+[AHDK GUI](ahdk)  
+[Ambsh script loader](loader)  
 
 # Goals
 - Extensive Ambsh documentation
@@ -14,7 +14,7 @@ Unofficial documentation and hacks for Ambarella based cameras.
 - If absolutely necessary, a custom firmware (for newer GoPros)
 
 # Help Needed
-- Better build system (with gnu make, linker)
+- Testing on new devices
 
 # Thanks to
 - http://spritesmods.com/?art=zx3hack&page=4 for the work done back in 2010.
