@@ -3,7 +3,7 @@
 
 // Default platform
 #ifndef P_NAME
-	#include "../../platform/activeondx.h"
+	#include "../platform/activeondx.h"
 #endif
 
 ENTRY(_start)

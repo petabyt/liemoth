@@ -1,6 +1,6 @@
 // Default platform
 #ifndef P_NAME
-	#include "../../platform/activeondx.h"
+	#include "../platform/activeondx.h"
 #endif
 
 #include "font.h"
@@ -125,6 +125,8 @@ void print(char *string) {
 	line++;
 }
 
+// Use https://codepen.io/Pufflegamerz/pen/abBgLeG?editors=1010
+// To convert typical images to AHDK image.
 void drawImage(int x, int y, int width, int height) {
 	width += x;
 	height += y;
@@ -187,9 +189,7 @@ void start(void *env) {
 
 		drawImage(120, 60, 150, 150);
 
-		while (1) {
-			ambsh_msleep(500);
-		}
+		ambsh_msleep(60000);
 	} else {
 		clearScreen();
 	}

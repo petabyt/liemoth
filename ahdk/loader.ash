@@ -1,6 +1,7 @@
 # Inject assembly into cardmgr command
 [writeBin "loader.o" MEM_LOADER]
 
+sleep 1
 touch log
 writeb 0xc012d5ac 0x0
 suspend 18

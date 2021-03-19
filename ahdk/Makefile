@@ -2,9 +2,9 @@ p ?= activeondx
 d ?= /media/dan/8765-4321/
 
 # Using a C makefile would be alternative, but this is spiffier
-MEM_LOADER := $(shell awk '/MEM_LOADER/{print $$3}' <../../platform/${p}.h)
-MEM_MAIN := $(shell awk '/MEM_MAIN/{print $$3}' <../../platform/${p}.h)
-INCLUDE := -include "../../platform/${p}.h"
+MEM_LOADER := $(shell awk '/MEM_LOADER/{print $$3}' <../platform/${p}.h)
+MEM_MAIN := $(shell awk '/MEM_MAIN/{print $$3}' <../platform/${p}.h)
+INCLUDE := -include "../platform/${p}.h"
 
 CFLAGS := -std=c99 -march=armv6 -c -mthumb -nostartfiles -nostdlib
 ASMFLAGS := -c -Wa,-mthumb
@@ -34,6 +34,6 @@ all:
 
 # Write AHDK
 	@cat main.o > ${d}AHDK.BIN
-	@gcc ../main.c script.c ${INCLUDE} -o gen
+	@gcc ../ashp/main.c script.c ${INCLUDE} -o gen
 	@./gen > ${d}autoexec.ash
 	@rm gen *.o *.elf
