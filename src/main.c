@@ -184,6 +184,8 @@ void parseStatement(char *buffer) {
 		mem.len++;
 	} else if (!strcmp(tokens[0].text, "genUnicode")) {
 		genUnicode(tokens[1].text, tokens[2].value);
+	} else if (!strcmp(tokens[0].text, "writeBin")) {
+		writeBin(tokens[1].text, tokens[2].value);
 	}
 }
 

@@ -3,6 +3,7 @@ Strings are stored under functions.
 I personally used Ghirda (free open-source)
 - msleep: Search "Usage: %s [sec]\n"
 - fread, fopen, fclose: Search "%s: '%s' %s!\n" and "Usage: %s [file]\n"
+- sprintf: Search "cannot load file '%s'!"
 - screen buffer:
 ```
 # Get system debug startup log

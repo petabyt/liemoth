@@ -30,9 +30,11 @@ _start:
 	pop {r0}
 
 	bl MEM_MAIN
-	
+				
 	// Hack an early return.
 	pop {r4, pc}
 
 file: .string "d:\\AHDK.BIN"
 read: .string "r"
+
+

@@ -1,0 +1,3 @@
+[submodule "src/asm/font"]
+	path = src/asm/font
+	url = https://github.com/petabyt/font/

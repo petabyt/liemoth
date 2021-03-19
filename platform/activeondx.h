@@ -49,10 +49,12 @@ Display Info:
 
 #define P_NAME "Activeon DX"
 
+// See notes.md
 #define SCREEN_HEIGHT 256
 #define SCREEN_WIDTH 320
-
 #define MEM_BUFFER 0xc2413880
+
+// Random spot in memory
 #define MEM_PARAM 0xc012d5ac
 
 // Run on command "cardmgr", a bunch of prints
@@ -62,11 +64,13 @@ Display Info:
 // Attempt payload location
 #define MEM_MAIN 0xc012d73c
 
-// Printf for ambsh command output.
-// AMBSH_PRINTF(void *env, char *format, ...)
 #define AMBSH_PRINTF 0xc0272996
-
 #define AMBSH_MSLEEP 0xc026cc9c
+#define AMBSH_ATOI 0xc01a23ac
+#define AMBSH_SPRINTF 0xc02745c4
+#define AMBSH_FOPEN 0xc02749a4
+#define AMBSH_FCLOSE 0xc0274a92
+#define AMBSH_FREAD 0xc0274c22
 
 
 // Experiments
@@ -79,13 +83,6 @@ Display Info:
 
 // int result = MKDIR(char *folder)
 #define MKDIR 0xc0275804
-
-// Untested
-#define AMBSH_FOPEN 0xc02749a4
-#define AMBSH_FCLOSE 0xc0274a92
-#define AMBSH_FREAD 0xc0274c22
-// fclose ?? 0xc0274cbe
-// fread ?? 0xc028cb70
 
 #define STRCMP 0xc012de02
 
