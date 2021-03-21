@@ -4,6 +4,7 @@ I personally used Ghirda (free open-source)
 - msleep: Search "Usage: %s [sec]\n"
 - fread, fopen, fclose: Search "%s: '%s' %s!\n" and "Usage: %s [file]\n"
 - sprintf: Search "cannot load file '%s'!"
+- card info: "slot '%c' info\n" and "memory + I/O combo"
 - screen buffer:
 ```
 # Get system debug startup log

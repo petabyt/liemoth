@@ -62,7 +62,7 @@ Display Info:
 #define MEM_LOADER 0xc012d5d4
 
 // Attempt payload location
-#define MEM_MAIN 0xc012d73c
+#define MEM_MAIN 0xc012d736
 
 #define AMBSH_PRINTF 0xc0272996
 #define AMBSH_MSLEEP 0xc026cc9c

@@ -3,52 +3,18 @@
 	#include "../platform/activeondx.h"
 #endif
 
+#include "header.h"
+#include "ambarella.h"
+
 struct Font {
     char letter;
     char code[7][5];
 };
 
-// FONT.BIN will be loaded into this
 struct Font font[100];
-
+char buffer[100];
 int line;
-
-void ambsh_msleep();
-void ambsh_printf();
-void ambsh_sprintf();
-int ambsh_fopen();
-int ambsh_fread();
-void ambsh_fclose();
-
-// GPIO tests
-int FUN_c02745f0() {
-	__asm__("bl 0xc02745f0");
-}
-
-int FUN_c0276bea() {
-	__asm__("bl FUN_c0276bea");
-}
-
-int getGPIO() {
-	int iVar1;
-	char local_24[4];
-	unsigned int local_20;
-	unsigned int local_1c;
-	unsigned int local_18;
-	//unsigned int uVar7;
-
-	iVar1 = FUN_c02745f0("48", &local_18);
-	if (iVar1 < 0) {
-		return 50;
-	}
-	
-	iVar1 = FUN_c0276bea(local_18 & 0xffff, &local_1c, &local_20, local_24);
-	if ((int)(local_20 & 0xff)) {
-		return 100;
-	} else {
-		return 200;
-	}
-}
+int sel;
 
 // Screen weird, needs magic numbers
 void drawPixel(int x, int y, unsigned char col) {
@@ -169,34 +135,55 @@ void drawGUI() {
 	}
 
 	// Draw selector box
-	//fillRect(20, 20, SCREEN_WIDTH - 30, 40 + (sel * 10), 0x20);
+	fillRect(20, 20 + (sel * 22), SCREEN_WIDTH - 30, 40 + (sel * 22), 0x20);
 }
 
-void start(void *env) {
-	char buffer[100];
-	line = 0;
+// GPIO tests
+int ambsh_gpio();
+
+int keyget(int *env, char key[]) {
+	char *arg[] = {"gpio", key};
+	int a = ambsh_gpio(env, 2, arg);
+	if (a == 0) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+
+void start(int *env) {
 	unsigned char *param = (unsigned char*)MEM_PARAM;
 
+	//struct Ambsh_cardstat status;
+	//int r = gpiofoo('d' - 'a', &status);
+	//int r = foo(0, 1);
+
+	line = 0;
+	sel = 0;
 	if (*param == 0) {
-		ambsh_printf(env, "Loading FONT.BIN...\n");
 		int file = ambsh_fopen("d:\\FONT.BIN", "r");
 		ambsh_fread(font, 2737, 2737, file);
-		ambsh_printf(env, "Loaded FONT.BIN result is %d\n", file);
 
 		drawGUI();
-
-		ambsh_sprintf(buffer, "AHDK Console. Model: %s", P_NAME);
-		print(buffer);
-		ambsh_sprintf(buffer, "Sprintf test = %d", 123456);
-		print(buffer);
-		ambsh_sprintf(buffer, "Parameter = %d", (int)(*param));
-		print(buffer);
 		ambsh_msleep(1000);
-		drawImage(100, 70, 150, 150, "d:\\LOGO.BIN");
+		
+		while (1) {
+			if (keyget(env, "48")) {
+				if (sel == 7) {
+					sel = 0;
+				} else {
+					sel++;
+				}
+				
+				drawGUI();
+			}
+			
+			ambsh_msleep(100);
+		}
 
-		//drawImage(120, 60, 150, 150);
-
-		ambsh_msleep(10000);
+		//ambsh_msleep(20000);
+		
 	} else {
 		clearScreen();
 	}

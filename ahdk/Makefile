@@ -21,6 +21,7 @@ all:
 	@${CC}gcc ${ASMFLAGS} ${INCLUDE} main.S -o mains.o
 
 # Main AHDK
+	@${CC}gcc ${CFLAGS} -O1 ${INCLUDE} lib.c -o lib.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} main.c -o main.o
 	@${CC}ld -Bstatic mains.o main.o -Ttext ${MEM_MAIN} -o main.elf
 	@${CC}objcopy -O binary main.elf main.o
@@ -32,12 +33,14 @@ all:
 	@hexdump -C main.o | head
 	@ls -l main.o
 
-# Build font
-	@${CC}gcc ${CFLAGS} font.c -o font.o
-	@${CC}objcopy -O binary font.o ${d}FONT.BIN
-
 # Write AHDK
 	@cat main.o > ${d}AHDK.BIN
 	@gcc ../ashp/main.c script.c ${INCLUDE} -o gen
 	@./gen > ${d}autoexec.ash
 	@rm gen *.o *.elf
+
+# Build font
+font:
+	@${CC}gcc ${CFLAGS} font.c -o font.o
+	@${CC}objcopy -O binary font.o ${d}FONT.BIN
+	@rm font.o
