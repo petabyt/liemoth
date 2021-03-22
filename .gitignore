@@ -1,2 +1,7 @@
 cli
 scr_*
+*.o
+*.elf
+*.a
+*.out
+emulate/temp/*

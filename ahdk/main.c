@@ -1,7 +1,5 @@
-// Default platform
-#ifndef P_NAME
-	#include "../platform/activeondx.h"
-#endif
+// Get FILE object to be compatible with emulator
+#include <stdio.h>
 
 #include "header.h"
 #include "ambarella.h"
@@ -16,26 +14,11 @@ char buffer[100];
 int line;
 int sel;
 
-// Screen weird, needs magic numbers
-void drawPixel(int x, int y, unsigned char col) {
-	unsigned char *screen = (unsigned char*)MEM_BUFFER;
-	y += 20;
-	x += 5;
-	screen[x * SCREEN_HEIGHT - y] = col;
-}
-
 void fillRect(int x, int y, int x1, int y1, int col) {
 	for (int tx = x; tx < x1; tx++) {
 		for (int ty = y; ty < y1; ty++) {
 			drawPixel(tx, ty, col);
 		}
-	}
-}
-
-void clearScreen() {
-	unsigned char *screen = (unsigned char*)MEM_BUFFER;
-	for (int i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++) {
-		screen[i] = 0xff;
 	}
 }
 
@@ -103,7 +86,7 @@ void drawImage(int x, int y, int width, int height, char image[]) {
 	height += y;
 	
 	char c;
-	int file = ambsh_fopen(image, "r");
+	FILE *file = ambsh_fopen(image, "r");
 	int i = 0;
 
 	for (;y < height; y++) {
@@ -135,11 +118,10 @@ void drawGUI() {
 	}
 
 	// Draw selector box
-	fillRect(20, 20 + (sel * 22), SCREEN_WIDTH - 30, 40 + (sel * 22), 0x20);
+	int y = (sel * 22);
+	fillRect(20, 20 + y, SCREEN_WIDTH - 30, 40 + y, 0x20);
+	printString(26, 26 + y, "AHDK Menu Testing", 0x1);
 }
-
-// GPIO tests
-int ambsh_gpio();
 
 int keyget(int *env, char key[]) {
 	char *arg[] = {"gpio", key};
@@ -152,8 +134,7 @@ int keyget(int *env, char key[]) {
 }
 
 
-void start(int *env) {
-	unsigned char *param = (unsigned char*)MEM_PARAM;
+void start(int *env, int param) {
 
 	//struct Ambsh_cardstat status;
 	//int r = gpiofoo('d' - 'a', &status);
@@ -161,9 +142,14 @@ void start(int *env) {
 
 	line = 0;
 	sel = 0;
-	if (*param == 0) {
-		int file = ambsh_fopen("d:\\FONT.BIN", "r");
-		ambsh_fread(font, 2737, 2737, file);
+	if (param == 0) {
+		FILE *file = ambsh_fopen("d:\\FONT.BIN", "r");
+		if (!file) {
+			return;
+		}
+		
+		ambsh_fread(font, 2737, 1, file);
+		ambsh_fclose(file);
 
 		drawGUI();
 		ambsh_msleep(1000);
@@ -174,6 +160,7 @@ void start(int *env) {
 					sel = 0;
 				} else {
 					sel++;
+					ambsh_msleep(20);
 				}
 				
 				drawGUI();

@@ -42,7 +42,7 @@ ambsh_fread:
 	bl AMBSH_FREAD
 	pop {r7, pc}
 
-.global ambsh_close
+.global ambsh_fclose
 ambsh_fclose:
 	push {r7, lr}
 	bl AMBSH_FCLOSE

@@ -29,7 +29,8 @@ _start:
 	bgt top
 
 	pop {r0}
-
+	
+	mov r1, #0 // TODO: insert param
 	bl MEM_MAIN
 				
 	// Hack an early return.

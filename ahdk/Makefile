@@ -11,6 +11,8 @@ ASMFLAGS := -c -Wa,-mthumb
 
 CC := arm-none-linux-gnueabi-
 
+default: all clean
+
 all:
 # Loader
 	@${CC}gcc ${ASMFLAGS} ${INCLUDE} -o loader.o loader.S
@@ -21,9 +23,10 @@ all:
 	@${CC}gcc ${ASMFLAGS} ${INCLUDE} main.S -o mains.o
 
 # Main AHDK
+	@${CC}gcc ${CFLAGS} -O1 ${INCLUDE} screen.c  -o screen.o
 	@${CC}gcc ${CFLAGS} -O1 ${INCLUDE} lib.c -o lib.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} main.c -o main.o
-	@${CC}ld -Bstatic mains.o main.o -Ttext ${MEM_MAIN} -o main.elf
+	@${CC}ld -Bstatic mains.o main.o screen.o -Ttext ${MEM_MAIN} -o main.elf
 	@${CC}objcopy -O binary main.elf main.o
 
 # Dump some things
@@ -34,13 +37,15 @@ all:
 	@ls -l main.o
 
 # Write AHDK
-	@cat main.o > ${d}AHDK.BIN
-	@gcc ../ashp/main.c script.c ${INCLUDE} -o gen
-	@./gen > ${d}autoexec.ash
-	@rm gen *.o *.elf
+	-@cat main.o > ${d}AHDK.BIN
+	@gcc ../ashp/main.c script.c ${INCLUDE} -o gen.o
+	-@./gen.o > ${d}autoexec.ash
 
 # Build font
 font:
 	@${CC}gcc ${CFLAGS} font.c -o font.o
 	@${CC}objcopy -O binary font.o ${d}FONT.BIN
 	@rm font.o
+
+clean:
+	@rm -f *.o *.elf
