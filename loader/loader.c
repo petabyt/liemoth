@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[]) {
 	// Define MEM_NOCARD from header
-	#ifndef NOSCREEN
+	#ifndef P_NOSCREEN
 		strcpy(mem.t[0].name, "MEM_TEXT");
 		mem.t[0].integer = MEM_NOCARD;
 	#endif

@@ -3,7 +3,7 @@
 # If files aren't found, it's okay,
 # comments will be left in the output.
 
-# Suspend main task. Ambsh will be fine.
+# Suspend Host Control Manager. Ambsh will be fine.
 suspend {P_CTRLMAN}
 t app fp_string 'AHDK'
 loop 5; do

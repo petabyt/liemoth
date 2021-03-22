@@ -47,14 +47,16 @@ Display Info:
 	[0;32m[00002941] DISP: =======================[0m
 */
 
-#define P_NAME "Activeon DX"
 
-// See notes.md
-#define SCREEN_HEIGHT 256
-#define SCREEN_WIDTH 320
-#define MEM_BUFFER 0xc2413880
+#define P_NAME "Activeon DX"
+#define P_THUMB // Preferred Code 
+
 #define P_CTRLMAN 18
 #define P_MODEBTN 48
+#define SCREEN_HEIGHT 256
+#define SCREEN_WIDTH 320
+
+#define MEM_BUFFER 0xc2413880
 
 // Random spot in memory
 #define MEM_PARAM 0xc012d5ac

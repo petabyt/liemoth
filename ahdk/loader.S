@@ -5,6 +5,7 @@
 
 .global _start
 
+#ifdef P_THUMB
 _start:
 	// Preserve r0, which holds env
 	push {r0}
@@ -33,6 +34,13 @@ _start:
 				
 	// Hack an early return.
 	pop {r4, pc}
+#endif
+
+#ifdef P_ARM
+_start:
+	// TODO: ARM support
+	ldmia sp!,{r4 lr}
+#endif
 
 file: .string "d:\\AHDK.BIN"
 read: .string "r"

@@ -1,6 +1,8 @@
 # Porting notes:
 Strings are stored under functions.  
 I personally used Ghirda (free open-source)
+To get a RAM dump: `savebin d:\memdump.bin 0xC0000000 l 134217728`
+``
 - msleep: Search "Usage: %s [sec]\n"
 - fread, fopen, fclose: Search "%s: '%s' %s!\n" and "Usage: %s [file]\n"
 - sprintf: Search "cannot load file '%s'!"
@@ -20,3 +22,12 @@ dmesg rtos -100 >> foo
 Search "0xc" in foo.
 - cardmgr: Search "\tinfo - information of card\n"
 - printf: In cardmgr function.
+- GPIO Button Codes:
+```
+# Press desired button a bunch of times
+# This is a very bad method
+touch foo
+while true; do
+	t gpio dump >> foo
+	sleep 1
+done

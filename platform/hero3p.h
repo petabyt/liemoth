@@ -5,8 +5,9 @@ Gopro Hero 3+
 */
 
 #define P_NAME "GoPro Hero 3+"
+#define P_ARM
+#define P_NOSCREEN
 
-#define NOSCREEN
 #define P_CTRLMAN 37
 #define P_MODEBTN 89
 
