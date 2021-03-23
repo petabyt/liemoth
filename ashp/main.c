@@ -181,6 +181,7 @@ void parseStatement(char *buffer) {
 		strcpy(mem.t[mem.len].name, tokens[1].text);
 		strcpy(mem.t[mem.len].value, tokens[2].text);
 		mem.t[mem.len].integer = tokens[2].value;
+		mem.t[mem.len].type = tokens[2].type;
 		mem.len++;
 	} else if (!strcmp(tokens[0].text, "genUnicode")) {
 		genUnicode(tokens[1].text, tokens[2].value);
@@ -247,12 +248,19 @@ int parseAmbsh(char *file) {
 				}
 			}
 
+			// Find the correct definition value
+			int i;
 			buffer[len] = '\0';
-			for (int i = 0; i < mem.len; i++) {
+			for (i = 0; i < mem.len; i++) {
 				if (!strcmp(mem.t[i].name, buffer)) {
-					printf(mem.t[i].value);
 					break;
 				}
+			}
+
+			if (mem.t[i].type == INTEGER) {
+				printf("%li", mem.t[i].integer);
+			} else if (mem.t[i].type == STRING) {
+				printf("%s", mem.t[i].value);
 			}
 		} else {
 			putchar((char)c);

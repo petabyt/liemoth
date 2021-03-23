@@ -22,6 +22,7 @@ struct Memory {
 		char name[100];
 		char value[100];
 		long integer;
+		int type;
 	}t[100];
 };
 
