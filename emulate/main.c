@@ -23,6 +23,9 @@ void setColor(unsigned int color) {
 	case 32:
 		gfx_setColor(&window, 171, 171, 171);
 		break;
+	case 120:
+		gfx_setColor(&window, 80, 80, 80);
+		break;
 	default:
 		gfx_setColor(&window, 0, 255, 0);
 	}
@@ -68,10 +71,13 @@ void ambsh_msleep(int ms) {
 	usleep(ms);
 }
 
+// hacky bad
 int ambsh_gpio(int *env, int count, char *arg[]) {
 	struct gfx_interaction ia = gfx_event();
 	if (ia.type == KEY) {
-		if (ia.value == 'a') {
+		if (!strcmp(arg[1], "48") && ia.value == 'a') {
+			return 0;
+		} else if (!strcmp(arg[1], "49") && ia.value == 's') {
 			return 0;
 		} else if (ia.value == 'q') {
 			exit(0);

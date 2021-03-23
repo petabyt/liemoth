@@ -53,6 +53,7 @@ Display Info:
 
 #define P_CTRLMAN 18
 #define P_MODEBTN 48
+#define P_SELBTN 49
 #define SCREEN_HEIGHT 256
 #define SCREEN_WIDTH 320
 
