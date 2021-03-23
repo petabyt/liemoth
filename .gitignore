@@ -5,3 +5,4 @@ scr_*
 *.a
 *.out
 emulate/temp/*
+link.ld

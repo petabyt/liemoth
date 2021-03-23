@@ -9,11 +9,16 @@ INCLUDE := -include "../platform/${p}.h"
 CFLAGS := -std=c99 -march=armv6 -c -mthumb -nostartfiles -nostdlib
 ASMFLAGS := -c -Wa,-mthumb
 
-CC := arm-none-linux-gnueabi-
+CC := arm-none-eabi-
 
-default: all
+default: all clean
 
 all:
+# Write files
+	@touch ${d}ahdk/ahdk.bin
+	@touch ${d}ahdk/font.bin
+	@touch ${d}autoexec.ash
+
 # Convert linker script
 	@${CC}gcc -include "../platform/${p}.h" -P -E link.c -o link.ld
 	
@@ -38,14 +43,14 @@ all:
 	@ls -l main.o
 
 # Write AHDK
-	-@cat main.o > ${d}AHDK.BIN
-	@gcc ../ashp/main.c script.c ${INCLUDE} -o gen.o
-	-@./gen.o > ${d}autoexec.ash
+	@cat main.o > ${d}ahdk/ahdk.bin
+	@cc ../ashp/main.c script.c ${INCLUDE} -o gen.o
+	@./gen.o > ${d}autoexec.ash
 
 # Build font
 font:
 	@${CC}gcc ${CFLAGS} font.c -o font.o
-	@${CC}objcopy -O binary font.o ${d}FONT.BIN
+	@${CC}objcopy -O binary font.o ${d}ahdk/font.bin
 	@rm font.o
 
 clean:

@@ -1,4 +1,4 @@
 [writeBin "main.o" MEM_LOADER]
-rm log
-touch log
-t gpio 48 > log
+[writeBin "arm.o" 0xc07156b8]
+cardmgr
+

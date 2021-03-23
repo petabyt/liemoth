@@ -31,3 +31,5 @@ while true; do
 	t gpio dump >> foo
 	sleep 1
 done
+```
+- GPIO function: "gpio%d:\t %s %d %s\n" (it should accept 4 parameters?)

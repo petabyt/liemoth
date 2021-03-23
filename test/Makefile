@@ -11,10 +11,16 @@ all:
 	@${CC}gcc ${ASMFLAGS} ${INCLUDE} -o main.o main.S
 	@${CC}ld -Bstatic main.o -Ttext ${l} -o main.elf
 	@${CC}objcopy -O binary main.elf main.o
+	
+	@${CC}gcc -c ${INCLUDE} -o arm.o arm.S
+	@${CC}ld -Bstatic arm.o -o arm.elf
+	@${CC}objcopy -O binary arm.elf arm.o
 
 # Dump some things
 	@hexdump -C main.o
+	@hexdump -C arm.o
 	@ls -l main.o
+	@ls -l arm.o
 
 # Write AHDK
 	@gcc ../ashp/main.c script.c ${INCLUDE} -o gen

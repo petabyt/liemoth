@@ -51,12 +51,17 @@ Display Info:
 #define P_NAME "Activeon DX"
 #define P_THUMB // Preferred Code 
 
+// Main control manager process ID (should stay the same)
 #define P_CTRLMAN 18
+
+// Button GPIO codes
 #define P_MODEBTN 48
 #define P_SELBTN 49
+
 #define SCREEN_HEIGHT 256
 #define SCREEN_WIDTH 320
 
+// Top screen buffer (see notes.md)
 #define MEM_BUFFER 0xc2413880
 
 // Random spot in memory
@@ -66,8 +71,8 @@ Display Info:
 // including the strings, about 1.3k is free to use.
 #define MEM_LOADER 0xc012d5d4
 
-// Attempt payload location
-#define MEM_MAIN 0xc012d736
+// Attempt payload location (ntfl code space)
+#define MEM_MAIN 0xc0138870
 
 #define AMBSH_PRINTF 0xc0272996
 #define AMBSH_MSLEEP 0xc026cc9c
@@ -76,6 +81,8 @@ Display Info:
 #define AMBSH_FOPEN 0xc02749a4
 #define AMBSH_FCLOSE 0xc0274a92
 #define AMBSH_FREAD 0xc0274c22
+#define AMBSH_GPIO 0xc0276bea
+
 
 
 // Experiments

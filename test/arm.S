@@ -4,9 +4,8 @@
 #endif
 
 .global _start
-.thumb
-.thumb_func
 _start:
-	ldr r0, =0xc07156b8
-	blx r0
-	pop {r4, pc}
+	ldmia sp!,{r4, pc}
+	mov r0, #1000
+	blx 0xC026CC9c
+	stmdb sp!,{r4, lr}

@@ -88,11 +88,14 @@ void print(char *string) {
 void drawImage(int x, int y, int width, int height, char image[]) {
 	width += x;
 	height += y;
-	
-	char c;
-	FILE *file = ambsh_fopen(image, "r");
-	int i = 0;
 
+	FILE *file = ambsh_fopen(image, "r");
+	if (!file) {
+		return;
+	}
+
+	char c;
+	int i = 0;
 	for (;y < height; y++) {
 		for (int tx = x; tx < width; tx++) {
 			if (!ambsh_fread(&c, 1, 1, file)) {
@@ -139,17 +142,14 @@ void drawMenu() {
 	}
 }
 
-int keyget(int *env, char key[]) {
-	char *arg[] = {"gpio", key};
-	int a = ambsh_gpio(env, 2, arg);
-	if (a == 0) {
-		return 1;
-	} else {
-		return 0;
-	}
+// Return GPIO status
+int getButton(int id) {
+	int b, c, d;
+	ambsh_gpio(id, &b, &c, &d);
+	return !(c & 0xff);
 }
 
-int menuClick(int *env) {
+int menuClick() {
 	line = 0;
 	drawGUI();
 	switch (sel) {
@@ -158,10 +158,10 @@ int menuClick(int *env) {
 	case 1:
 		ambsh_sprintf(buffer, "AHDK Console. Model: %s", P_NAME);
 		print(buffer);
-		drawImage(140, 50, 150, 150, "d:\\LOGO.BIN");
+		drawImage(140, 50, 150, 150, "d:\\ahdk\\logo.bin");
 		print("Press select button to exit.");
-		while (keyget(env, "49") == 0) {
-			ambsh_msleep(40);
+		while (!getButton(P_SELBTN)) {
+			ambsh_msleep(UI_WAIT);
 		}
 
 		break;
@@ -176,8 +176,9 @@ void start(int *env, int param) {
 	line = 0;
 	sel = 0;
 	if (param == 0) {
-		FILE *file = ambsh_fopen("d:\\FONT.BIN", "r");
+		FILE *file = ambsh_fopen("d:/ahdk/font.bin", "r");
 		if (!file) {
+			ambsh_printf(env, "Bad File");
 			return;
 		}
 		
@@ -188,17 +189,17 @@ void start(int *env, int param) {
 		drawMenu();
 
 		while (1) {
-			if (keyget(env, "49")) {
-				ambsh_msleep(40);		
-				if (menuClick(env)) {
+			if (getButton(P_SELBTN)) {
+				ambsh_msleep(UI_WAIT);		
+				if (menuClick()) {
 					return;
 				}
-			} else if (keyget(env, "48")) {
+			} else if (getButton(P_MODEBTN)) {
 				if (sel == MENU_ITEMS - 1) {
 					sel = 0;
 				} else {
 					sel++;
-					ambsh_msleep(40);
+					ambsh_msleep(UI_WAIT);
 				}
 
 				drawGUI();

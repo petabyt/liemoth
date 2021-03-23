@@ -51,5 +51,5 @@ ambsh_fclose:
 .global ambsh_gpio
 ambsh_gpio:
 	push {r7, lr}
-	bl 0xc0107f64
+	bl AMBSH_GPIO
 	pop {r7, pc}

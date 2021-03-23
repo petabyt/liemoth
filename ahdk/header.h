@@ -8,6 +8,8 @@
 #define MENU_COL 93
 #define TEXT_COL 1
 
+#define UI_WAIT 150
+
 // Screen weird, needs magic numbers
 void drawPixel(int x, int y, unsigned char col);
 void clearScreen();
