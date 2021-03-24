@@ -29,7 +29,7 @@ all:
 
 # Main AHDK
 	@${CC}gcc ${ASMFLAGS} ${INCLUDE} main.S -o mains.o
-	@${CC}gcc ${CFLAGS} -O1 ${INCLUDE} screen.c  -o screen.o
+	@${CC}gcc ${CFLAGS} ${INCLUDE} screen.c  -o screen.o
 	@${CC}gcc ${CFLAGS} -O1 ${INCLUDE} lib.c -o lib.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} main.c -o main.o
 	@${CC}ld -Bstatic mains.o main.o screen.o -T link.ld -o main.elf

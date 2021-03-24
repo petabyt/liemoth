@@ -4,15 +4,10 @@
 #include "header.h"
 #include "ambarella.h"
 
-struct Font {
-    char letter;
-    char code[7][5];
-};
-
-struct Font font[100];
-char buffer[100];
 int line;
 int sel;
+struct Font font[100];
+char buffer[100];
 
 char *menu[] = {
 	"Resume to OS",
@@ -28,84 +23,9 @@ char *menu[] = {
 	// void (*action)(int *env);
 // };
 
-void fillRect(int x, int y, int x1, int y1, int col) {
-	for (int tx = x; tx < x1; tx++) {
-		for (int ty = y; ty < y1; ty++) {
-			drawPixel(tx, ty, col);
-		}
-	}
-}
-
-int printChar(int x, int y, char c, char color) {
-	int match = 0;
-	for (int l = 0; l < (int)(sizeof(font) / sizeof(font[0])); l++) {
-		if (font[l].letter == c) {
-			match = l;
-			break;
-		}
-	}
-
-	// Loop through 7 high 5 wide monochrome font
-	int maxLength = 0;
-	for (int py = 0; py < 7; py++) {
-		for (int px = 0; px < 5; px++) {
-			if (font[match].code[py][px] == '#') {
-				drawPixel(x + px, y + py, color);
-
-				// Dynamic width character spacing
-				if (px > maxLength) {
-					maxLength = px;
-				}
-			}
-		}
-	}
-
-	return maxLength;
-}
-
-int printString(int x, int y, char *string, char color) {
-	int cx = x;
-	int cy = y;
-	for (int c = 0; string[c] != '\0'; c++) {
-		int length = printChar(cx, cy, string[c], color);
-		if (string[c] == ' ') {
-			length = 5;
-		}
-
-		cx += length + 3;
-	}
-
-	return cy;
-}
-
 void print(char *string) {
 	printString(20, 20 + (line * 14), string, TEXT_COL);
 	line++;
-}
-
-// Use https://codepen.io/Pufflegamerz/pen/abBgLeG?editors=1010
-// To convert typical images to AHDK image.
-void drawImage(int x, int y, int width, int height, char image[]) {
-	width += x;
-	height += y;
-
-	FILE *file = ambsh_fopen(image, "r");
-	if (!file) {
-		return;
-	}
-
-	char c;
-	int i = 0;
-	for (;y < height; y++) {
-		for (int tx = x; tx < width; tx++) {
-			if (!ambsh_fread(&c, 1, 1, file)) {
-				return;
-			}
-			
-			drawPixel(tx, y, c);
-			i++;
-		}
-	}
 }
 
 // Draw main UI box
@@ -143,10 +63,39 @@ void drawMenu() {
 }
 
 // Return GPIO status
-int getButton(int id) {
+int gpioStat(int id) {
 	int b, c, d;
 	ambsh_gpio(id, &b, &c, &d);
 	return !(c & 0xff);
+}
+
+int waitButton(int id) {
+	while (!gpioStat(id)) {
+		ambsh_msleep(1);
+	}
+
+	while (gpioStat(id)) {
+		ambsh_msleep(1);
+	}
+}
+
+int getButton() {
+	// Check for button
+	int id;
+	if (gpioStat(P_SELBTN)) {
+		id = P_SELBTN;
+	} else if (gpioStat(P_MODEBTN)) {
+		id = P_MODEBTN;
+	} else {
+		return 0;
+	}
+
+	// Wait until button is up
+	while (gpioStat(id)) {
+		ambsh_msleep(1);
+	}
+
+	return id;
 }
 
 int menuClick() {
@@ -158,12 +107,9 @@ int menuClick() {
 	case 1:
 		ambsh_sprintf(buffer, "AHDK Console. Model: %s", P_NAME);
 		print(buffer);
-		drawImage(140, 50, 150, 150, "d:\\ahdk\\logo.bin");
 		print("Press select button to exit.");
-		while (!getButton(P_SELBTN)) {
-			ambsh_msleep(UI_WAIT);
-		}
-
+		drawImage(140, 50, 150, 150, "d:\\ahdk\\logo.bin");
+		waitButton(P_SELBTN);
 		break;
 	}
 
@@ -172,47 +118,40 @@ int menuClick() {
 	return 0;
 }
 
-void start(int *env, int param) {
+void start(int *env) {
 	line = 0;
 	sel = 0;
-	if (param == 0) {
-		FILE *file = ambsh_fopen("d:/ahdk/font.bin", "r");
-		if (!file) {
-			ambsh_printf(env, "Bad File");
-			return;
-		}
-		
-		ambsh_fread(font, 2737, 2737, file);
-		ambsh_fclose(file);
+	FILE *file = ambsh_fopen("d:/ahdk/font.bin", "r");
+	if (!file) {
+		ambsh_printf(env, "Bad File");
+		return;
+	}
+	
+	ambsh_fread(font, 2737, 2737, file);
+	ambsh_fclose(file);
 
-		drawGUI();
-		drawMenu();
+	drawGUI();
+	drawMenu();
 
-		while (1) {
-			if (getButton(P_SELBTN)) {
-				ambsh_msleep(UI_WAIT);		
-				if (menuClick()) {
-					return;
-				}
-			} else if (getButton(P_MODEBTN)) {
-				if (sel == MENU_ITEMS - 1) {
-					sel = 0;
-				} else {
-					sel++;
-					ambsh_msleep(UI_WAIT);
-				}
-
-				drawGUI();
-				drawMenu();
+	while (1) {
+		int r = getButton();
+		if (r == P_SELBTN) {
+			if (menuClick()) {
+				clearScreen();
+				return;
 			}
-			
-			ambsh_msleep(100);
-		}
+		} else if (r == P_MODEBTN) {
+			if (sel == MENU_ITEMS - 1) {
+				sel = 0;
+			} else {
+				sel++;
+			}
 
-		//ambsh_msleep(20000);
+			drawGUI();
+			drawMenu();	
+		}
 		
-	} else {
-		clearScreen();
+		ambsh_msleep(10);
 	}
 
 	return;
