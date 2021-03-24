@@ -14,8 +14,6 @@ Contains the main AHDK UI and source code that is injected into the
 device.
 ## [ashp](ashp/)
 Ambsh parser. It adds extra features and generates a smaller ASH file.
-## [emulate](emulate/)
-Stupid "emulator". Probably will be deleted one day.
 ## [loader](loader/)
 Ambsh script chooser, written in Ambsh.
 ## [platform](platform/)
@@ -26,7 +24,8 @@ Bare bones assembly injection test. Generates ASH file.
 Contains extensive documentation on the Ambsh programming language.
 
 # Help Needed
-- Testing on new devices
+- RAM dumps
+- Stability
 
 # Thanks to
 - http://spritesmods.com/?art=zx3hack&page=4 for the work done back in 2010.
