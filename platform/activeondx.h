@@ -49,7 +49,9 @@ Display Info:
 
 
 #define P_NAME "Activeon DX"
-#define P_THUMB // Preferred Code 
+
+// Preferred Code
+#define P_THUMB
 
 // Main control manager process ID (should stay the same)
 #define P_CTRLMAN 18
@@ -83,7 +85,7 @@ Display Info:
 #define AMBSH_FREAD 0xc0274c22
 #define AMBSH_GPIO 0xc0276bea
 #define AMBSH_FWRITE 0xc0274bd8
-
+#define AMBSH_EXP 0xc02d0204
 
 // Experiments
 

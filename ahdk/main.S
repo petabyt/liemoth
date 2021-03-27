@@ -60,8 +60,8 @@ ambsh_gpio:
 	bl AMBSH_GPIO
 	pop {r7, pc}
 
-.global foo
-foo:
+.global ambsh_exp
+ambsh_exp:
 	push {r7, lr}
-	bl 0xc0274dd8
+	bl AMBSH_EXP
 	pop {r7, pc}

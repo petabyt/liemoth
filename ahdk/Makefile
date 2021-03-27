@@ -33,7 +33,7 @@ all:
 	@${CC}gcc ${CFLAGS} ${INCLUDE} screen.c  -o screen.o
 	@${CC}gcc ${CFLAGS} -O1 ${INCLUDE} lib.c -o lib.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} -fdata-sections main.c -o main.o
-	@${CC}ld -Bstatic --gc-sections mains.o main.o screen.o -T link.ld -o main.elf
+	@${CC}ld -Bstatic --gc-sections mains.o main.o screen.o lib.o -T link.ld -o main.elf
 	@${CC}objcopy -O binary main.elf main.o
 
 # Dump some things

@@ -1,12 +1,13 @@
 #include "header.h"
 #include "ambarella.h"
 
+int *envg;
 int line;
 int sel;
 struct Font font[100];
 char buffer[100];
 
-int shutterCode[] = {1, 24, 85, 126, 178, 252, 378};
+char shutterCode[][4] = {"1", "24", "85", "126", "178", "252", "378"};
 
 void notify() {
 	drawBox(10, 10, 200, 40, MENU_COL);
@@ -101,6 +102,8 @@ int runMenu(struct MenuItem menu[]) {
 			if (menu[sel].type == ACTION) {
 				drawGUI();
 				if (menu[sel].action() != 0) {
+					sel = 0;
+					line = 0;
 					return 1;
 				}
 			// NOTE: This is for SELECT
@@ -167,9 +170,19 @@ struct ItemInfo selectExp = {
 	0, {"8", "7", "6", "5", "4", "3", "2", "1", 0}
 };
 
+char *hijackExp[] = {"ia2", "-ae", "exp", 0, 0};
+
+int expTake() {
+	hijackExp[3] = selectISO.elements[selectISO.s];
+	hijackExp[4] = shutterCode[selectExp.s];
+	ambsh_exp(envg, hijackExp);
+	return 0;
+}
+
 struct MenuItem expMenu[] = {
 	{"ISO", 0, SELECT, &selectISO},
 	{"Exp", 0, SELECT, &selectExp},
+	{"Apply", expTake, ACTION, 0},
 	{"Exit", exitMenu, ACTION, 0},
 	{0}
 };
@@ -187,6 +200,7 @@ struct MenuItem mainMenu[] = {
 };
 
 void start(int *env) {
+	envg = env;
 	ambsh_printf(env, "AHDK Started");
 	line = 0;
 	sel = 0;
