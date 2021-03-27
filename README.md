@@ -1,12 +1,12 @@
 # Ambarella Hack Development Kit
-Unofficial documentation and hacks for Ambarella based cameras.  
+Basically a CHDK/Magic Lantern clone for Ambarella based cameras.  
+Has unofficial documentation and hacks. Don't expect anything  
+too polished at the moment.
 
 # Goals
 - Extensive Ambsh documentation
-- Magic lantern like program (written in C)
-- Quick introduction document to Ambarella software/hardware
-- Ambsh interpreter/minimizer (with macros and stuff?) (parse/)
-- If absolutely necessary, a custom firmware (for newer GoPros)
+- Magic lantern/CHDK like GUI program loaded onto camera
+- Ambsh interpreter/minimizer
 
 # File Structure:
 ## [ahdk](ahdk/)
@@ -24,15 +24,15 @@ Bare bones assembly injection test. Generates ASH file.
 Contains extensive documentation on the Ambsh programming language.
 
 # Help Needed
-- RAM dumps
-- Stability
+- Porting to other models
+- Stabilizing the hack
 
 # Thanks to
 - http://spritesmods.com/?art=zx3hack&page=4 for the work done back in 2010.
 - The entire Autoexec.ash/Ambarella hacking community.
 
 ## Other
-- Currently, I'm working with the Activeon DX, but I also have a Gopro Hero 3+.  
+- Currently my only camera (with a screen) is the Activeon DX, but I also have a Gopro Hero 3+.  
 - Any help and/or questions are welcome.
 
 ![Screen hacks](screen.jpg)
