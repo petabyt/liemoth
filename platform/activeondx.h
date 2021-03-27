@@ -82,7 +82,7 @@ Display Info:
 #define AMBSH_FCLOSE 0xc0274a92
 #define AMBSH_FREAD 0xc0274c22
 #define AMBSH_GPIO 0xc0276bea
-
+#define AMBSH_FWRITE 0xc0274bd8
 
 
 // Experiments

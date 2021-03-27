@@ -25,6 +25,22 @@
 
 #define UI_WAIT 150
 
+enum OptionType {
+	SELECT, ACTION
+};
+
+struct ItemInfo {
+	int s;
+	char *elements[];
+};
+
+struct MenuItem {
+	char *text;
+	int (*action)();
+	int type;
+	struct ItemInfo *info;
+};
+
 struct Font {
     char letter;
     char code[7][5];
@@ -36,6 +52,9 @@ int printString(int x, int y, char *string, char color);
 void drawImage(int x, int y, int width, int height, char image[]);
 int printChar(int x, int y, char c, char color);
 void fillRect(int x, int y, int x1, int y1, int col);
+void drawBox(int x, int y, int x1, int y1, int col);
+
+int strlen(char *buffer);
 
 // Arm division functions, may or may not use
 int divmod(int a, int b, int o);

@@ -43,3 +43,13 @@ int __aeabi_udivmod(int a, int b) {
 int __aeabi_idivmod(int a, int b) {
 	return divmod(a, b, 1);
 }
+
+int strlen(char *buffer) {
+	int a = 0;
+	while (*buffer != 0) {
+		buffer++;
+		a++;
+	}
+
+	return a;
+}

@@ -6,7 +6,7 @@ MEM_LOADER := $(shell awk '/MEM_LOADER/{print $$3}' <../platform/${p}.h)
 MEM_MAIN := $(shell awk '/MEM_MAIN/{print $$3}' <../platform/${p}.h)
 INCLUDE := -include "../platform/${p}.h"
 
-CFLAGS := -std=c99 -march=armv6 -c -mthumb -nostartfiles -nostdlib
+CFLAGS := -std=c99 -march=armv6 -c -mthumb -nostartfiles -nostdlib -ffunction-sections
 ASMFLAGS := -c -Wa,-mthumb
 
 CC := arm-none-eabi-
@@ -14,8 +14,9 @@ CC := arm-none-eabi-
 default: all clean
 
 all:
-# Write files
+# Write initial files
 	@touch ${d}ahdk/ahdk.bin
+	@touch ${d}ahdk/a.ash
 	@touch ${d}ahdk/font.bin
 	@touch ${d}autoexec.ash
 
@@ -31,8 +32,8 @@ all:
 	@${CC}gcc ${ASMFLAGS} ${INCLUDE} main.S -o mains.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} screen.c  -o screen.o
 	@${CC}gcc ${CFLAGS} -O1 ${INCLUDE} lib.c -o lib.o
-	@${CC}gcc ${CFLAGS} ${INCLUDE} main.c -o main.o
-	@${CC}ld -Bstatic mains.o main.o screen.o -T link.ld -o main.elf
+	@${CC}gcc ${CFLAGS} ${INCLUDE} -fdata-sections main.c -o main.o
+	@${CC}ld -Bstatic --gc-sections mains.o main.o screen.o -T link.ld -o main.elf
 	@${CC}objcopy -O binary main.elf main.o
 
 # Dump some things

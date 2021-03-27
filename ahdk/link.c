@@ -5,5 +5,4 @@
 
 SECTIONS {
 	.text MEM_MAIN: { *(.text) }
-	veener = ABSOLUTE(AMBSH_MSLEEP);
 }

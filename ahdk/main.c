@@ -1,6 +1,3 @@
-// Get FILE object to be compatible with emulator
-#include <stdio.h>
-
 #include "header.h"
 #include "ambarella.h"
 
@@ -9,19 +6,20 @@ int sel;
 struct Font font[100];
 char buffer[100];
 
-char *menu[] = {
-	"Resume to OS",
-	"AHDK Info",
-	"Set Exposure",
-	"Set ISO"
-};
+int shutterCode[] = {1, 24, 85, 126, 178, 252, 378};
 
-#define MENU_ITEMS (int)(sizeof(menu) / sizeof(menu[0]))
+void notify() {
+	drawBox(10, 10, 200, 40, MENU_COL);
+	printString(20, 20, buffer, TEXT_COL);
+}
 
-// struct Menu {
-	// char *text;
-	// void (*action)(int *env);
-// };
+void countdown(int sec) {
+	for (; sec != 0; sec--) {
+		ambsh_sprintf(buffer, "Waiting %d...", sec);
+		notify();
+		ambsh_msleep(1000);
+	}
+}
 
 void print(char *string) {
 	printString(20, 20 + (line * 14), string, TEXT_COL);
@@ -30,25 +28,13 @@ void print(char *string) {
 
 // Draw main UI box
 void drawGUI() {
-	fillRect(10, 10, SCREEN_WIDTH - 20, SCREEN_HEIGHT - 40, MENU_COL);
-		
-	// Horizontal lines
-	for (int i = 10; i < SCREEN_WIDTH - 20; i++) {
-		drawPixel(i, 10, 1);
-		drawPixel(i, 215, 1);
-	}
-
-	// Vertical lines
-	for (int i = 10; i < SCREEN_HEIGHT - 40; i++) {
-		drawPixel(10, i, 1);
-		drawPixel(300, i, 1);
-	}
+	drawBox(10, 10, SCREEN_WIDTH - 20, SCREEN_HEIGHT - 40, MENU_COL);
 }
 
-void drawMenu() {
+void drawMenu(struct MenuItem menu[]) {
 	// Menu selector
 	int y = 0;
-	for (int i = 0; i < MENU_ITEMS; i++) {
+	for (int i = 0; menu[i].text != 0; i++) {
 		int col;
 		if (sel == i) {
 			col = BTN_DOWN_COL;
@@ -57,7 +43,13 @@ void drawMenu() {
 		}
 
 		fillRect(20, 20 + y, SCREEN_WIDTH - 30, 40 + y, col);
-		printString(26, 26 + y, menu[i], TEXT_COL);
+		printString(26, 26 + y, menu[i].text, TEXT_COL);
+
+		// Print
+		if (menu[i].type == SELECT) {
+			printString(SCREEN_WIDTH - 120, 26 + y, menu[i].info->elements[menu[i].info->s], TEXT_COL);
+		}
+
 		y += 22;
 	}
 }
@@ -69,6 +61,7 @@ int gpioStat(int id) {
 	return !(c & 0xff);
 }
 
+// Wait until a button is pressed
 int waitButton(int id) {
 	while (!gpioStat(id)) {
 		ambsh_msleep(1);
@@ -79,8 +72,8 @@ int waitButton(int id) {
 	}
 }
 
+// Check for button
 int getButton() {
-	// Check for button
 	int id;
 	if (gpioStat(P_SELBTN)) {
 		id = P_SELBTN;
@@ -98,61 +91,113 @@ int getButton() {
 	return id;
 }
 
-int menuClick() {
-	line = 0;
+// This interprets and runs a menu from the structure.
+int runMenu(struct MenuItem menu[]) {
 	drawGUI();
-	switch (sel) {
-	case 0:
-		return 1;
-	case 1:
-		ambsh_sprintf(buffer, "AHDK Console. Model: %s", P_NAME);
-		print(buffer);
-		print("Press select button to exit.");
-		drawImage(140, 50, 150, 150, "d:\\ahdk\\logo.bin");
-		waitButton(P_SELBTN);
-		break;
-	}
-
-	drawGUI();
-	drawMenu();
-	return 0;
-}
-
-void start(int *env) {
-	line = 0;
-	sel = 0;
-	FILE *file = ambsh_fopen("d:/ahdk/font.bin", "r");
-	if (!file) {
-		ambsh_printf(env, "Bad File");
-		return;
-	}
-	
-	ambsh_fread(font, 2737, 2737, file);
-	ambsh_fclose(file);
-
-	drawGUI();
-	drawMenu();
-
+	drawMenu(menu);
 	while (1) {
 		int r = getButton();
 		if (r == P_SELBTN) {
-			if (menuClick()) {
-				clearScreen();
-				return;
+			if (menu[sel].type == ACTION) {
+				drawGUI();
+				if (menu[sel].action() != 0) {
+					return 1;
+				}
+			// NOTE: This is for SELECT
+			} else {
+				while (1) {
+					r = getButton();
+					if (r == P_MODEBTN) {
+						menu[sel].info->s++;
+						if (menu[sel].info->elements[menu[sel].info->s] == 0) {
+							menu[sel].info->s = 0;
+						}
+
+						drawGUI();
+						drawMenu(menu);
+					} else if (r == P_SELBTN) {
+						break;
+					}
+					
+					ambsh_msleep(1);
+				}
 			}
 		} else if (r == P_MODEBTN) {
-			if (sel == MENU_ITEMS - 1) {
+			if (menu[sel + 1].text == 0) {
 				sel = 0;
 			} else {
 				sel++;
 			}
-
-			drawGUI();
-			drawMenu();	
+		} else {
+			continue;
 		}
+
+		drawGUI();
+		drawMenu(menu);
 		
 		ambsh_msleep(10);
 	}
+}
 
-	return;
+int ahdkInfo() {
+	line = 0;
+	ambsh_sprintf(buffer, "AHDK Menu: Model: %s", P_NAME);
+	print(buffer);
+	print("Press select button to exit.");
+	drawImage(140, 50, 150, 150, "d:/ahdk/logo.bin");
+	waitButton(P_SELBTN);
+	return 0;
+}
+
+void writeAmbsh(char *buffer) {
+	FILE *file = ambsh_fopen("d:/ahdk/a.ash", "w");
+	ambsh_fwrite(buffer, 1, strlen(buffer), file);
+	ambsh_fclose(file);
+}
+
+int exitMenu() {
+	return 1;
+}
+
+struct ItemInfo selectISO = {
+	0, {"200", "800", "1600", "3200", "6400", 0}
+};
+
+struct ItemInfo selectExp = {
+	0, {"8", "7", "6", "5", "4", "3", "2", "1", 0}
+};
+
+struct MenuItem expMenu[] = {
+	{"ISO", 0, SELECT, &selectISO},
+	{"Exp", 0, SELECT, &selectExp},
+	{"Exit", exitMenu, ACTION, 0},
+	{0}
+};
+
+int expSetting() {
+	runMenu(expMenu);
+	return 0;
+}
+
+struct MenuItem mainMenu[] = {
+	{"Exit", exitMenu, ACTION, 0},
+	{"Manual", expSetting, ACTION, 0},
+	{"About AHDK", ahdkInfo, ACTION, 0},
+	{0}
+};
+
+void start(int *env) {
+	ambsh_printf(env, "AHDK Started");
+	line = 0;
+	sel = 0;
+
+	// Copy font into memory
+	FILE *file = ambsh_fopen("d:/ahdk/font.bin", "r");
+	if (!file) {ambsh_printf(env, "No font"); return;}
+	ambsh_fread(font, 2737, 2737, file);
+	ambsh_fclose(file);
+
+	runMenu(mainMenu);
+	clearScreen();
+	countdown(3);
 }

@@ -1,5 +1,4 @@
 // Screen/graphics related functions
-#include <stdio.h>
 #include "header.h"
 #include "ambarella.h"
 
@@ -26,6 +25,22 @@ void fillRect(int x, int y, int x1, int y1, int col) {
 		for (int ty = y; ty < y1; ty++) {
 			drawPixel(tx, ty, col);
 		}
+	}
+}
+
+void drawBox(int x, int y, int x1, int y1, int col) {
+	fillRect(x, y, x1, y1, col);
+	
+	// Horizontal lines
+	for (int i = 10; i < x1; i++) {
+		drawPixel(i, y, 1);
+		drawPixel(i, y1, 1);
+	}
+
+	// Vertical lines
+	for (int i = 10; i < y1; i++) {
+		drawPixel(x, i, 1);
+		drawPixel(x1, i, 1);
 	}
 }
 

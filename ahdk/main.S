@@ -42,6 +42,12 @@ ambsh_fread:
 	bl AMBSH_FREAD
 	pop {r7, pc}
 
+.global ambsh_fwrite
+ambsh_fwrite:
+	push {r7, lr}
+	bl AMBSH_FWRITE
+	pop {r7, pc}
+
 .global ambsh_fclose
 ambsh_fclose:
 	push {r7, lr}
@@ -52,4 +58,10 @@ ambsh_fclose:
 ambsh_gpio:
 	push {r7, lr}
 	bl AMBSH_GPIO
+	pop {r7, pc}
+
+.global foo
+foo:
+	push {r7, lr}
+	bl 0xc0274dd8
 	pop {r7, pc}

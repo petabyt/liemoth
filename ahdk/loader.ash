@@ -1,7 +1,6 @@
 suspend {P_CTRLMAN}
+sleep 1
 [writeBin "loader.o" MEM_LOADER]
-rm log
-touch log
-cardmgr > log
+cardmgr
 resume {P_CTRLMAN}
-t app key mode
+
