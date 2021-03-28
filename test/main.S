@@ -2,11 +2,8 @@
 #ifndef P_NAME
 	#include "../platform/activeondx.h"
 #endif
-
+.arm
 .global _start
-.thumb
-.thumb_func
 _start:
-	ldr r0, =0xc07156b8
-	blx r0
-	pop {r4, pc}
+	ldrb r0, [sp, #0x10]
+	add sp, sp, #0x1c
