@@ -214,4 +214,5 @@ void start(int *env) {
 	runMenu(mainMenu);
 	clearScreen();
 	countdown(3);
+	clearScreen();
 }
