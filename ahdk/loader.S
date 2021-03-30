@@ -13,7 +13,7 @@ _start:
 	// Open the file
 	ldr r0, =file
 	ldr r1, =read
-	bl AMBSH_FOPEN
+	bl AMB_FOPEN
 
 	// Load the binary into memory
 	movs r5,r0
@@ -23,12 +23,14 @@ _start:
 		mov r1, #1
 		ldr r2, =255
 		mov r3, r5
-		bl AMBSH_FREAD
+		bl AMB_FREAD
 		add r4, #255
 		cmp r0, #1
 	bgt top
 
 	pop {r0}
+
+	// No fclose because Im lazy
 	
 	mov r1, #0 // TODO: insert param
 	bl MEM_MAIN

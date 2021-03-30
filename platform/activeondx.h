@@ -73,19 +73,24 @@ Display Info:
 // including the strings, about 1.3k is free to use.
 #define MEM_LOADER 0xc012d5d4
 
-// Attempt payload location (ntfl code space)
+// Attempt payload location
+// This is where the ntfl commmand is.
+// I think around 18kb is free to use.
 #define MEM_MAIN 0xc0138870
 
-#define AMBSH_PRINTF 0xc0272996
-#define AMBSH_MSLEEP 0xc026cc9c
-#define AMBSH_ATOI 0xc01a23ac
-#define AMBSH_SPRINTF 0xc02745c4
-#define AMBSH_FOPEN 0xc02749a4
-#define AMBSH_FCLOSE 0xc0274a92
-#define AMBSH_FREAD 0xc0274c22
-#define AMBSH_GPIO 0xc0276bea
-#define AMBSH_FWRITE 0xc0274bd8
-#define AMBSH_EXP 0xc02d0204
+#define AMB_PRINTF 0xc0272996
+#define AMB_MSLEEP 0xc026cc9c
+#define AMB_ATOI 0xc01a23ac
+#define AMB_SPRINTF 0xc02745c4
+#define AMB_FOPEN 0xc02749a4
+#define AMB_FCLOSE 0xc0274a92
+#define AMB_FREAD 0xc0274c22
+#define AMB_GPIO 0xc0276bea
+#define AMB_FWRITE 0xc0274bd8
+#define AMB_EXP 0xc02d0204
+#define AMB_ALLOC 0xc0181a08
+#define AMB_HEAP 0xc03ac89c
+#define AMB_FREE 0xc026e4b8
 
 // Experiments
 

@@ -12,56 +12,74 @@ _start:
 
 // Stub routers, dont
 // want to bother with blx for now
-.global ambsh_printf
-ambsh_printf:
+.global amb_printf
+amb_printf:
 	push {r7, lr}
-	bl AMBSH_PRINTF
+	bl AMB_PRINTF
 	pop {r7, pc}
 
-.global ambsh_msleep
-ambsh_msleep:
+.global amb_msleep
+amb_msleep:
 	push {r7, lr}
-	bl AMBSH_MSLEEP
+	bl AMB_MSLEEP
 	pop {r7, pc}
 
-.global ambsh_sprintf
-ambsh_sprintf:
+.global amb_sprintf
+amb_sprintf:
 	push {r7, lr}
-	bl AMBSH_SPRINTF
+	bl AMB_SPRINTF
 	pop {r7, pc}
 
-.global ambsh_fopen
-ambsh_fopen:
+.global amb_fopen
+amb_fopen:
 	push {r7, lr}
-	bl AMBSH_FOPEN
+	bl AMB_FOPEN
 	pop {r7, pc}
 
-.global ambsh_fread
-ambsh_fread:
+.global amb_fread
+amb_fread:
 	push {r7, lr}
-	bl AMBSH_FREAD
+	bl AMB_FREAD
 	pop {r7, pc}
 
-.global ambsh_fwrite
-ambsh_fwrite:
+.global amb_fwrite
+amb_fwrite:
 	push {r7, lr}
-	bl AMBSH_FWRITE
+	bl AMB_FWRITE
 	pop {r7, pc}
 
-.global ambsh_fclose
-ambsh_fclose:
+.global amb_fclose
+amb_fclose:
 	push {r7, lr}
-	bl AMBSH_FCLOSE
+	bl AMB_FCLOSE
 	pop {r7, pc}
 
-.global ambsh_gpio
-ambsh_gpio:
+.global amb_gpio
+amb_gpio:
 	push {r7, lr}
-	bl AMBSH_GPIO
+	bl AMB_GPIO
 	pop {r7, pc}
 
-.global ambsh_exp
-ambsh_exp:
+.global amb_exp
+amb_exp:
 	push {r7, lr}
-	bl AMBSH_EXP
+	bl AMB_EXP
+	pop {r7, pc}
+
+.global amb_alloc
+amb_alloc:
+	push {r7, lr}
+	bl AMB_ALLOC
+	pop {r7, pc}
+
+.global amb_free
+amb_free:
+	push {r7, lr}
+	bl AMB_FREE
+	pop {r7, pc}
+
+.global amb_heap
+amb_heap:
+	push {r7, lr}
+	bl AMB_HEAP
 	pop {r7, pc}

@@ -4,11 +4,11 @@
 
 extern struct Font font[100];
 
-// Severely broken functions
+// Needs magic numbers...
 void drawPixel(int x, int y, unsigned char col) {
 	unsigned char *screen = (unsigned char*)MEM_BUFFER;
-	y += 20;
-	x += 5;
+	x += 5; // 1?
+	y += 20; // 17?
 	screen[x * SCREEN_HEIGHT - y] = col;
 }
 
@@ -92,7 +92,7 @@ void drawImage(int x, int y, int width, int height, char image[]) {
 	width += x;
 	height += y;
 
-	FILE *file = ambsh_fopen(image, "r");
+	FILE *file = amb_fopen(image, "r");
 	if (!file) {
 		return;
 	}
@@ -101,7 +101,7 @@ void drawImage(int x, int y, int width, int height, char image[]) {
 	int i = 0;
 	for (;y < height; y++) {
 		for (int tx = x; tx < width; tx++) {
-			if (!ambsh_fread(&c, 1, 1, file)) {
+			if (!amb_fread(&c, 1, 1, file)) {
 				return;
 			}
 			
@@ -109,4 +109,6 @@ void drawImage(int x, int y, int width, int height, char image[]) {
 			i++;
 		}
 	}
+
+	amb_fclose(file);
 }

@@ -6,8 +6,8 @@ int line;
 int sel;
 struct Font font[100];
 char buffer[100];
-
 char shutterCode[][4] = {"1", "24", "85", "126", "178", "252", "378"};
+int ox, oy;
 
 void notify() {
 	drawBox(10, 10, 200, 40, MENU_COL);
@@ -16,9 +16,9 @@ void notify() {
 
 void countdown(int sec) {
 	for (; sec != 0; sec--) {
-		ambsh_sprintf(buffer, "Waiting %d...", sec);
+		amb_sprintf(buffer, "Waiting %d...", sec);
 		notify();
-		ambsh_msleep(1000);
+		amb_msleep(1000);
 	}
 }
 
@@ -58,18 +58,18 @@ void drawMenu(struct MenuItem menu[]) {
 // Return GPIO status
 int gpioStat(int id) {
 	int b, c, d;
-	ambsh_gpio(id, &b, &c, &d);
+	amb_gpio(id, &b, &c, &d);
 	return !(c & 0xff);
 }
 
 // Wait until a button is pressed
 int waitButton(int id) {
 	while (!gpioStat(id)) {
-		ambsh_msleep(1);
+		amb_msleep(1);
 	}
 
 	while (gpioStat(id)) {
-		ambsh_msleep(1);
+		amb_msleep(1);
 	}
 }
 
@@ -86,7 +86,7 @@ int getButton() {
 
 	// Wait until button is up
 	while (gpioStat(id)) {
-		ambsh_msleep(1);
+		amb_msleep(1);
 	}
 
 	return id;
@@ -122,7 +122,7 @@ int runMenu(struct MenuItem menu[]) {
 						break;
 					}
 					
-					ambsh_msleep(1);
+					amb_msleep(1);
 				}
 			}
 		} else if (r == P_MODEBTN) {
@@ -138,13 +138,13 @@ int runMenu(struct MenuItem menu[]) {
 		drawGUI();
 		drawMenu(menu);
 		
-		ambsh_msleep(10);
+		amb_msleep(10);
 	}
 }
 
 int ahdkInfo() {
 	line = 0;
-	ambsh_sprintf(buffer, "AHDK Menu: Model: %s", P_NAME);
+	amb_sprintf(buffer, "AHDK Menu: Model: %s", P_NAME);
 	print(buffer);
 	print("Press select button to exit.");
 	drawImage(140, 50, 150, 150, "d:/ahdk/logo.bin");
@@ -153,9 +153,9 @@ int ahdkInfo() {
 }
 
 void writeAmbsh(char *buffer) {
-	FILE *file = ambsh_fopen("d:/ahdk/a.ash", "w");
-	ambsh_fwrite(buffer, 1, strlen(buffer), file);
-	ambsh_fclose(file);
+	FILE *file = amb_fopen("d:/ahdk/a.ash", "w");
+	amb_fwrite(buffer, 1, strlen(buffer), file);
+	amb_fclose(file);
 }
 
 int exitMenu() {
@@ -175,7 +175,7 @@ char *hijackExp[] = {"ia2", "-ae", "exp", 0, 0};
 int expTake() {
 	hijackExp[3] = selectISO.elements[selectISO.s];
 	hijackExp[4] = shutterCode[selectExp.s];
-	ambsh_exp(envg, hijackExp);
+	amb_exp(envg, hijackExp);
 	return 0;
 }
 
@@ -192,24 +192,37 @@ int expSetting() {
 	return 0;
 }
 
+int allocTest() {
+	line = 0;
+	int test, r;
+	print("Alloc 1m");
+	r = amb_alloc(1, 102400, &test);
+	amb_sprintf(buffer, "R: %d Addr: %x", r, test);
+	print(buffer);
+	amb_free(&test);
+	print("1m Freed??");
+	waitButton(P_SELBTN);
+}
+
 struct MenuItem mainMenu[] = {
 	{"Exit", exitMenu, ACTION, 0},
 	{"Manual", expSetting, ACTION, 0},
 	{"About AHDK", ahdkInfo, ACTION, 0},
+	{"Alloc test", allocTest, ACTION, 0},
 	{0}
 };
 
 void start(int *env) {
 	envg = env;
-	ambsh_printf(env, "AHDK Started");
+	amb_printf(env, "AHDK Started");
 	line = 0;
 	sel = 0;
 
 	// Copy font into memory
-	FILE *file = ambsh_fopen("d:/ahdk/font.bin", "r");
-	if (!file) {ambsh_printf(env, "No font"); return;}
-	ambsh_fread(font, 2737, 2737, file);
-	ambsh_fclose(file);
+	FILE *file = amb_fopen("d:/ahdk/font.bin", "r");
+	if (!file) {amb_printf(env, "No font"); return;}
+	amb_fread(font, 2737, 2737, file);
+	amb_fclose(file);
 
 	runMenu(mainMenu);
 	clearScreen();
