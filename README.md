@@ -3,6 +3,8 @@ Basically a CHDK/Magic Lantern clone for Ambarella based cameras.
 Has unofficial documentation and hacks. Don't expect anything  
 too polished at the moment.
 
+Demonstration: https://www.youtube.com/watch?v=8iN3dRujXYc
+
 # Goals
 - Extensive Ambsh documentation
 - Magic lantern/CHDK like GUI program loaded onto camera
