@@ -15,6 +15,8 @@ Gopro Hero 3+
 // Triggered on invalid command
 #define MEM_PRINT 0xc0246a98
 
+#define MEM_GPIOHACK 0xc01505d4
+
 // Like Activeon DX, Also cardmgr command
 #define MEM_LOADER 0xc02d16dc
 

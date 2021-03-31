@@ -3,14 +3,10 @@
 #include "../ashp/main.h"
 
 int main(int argc, char *argv[]) {
-	// Define MEM_NOCARD from header
-	#ifndef P_NOSCREEN
-		strcpy(mem.t[0].name, "MEM_TEXT");
-		mem.t[0].integer = MEM_NOCARD;
+	if (argc == 1) {return -1;}
+	#ifdef MEM_GPIOHACK
+		defineInt("MEM_GPIOHACK", MEM_GPIOHACK);
 	#endif
-	strcpy(mem.t[1].name, "P_CTRLMAN");
-	mem.t[1].integer = P_CTRLMAN;
-	mem.len = 2;
-	
+	defineInt("P_CTRLMAN", P_CTRLMAN);
 	parseAmbsh(argv[1]);
 }

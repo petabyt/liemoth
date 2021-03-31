@@ -83,6 +83,13 @@ int findMem(char string[]) {
 	return -1;
 }
 
+void defineInt(char name[], long value) {
+	strcpy(mem.t[mem.len].name, name);
+	mem.t[mem.len].type = INTEGER;
+	mem.t[mem.len].integer = value;
+	mem.len++;
+}
+
 void parseStatement(char *buffer) {
 	// A simple token parser. Overkill, but flexible
 	// just in case I ever need to extend it
@@ -263,12 +270,12 @@ int parseAmbsh(char *file) {
 
 				// Skip if newline after
 				if (buffer[c + 1] == '\n') {
-					c += 1;
+					c += 2;
 				}
 				
 				int i = findMem(statement);
 				if (mem.t[i].type == INTEGER) {
-					printf("0x%lx", mem.t[i].integer);
+					printf("%li", mem.t[i].integer);
 				} else if (mem.t[i].type == STRING) {
 					printf("%s", mem.t[i].value);
 				}

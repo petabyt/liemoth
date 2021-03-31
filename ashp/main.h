@@ -33,3 +33,4 @@ void writeBytes(short opcode[], long location);
 void writeBin(char file[], long location);
 void writeFile(char file[]);
 int parseAmbsh(char *file);
+void defineInt(char name[], long value);
