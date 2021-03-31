@@ -268,10 +268,7 @@ int parseAmbsh(char *file) {
 
 				statement[len] = '\0';
 
-				// Skip if newline after
-				if (buffer[c + 1] == '\n') {
-					c += 2;
-				}
+				
 				
 				int i = findMem(statement);
 				if (mem.t[i].type == INTEGER) {
