@@ -9,30 +9,8 @@
 // TODO: Actual error handling
 
 struct Memory mem;
-
-int writeLong(char buffer[], int length, int location) {
-	long a;
-	int i = 0;
-
-	while (!((length - i) % 4)) {
-		printf("writeb 0x%x 0x%x\n", location, buffer[i]);
-		location++;
-		i++;
-	}
-	
-	while (i < length) {
-		a = buffer[i];
-		i++;
-		a |= buffer[i] << 8;
-		i++;
-		a |= buffer[i] << 16;
-		i++;
-		a |= buffer[i] << 24;
-		printf("writel 0x%x 0x%lx\n", location, a);
-		i++;
-		location += 4;
-	}
-}
+int skipping = 0;
+int inStatement = 0;
 
 // Generate a unicode string at address.
 // (seperated by spaces)
@@ -46,13 +24,6 @@ void genUnicode(char string[], long location) {
 
 	printf("writeb 0x%lx 0x0\n", location);
 	printf("writeb 0x%lx 0x0\n", location + 1);
-}
-
-void writeBytes(short opcode[], long location) {
-	for (int c = 0; opcode[c] != -1; c++) {
-		printf("writeb 0x%lx 0x%x\n", location, opcode[c]);
-		location++;
-	}
 }
 
 void writeBin(char file[], long location) {
@@ -88,7 +59,7 @@ void writeFile(char file[]) {
 	fclose(reader);
 }
 
-// Lexer Functions
+// Lexer Functions (copypasted from another project)
 int isChar(char a) {
 	return ((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || a == '_');
 }
@@ -101,9 +72,20 @@ int isHex(char a) {
 	return (a >= '0' && a <= '9') || (a >= 'a' && a <= 'f') || (a >= 'A' && a <= 'F');
 }
 
+// Find a token in memory structure
+int findMem(char string[]) {
+	for (int i = 0; i < mem.len; i++) {
+		if (!strcmp(mem.t[i].name, string)) {
+			return i;
+		}
+	}
+
+	return -1;
+}
+
 void parseStatement(char *buffer) {
 	// A simple token parser. Overkill, but flexible
-	// just in case I ever add some other crap
+	// just in case I ever need to extend it
 	int len = 0;
 	for (int c = 0; buffer[c] != '\0';) {
 		while (buffer[c] == ' ') {
@@ -177,6 +159,18 @@ void parseStatement(char *buffer) {
 		len++;
 	}
 
+	// Skip all ashp commands until end is defined
+	if (!strcmp(tokens[0].text, "end")) {
+		inStatement--;
+		if (skipping) {
+			skipping--;
+		}
+	}
+
+	if (skipping) {
+		return;
+	}
+
 	if (!strcmp(tokens[0].text, "define")) {
 		strcpy(mem.t[mem.len].name, tokens[1].text);
 		strcpy(mem.t[mem.len].value, tokens[2].text);
@@ -189,88 +183,100 @@ void parseStatement(char *buffer) {
 		writeBin(tokens[1].text, tokens[2].value);
 	} else if (!strcmp(tokens[0].text, "writeFile")) {
 		writeFile(tokens[1].text);
+	} else if (!strcmp(tokens[0].text, "ifdef")) {
+		inStatement++;
+		if (findMem(tokens[1].text) == -1) {
+			skipping++;
+		}
+	} else if (!strcmp(tokens[0].text, "ifndef")) {
+		inStatement++;
+		if (findMem(tokens[1].text) != -1) {
+			skipping++;
+		}
+	} else if (!strcmp(tokens[0].text, "ifeq")) {
+		inStatement++;
+		int i = findMem(tokens[1].text);
+		if (mem.t[i].type == INTEGER) {
+			if (mem.t[i].integer != tokens[2].value) {
+				skipping++;
+			}
+		} else if (mem.t[i].type == STRING) {
+			if (strcmp(mem.t[i].value, tokens[2].text)) {
+				skipping++;
+			}
+		}
 	}
 }
 
 int parseAmbsh(char *file) {
 	char buffer[500];
-	int len;
-	
+	char statement[500];
+
 	FILE *reader = fopen(file, "r");
-	int c;
-	while (1)  {
-		c = fgetc(reader);
-		if (c == EOF) {
-			break;
+
+	while (fgets(buffer, 500, reader) != NULL) {
+		int c = 0;
+		while (buffer[c] == '\t' || buffer[c] == '\n' || buffer[c] == ' ') {
+			c++;
 		}
 
-		if (c == '#') {
-			while ((char)c != '\n') {
-				c = fgetc(reader);
+		if (buffer[c] == '#') {
+			c++;
+			while (buffer[c] != '\0') {
+				c++;
 			}
-			
+		}
+
+		// If it made it this far, then it is a "nothing"
+		// line, and will not be parsed
+		if (buffer[c] == '\0') {
 			continue;
-		} if (c == '\t') {
-			continue;
-		} else if (c == '[') {
-			c = fgetc(reader);
-			len = 0;
-			while (c != ']') {
-				buffer[len] = (char)c;
-				len++;
-				c = fgetc(reader);
+		}
 
-				// No end
-				if (c == EOF) {
-					return -1;
+		for (; buffer[c] != '\0'; c++) {
+			if (buffer[c] == '[') {
+				c++;
+				int len = 0;
+				while (buffer[c] != ']') {
+					statement[len] = buffer[c];
+					c++;
+					len++;
 				}
-			}
 
-			buffer[len] = '\0';
-			parseStatement(buffer);
+				statement[len] = '\0';
+				parseStatement(statement);
 
-			// Newline required after statement
-			c = fgetc(reader);
-			if (c != '\n') {
-				return -1;
-			}
-		} else if (c == '{') {
-			c = fgetc(reader);
-			len = 0;
-			while (c != '}') {
-				buffer[len] = (char)c;
-				len++;
-				c = fgetc(reader);
-
-				// No end
-				if (c == EOF) {
-					return -1;
+				// Skip if newline after
+				if (buffer[c + 1] == '\n') {
+					c += 1;
 				}
-			}
-
-			// Find the correct definition value
-			int i;
-			buffer[len] = '\0';
-			for (i = 0; i < mem.len; i++) {
-				if (!strcmp(mem.t[i].name, buffer)) {
-					break;
+			} else if (buffer[c] == '{') {
+				c++;
+				int len = 0;
+				while (buffer[c] != '}') {
+					statement[len] = buffer[c];
+					c++;
+					len++;
 				}
-			}
 
-			if (mem.t[i].type == INTEGER) {
-				printf("%li", mem.t[i].integer);
-			} else if (mem.t[i].type == STRING) {
-				printf("%s", mem.t[i].value);
+				statement[len] = '\0';
+
+				// Skip if newline after
+				if (buffer[c + 1] == '\n') {
+					c += 1;
+				}
+				
+				int i = findMem(statement);
+				if (mem.t[i].type == INTEGER) {
+					printf("0x%lx", mem.t[i].integer);
+				} else if (mem.t[i].type == STRING) {
+					printf("%s", mem.t[i].value);
+				}
+			} else if (!skipping) {
+				putchar(buffer[c]);
 			}
-		} else {
-			putchar((char)c);
 		}
 	}
 
 	return 0;
 }
-
-// int main(int argc, char *argv[]) {
-	// return parseAmbsh(argv[1]);
-	// return 0;
-// }
