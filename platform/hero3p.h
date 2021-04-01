@@ -12,6 +12,8 @@ Gopro Hero 3+
 #define P_MODEBTN 139
 #define P_SELBTN 140
 
+#define MEM_BASEADDR 0xC0000000
+
 // Triggered on invalid command
 #define MEM_PRINT 0xc0246a98
 

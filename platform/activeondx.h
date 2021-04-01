@@ -63,6 +63,8 @@ Display Info:
 #define SCREEN_HEIGHT 256
 #define SCREEN_WIDTH 320
 
+#define MEM_BASEADDR 0xC0000000
+
 // Top screen buffer (see notes.md)
 #define MEM_BUFFER 0xc2413880
 
