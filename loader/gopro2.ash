@@ -32,12 +32,9 @@ while true; do
 	while (t gpio {P_MODEBTN}); do
 		# If select button down
 		if (t gpio {P_SELBTN}); then
-			resume {P_CTRLMAN}
+			t app fp_string 'Hello World'
 			sleep 5
-			t app fp_string 'SCRIPT1'
-			while true; do
-				sleep 100
-			done
+			t app fp_string 'AHDK    {firstName} {secondName}  {thirdName}  EXIT '
 		fi
 	done
 	# Wait until button is up
