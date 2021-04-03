@@ -7,7 +7,6 @@ int sel;
 struct Font font[100];
 char buffer[100];
 char shutterCode[][4] = {"1", "24", "85", "126", "178", "252", "378"};
-int ox, oy;
 
 void notify() {
 	drawBox(10, 10, 200, 40, MENU_COL);
@@ -204,11 +203,106 @@ int allocTest() {
 	waitButton(P_SELBTN);
 }
 
+int graphicTest() {
+	int a = 1;
+	int t = 1;
+	while (1) {
+		clearScreen();
+		fillRect(a, 10, a + 10, 20, COL_RED);
+		amb_msleep(30);
+		if (t) {
+			a++;
+		} else {
+			a--;
+		}
+
+		if (a == 100 || a == 0) {
+			t = !t;
+		}
+	}
+}
+
+// Stolen from:
+// https://github.com/kgabis/business-card-brainfuck
+// MIT License
+int bfExec() {
+	int x = 0;
+	int y = 0;
+	int r = 0;
+	int c = 0;
+	int t = 0;
+	int e = 0;
+	int p[65536];
+	int d[1024];
+	
+	FILE *f = amb_fopen("d:/autoexec.bf", "r");
+	if (!f) {
+		return 0;
+	}
+	
+	while (amb_fread(&c, 1, 1, f)) {
+		p[r] = c;
+		r++;
+	}
+	
+	r = 0;
+	while((c = p[r])) {
+		e = 0;
+		if (c == '>') {
+			t++;
+		} else if (c == '<') {
+			t--;
+		} else if (c == '+') {
+			d[t]++;
+		} else if (c == '-') {
+			d[t]--;
+		} else if (c == '.') {
+			if (d[t] == 10) {
+				y++;
+				x = 0;
+			} else {
+				drawPixel(x, y, d[t] * 2);
+				x++;
+			}
+		}
+		
+		while (c == '[' && !d[t]) {
+			if (p[r] == '[') {
+				e++;
+			}
+			
+			if (p[r] == ']' && e-- == 1) {
+				break;
+			}
+			
+			r++;
+		}
+		
+		while (c == ']' && d[t]) {
+			if (p[r] == ']') {
+				e++;
+			}
+			
+			if (p[r] == '[' && e-- == 1) {
+				break;
+			}
+			
+			r--;
+		}
+		
+		r++;
+	}
+
+	amb_msleep(10000);
+}
+
 struct MenuItem mainMenu[] = {
 	{"Exit", exitMenu, ACTION, 0},
 	{"Manual", expSetting, ACTION, 0},
 	{"About AHDK", ahdkInfo, ACTION, 0},
 	{"Alloc test", allocTest, ACTION, 0},
+	{"Graphics", graphicTest, ACTION, 0},
+	{"BF Exec", bfExec, ACTION, 0},
 	{0}
 };
 

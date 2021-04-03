@@ -15,7 +15,7 @@ void drawPixel(int x, int y, unsigned char col) {
 void clearScreen() {
 	unsigned char *screen = (unsigned char*)MEM_BUFFER;
 	for (int i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++) {
-		screen[i] = 0xff;
+		screen[i] = 111;
 	}
 }
 

@@ -8,6 +8,7 @@ Gopro Hero 3+
 #define P_ARM
 #define P_NOSCREEN
 
+
 #define P_CTRLMAN 37
 #define P_MODEBTN 139
 #define P_SELBTN 140

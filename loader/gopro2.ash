@@ -1,4 +1,5 @@
 # This loader will use buttons to load scripts.
+# This is currently configured to work on GoPro Hero 3+
 
 # This is where the GPIO hack function return is located.
 # Instead of:
@@ -7,7 +8,7 @@
 # We inject:
 #  ldrb r0, [sp, 0x10]
 #  add sp, #0x1c
-# With 0x10 being the outputle.
+# With 0x10 being the output var.
 
 # Now write the preassembled 8 byte binary
 [writeBin "gpioasm.bin" MEM_GPIOHACK]
@@ -15,6 +16,7 @@
 [define P_MODEBTN 139]
 [define P_SELBTN 140]
 
+# Predefined script names. Max 5 chars
 [define firstName "SCR 1"]
 [define secondName "SCR 2"]
 [define thirdName "SCR 3"]
@@ -23,16 +25,22 @@
 # but we can kill the autoexec.ash task
 [define AUTOEXECTASK 59]
 
+# Two button tasks. After closing, all of the previously
+# pressed button requests are opened to control manager task.
+# These are two button related tasks? Fixed it I think?
+[define BUTTONTASKA 17]
+[define BUTTONTASKB 16]
+
 suspend {P_CTRLMAN}
-suspend 17
-suspend 16
+suspend {BUTTONTASKA}
+suspend {BUTTONTASKB}
 while true; do
 	t app fp_string 'AHDK    {firstName} {secondName}  {thirdName}  EXIT '
 	# While mode button not up
 	while (t gpio {P_MODEBTN}); do
 		# If select button down
 		if (t gpio {P_SELBTN}); then
-			t app fp_string 'Hello World'
+			t app fp_string 'Hello  World'
 			sleep 5
 			t app fp_string 'AHDK    {firstName} {secondName}  {thirdName}  EXIT '
 		fi
@@ -74,13 +82,8 @@ while true; do
 	t app fp_string 'AHDK   {firstName}  {secondName}  {thirdName}   EXIT'
 	while (t gpio {P_MODEBTN}); do
 		if (t gpio {P_SELBTN}); then
-
-			# Two button tasks. After closing, all of the previously
-			# pressed button requests are opened to control manager task.
-			# These are two button related tasks? Fixed it I think?
-			resume 17
-			resume 16
-			
+			suspend {BUTTONTASKA}
+			suspend {BUTTONTASKB}
 			resume {P_CTRLMAN}
 			kill {AUTOEXECTASK}
 		fi
