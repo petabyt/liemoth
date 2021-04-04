@@ -32,3 +32,4 @@ while true; do
 done
 ```
 - GPIO function: "gpio%d:\t %s %d %s\n" (it should accept 4 parameters?)
+- Dir Openers: "start time = %d ms\n"

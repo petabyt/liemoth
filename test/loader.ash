@@ -1,3 +1,3 @@
 [writeBin "main.o" MEM_LOADER]
-cardmgr
-
+touch log
+ls > log

@@ -78,8 +78,14 @@ amb_free:
 	bl AMB_FREE
 	pop {r7, pc}
 
-.global amb_heap
-amb_heap:
+.global amb_openDir
+amb_openDir:
 	push {r7, lr}
-	bl AMB_HEAP
+	bl AMB_OPENDIR
+	pop {r7, pc}
+
+.global amb_nextFile
+amb_nextFile:
+	push {r7, lr}
+	bl AMB_NEXTFILE
 	pop {r7, pc}

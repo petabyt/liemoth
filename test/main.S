@@ -2,8 +2,11 @@
 #ifndef P_NAME
 	#include "../platform/activeondx.h"
 #endif
-.arm
+
 .global _start
 _start:
-	ldrb r0, [sp, #0x10]
-	add sp, sp, #0x1c
+	push {r7, lr}
+	ldr r1, =foo
+	bl 0xc0272996
+	pop {r7, pc}
+foo: .string "%s"

@@ -222,8 +222,8 @@ int graphicTest() {
 	}
 }
 
-// Stolen from:
-// https://github.com/kgabis/business-card-brainfuck
+// Graphical BrainF*ck Interpreter
+// Stolen from: https://github.com/kgabis/business-card-brainfuck
 // MIT License
 int bfExec() {
 	int x = 0;
@@ -235,7 +235,7 @@ int bfExec() {
 	int p[65536];
 	int d[1024];
 	
-	FILE *f = amb_fopen("d:/autoexec.bf", "r");
+	FILE *f = amb_fopen("d:/ml/autoexec.bf", "r");
 	if (!f) {
 		return 0;
 	}
@@ -293,17 +293,40 @@ int bfExec() {
 		r++;
 	}
 
-	amb_msleep(10000);
+	waitButton(P_SELBTN);
+}
+
+int showScripts() {
+	line = 0;
+	drawGUI();
+	struct Ambarella_dirReader dirReader;
+	int a = amb_openDir("d:/scripts/*", NORMALDIR, &dirReader);
+	while (!amb_nextFile(&dirReader)) {
+		amb_sprintf(buffer, "Test: %d %s", a, dirReader.name);
+		print(buffer);
+	}
+	
+	waitButton(P_SELBTN);
+	return 0;
+
+	#if 0
+	FILE *file = amb_fopen("d:/log", "w");
+	amb_fwrite(buf, 1, 65536, file);
+	amb_fclose(file);
+	#endif
 }
 
 struct MenuItem mainMenu[] = {
 	{"Exit", exitMenu, ACTION, 0},
 	{"Manual", expSetting, ACTION, 0},
 	{"About AHDK", ahdkInfo, ACTION, 0},
+
+#ifndef MINIMAL
 	{"Alloc test", allocTest, ACTION, 0},
-	{"Graphics", graphicTest, ACTION, 0},
+	{"Scripts", showScripts, ACTION, 0},
 	{"BF Exec", bfExec, ACTION, 0},
 	{0}
+#endif
 };
 
 void start(int *env) {
@@ -319,7 +342,4 @@ void start(int *env) {
 	amb_fclose(file);
 
 	runMenu(mainMenu);
-	clearScreen();
-	countdown(3);
-	clearScreen();
 }

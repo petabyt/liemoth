@@ -93,6 +93,8 @@ Display Info:
 #define AMB_ALLOC 0xc0181a08
 #define AMB_HEAP 0xc03ac89c
 #define AMB_FREE 0xc026e4b8
+#define AMB_OPENDIR 0xc0274dd8
+#define AMB_NEXTFILE 0xc0274cbe
 
 // Experiments
 
