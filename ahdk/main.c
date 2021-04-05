@@ -141,6 +141,8 @@ int runMenu(struct MenuItem menu[]) {
 	}
 }
 
+// Menu stuffs:
+
 int ahdkInfo() {
 	line = 0;
 	amb_sprintf(buffer, "AHDK Menu: Model: %s", P_NAME);
@@ -193,9 +195,9 @@ int expSetting() {
 
 int allocTest() {
 	line = 0;
-	int test, r;
 	print("Alloc 1m");
-	r = amb_alloc(1, 102400, &test);
+	int test;
+	int r = amb_alloc(1, 102400, &test);
 	amb_sprintf(buffer, "R: %d Addr: %x", r, test);
 	print(buffer);
 	amb_free(&test);
@@ -235,7 +237,7 @@ int bfExec() {
 	int p[65536];
 	int d[1024];
 	
-	FILE *f = amb_fopen("d:/ml/autoexec.bf", "r");
+	FILE *f = amb_fopen("d:/ahdk/autoexec.bf", "r");
 	if (!f) {
 		return 0;
 	}
@@ -308,25 +310,121 @@ int showScripts() {
 	
 	waitButton(P_SELBTN);
 	return 0;
-
-	#if 0
-	FILE *file = amb_fopen("d:/log", "w");
-	amb_fwrite(buf, 1, 65536, file);
-	amb_fclose(file);
-	#endif
 }
+
+int runCins() {
+	// Allocate 1 megabyte of memory
+	char *input;
+	int r = amb_alloc(1, 102400, &input);
+
+	// Read file into memory
+	FILE *file = amb_fopen("d:/ahdk/autoexec.cins", "r");
+	char c;
+	r = 0;
+	while (amb_fread(&c, 1, 1, file)) {
+		input[r] = c;
+		r++;
+	}
+
+	input[r] = '\0';
+	
+	int memtop[50];
+	int membottom[1000];
+	int topp = 0;
+	int bottomp = 0;
+	
+	// Map the labels in an array.
+	int labels[50];
+	int l = 0;
+	for (int c = 0; input[c] != '\0'; c++) {
+		if (input[c] == '|') {
+			labels[l] = c;
+			l++;
+		}
+	}
+
+	int bufC = 0;
+	for (int c = 0; input[c] != '\0'; c++) {
+		switch (input[c]) {
+		case '!':
+			membottom[bottomp] = 0;
+			break;
+		case '%':
+			membottom[bottomp] += 50;
+			break;
+		case '*':
+			membottom[bottomp] += 5;
+			break;
+		case '+':
+			membottom[bottomp]++;
+			break;
+		case '-':
+			membottom[bottomp]--;
+			break;
+		case '.':
+			if (membottom[bottomp] == '\n') {
+				buffer[bufC] = '\0';
+				bufC = 0;
+				print(buffer);
+			}
+			
+			buffer[bufC] = membottom[bottomp];
+			bufC++;
+			break;
+		case '>':
+			bottomp++;
+			break;
+		case '<':
+			bottomp--;
+			break;
+		case 'd':
+			topp++;
+			break;
+		case 'a':
+			topp--;
+			break;
+		case '^':
+			memtop[topp] = membottom[bottomp];
+			break;
+		case 'v':
+			membottom[bottomp] = memtop[topp];
+			break;
+		case '$':
+			c = labels[memtop[topp]];
+			break;
+		case '?':
+			if (memtop[topp + 1] == memtop[topp + 2]) {
+				c = labels[memtop[topp]];
+			}
+
+			break;
+		}
+	}
+
+	waitButton(P_SELBTN);
+	return 0;
+}
+
+#define RUNCINS
+#define ALLOCTEST
 
 struct MenuItem mainMenu[] = {
 	{"Exit", exitMenu, ACTION, 0},
 	{"Manual", expSetting, ACTION, 0},
 	{"About AHDK", ahdkInfo, ACTION, 0},
-
-#ifndef MINIMAL
-	{"Alloc test", allocTest, ACTION, 0},
-	{"Scripts", showScripts, ACTION, 0},
-	{"BF Exec", bfExec, ACTION, 0},
+	#ifdef ALLOCTEST
+		{"Alloc test", allocTest, ACTION, 0},
+	#endif
+	#ifdef SCRIPTS
+		{"Scripts", showScripts, ACTION, 0},
+	#endif
+	#ifdef BFEXEC
+		{"BF Exec", bfExec, ACTION, 0},
+	#endif
+	#ifdef RUNCINS
+		{"BF Exec", runCins, ACTION, 0},
+	#endif
 	{0}
-#endif
 };
 
 void start(int *env) {
