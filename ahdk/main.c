@@ -1,11 +1,13 @@
 #include "header.h"
 #include "ambarella.h"
+#include "mainmenu.h"
 
 int *envg;
 int line;
 int sel;
-struct Font font[100];
 char buffer[100];
+
+struct Font font[100];
 char shutterCode[][4] = {"1", "24", "85", "126", "178", "252", "378"};
 
 void notify() {
@@ -100,13 +102,12 @@ int runMenu(struct MenuItem menu[]) {
 		if (r == P_SELBTN) {
 			if (menu[sel].type == ACTION) {
 				drawGUI();
-				if (menu[sel].action() != 0) {
+				if (menu[sel].action(sel) != 0) {
 					sel = 0;
 					line = 0;
-					return 1;
+					return 0;
 				}
-			// NOTE: This is for SELECT
-			} else {
+			} else if (menu[sel].type == SELECT) {
 				while (1) {
 					r = getButton();
 					if (r == P_MODEBTN) {
@@ -123,6 +124,10 @@ int runMenu(struct MenuItem menu[]) {
 					
 					amb_msleep(1);
 				}
+			} else if (menu[sel].type == RETURN) {
+				int temp = sel;
+				sel = 0;
+				return temp;
 			}
 		} else if (r == P_MODEBTN) {
 			if (menu[sel + 1].text == 0) {
@@ -139,28 +144,6 @@ int runMenu(struct MenuItem menu[]) {
 		
 		amb_msleep(10);
 	}
-}
-
-// Menu stuffs:
-
-int ahdkInfo() {
-	line = 0;
-	amb_sprintf(buffer, "AHDK Menu: Model: %s", P_NAME);
-	print(buffer);
-	print("Press select button to exit.");
-	drawImage(140, 50, 150, 150, "d:/ahdk/logo.bin");
-	waitButton(P_SELBTN);
-	return 0;
-}
-
-void writeAmbsh(char *buffer) {
-	FILE *file = amb_fopen("d:/ahdk/a.ash", "w");
-	amb_fwrite(buffer, 1, strlen(buffer), file);
-	amb_fclose(file);
-}
-
-int exitMenu() {
-	return 1;
 }
 
 struct ItemInfo selectISO = {
@@ -184,7 +167,7 @@ struct MenuItem expMenu[] = {
 	{"ISO", 0, SELECT, &selectISO},
 	{"Exp", 0, SELECT, &selectExp},
 	{"Apply", expTake, ACTION, 0},
-	{"Exit", exitMenu, ACTION, 0},
+	{"Exit", 0, RETURN, 0},
 	{0}
 };
 
@@ -193,237 +176,15 @@ int expSetting() {
 	return 0;
 }
 
-int allocTest() {
-	line = 0;
-	print("Alloc 1m");
-	int test;
-	int r = amb_alloc(1, 102400, &test);
-	amb_sprintf(buffer, "R: %d Addr: %x", r, test);
-	print(buffer);
-	amb_free(&test);
-	print("1m Freed??");
-	waitButton(P_SELBTN);
-}
-
-int graphicTest() {
-	int a = 1;
-	int t = 1;
-	while (1) {
-		clearScreen();
-		fillRect(a, 10, a + 10, 20, COL_RED);
-		amb_msleep(30);
-		if (t) {
-			a++;
-		} else {
-			a--;
-		}
-
-		if (a == 100 || a == 0) {
-			t = !t;
-		}
-	}
-}
-
-// Graphical BrainF*ck Interpreter
-// Stolen from: https://github.com/kgabis/business-card-brainfuck
-// MIT License
-int bfExec() {
-	int x = 0;
-	int y = 0;
-	int r = 0;
-	int c = 0;
-	int t = 0;
-	int e = 0;
-	int p[65536];
-	int d[1024];
-	
-	FILE *f = amb_fopen("d:/ahdk/autoexec.bf", "r");
-	if (!f) {
-		return 0;
-	}
-	
-	while (amb_fread(&c, 1, 1, f)) {
-		p[r] = c;
-		r++;
-	}
-	
-	r = 0;
-	while((c = p[r])) {
-		e = 0;
-		if (c == '>') {
-			t++;
-		} else if (c == '<') {
-			t--;
-		} else if (c == '+') {
-			d[t]++;
-		} else if (c == '-') {
-			d[t]--;
-		} else if (c == '.') {
-			if (d[t] == 10) {
-				y++;
-				x = 0;
-			} else {
-				drawPixel(x, y, d[t] * 2);
-				x++;
-			}
-		}
-		
-		while (c == '[' && !d[t]) {
-			if (p[r] == '[') {
-				e++;
-			}
-			
-			if (p[r] == ']' && e-- == 1) {
-				break;
-			}
-			
-			r++;
-		}
-		
-		while (c == ']' && d[t]) {
-			if (p[r] == ']') {
-				e++;
-			}
-			
-			if (p[r] == '[' && e-- == 1) {
-				break;
-			}
-			
-			r--;
-		}
-		
-		r++;
-	}
-
-	waitButton(P_SELBTN);
-}
-
-int showScripts() {
-	line = 0;
-	drawGUI();
-	struct Ambarella_dirReader dirReader;
-	int a = amb_openDir("d:/scripts/*", NORMALDIR, &dirReader);
-	while (!amb_nextFile(&dirReader)) {
-		amb_sprintf(buffer, "Test: %d %s", a, dirReader.name);
-		print(buffer);
-	}
-	
-	waitButton(P_SELBTN);
-	return 0;
-}
-
-int runCins() {
-	// Allocate 1 megabyte of memory
-	char *input;
-	int r = amb_alloc(1, 102400, &input);
-
-	// Read file into memory
-	FILE *file = amb_fopen("d:/ahdk/autoexec.cins", "r");
-	char c;
-	r = 0;
-	while (amb_fread(&c, 1, 1, file)) {
-		input[r] = c;
-		r++;
-	}
-
-	input[r] = '\0';
-	
-	int memtop[50];
-	int membottom[1000];
-	int topp = 0;
-	int bottomp = 0;
-	
-	// Map the labels in an array.
-	int labels[50];
-	int l = 0;
-	for (int c = 0; input[c] != '\0'; c++) {
-		if (input[c] == '|') {
-			labels[l] = c;
-			l++;
-		}
-	}
-
-	int bufC = 0;
-	for (int c = 0; input[c] != '\0'; c++) {
-		switch (input[c]) {
-		case '!':
-			membottom[bottomp] = 0;
-			break;
-		case '%':
-			membottom[bottomp] += 50;
-			break;
-		case '*':
-			membottom[bottomp] += 5;
-			break;
-		case '+':
-			membottom[bottomp]++;
-			break;
-		case '-':
-			membottom[bottomp]--;
-			break;
-		case '.':
-			if (membottom[bottomp] == '\n') {
-				buffer[bufC] = '\0';
-				bufC = 0;
-				print(buffer);
-			}
-			
-			buffer[bufC] = membottom[bottomp];
-			bufC++;
-			break;
-		case '>':
-			bottomp++;
-			break;
-		case '<':
-			bottomp--;
-			break;
-		case 'd':
-			topp++;
-			break;
-		case 'a':
-			topp--;
-			break;
-		case '^':
-			memtop[topp] = membottom[bottomp];
-			break;
-		case 'v':
-			membottom[bottomp] = memtop[topp];
-			break;
-		case '$':
-			c = labels[memtop[topp]];
-			break;
-		case '?':
-			if (memtop[topp + 1] == memtop[topp + 2]) {
-				c = labels[memtop[topp]];
-			}
-
-			break;
-		}
-	}
-
-	waitButton(P_SELBTN);
-	return 0;
-}
-
-#define RUNCINS
-#define ALLOCTEST
-
 struct MenuItem mainMenu[] = {
-	{"Exit", exitMenu, ACTION, 0},
+	{"Exit", 0, RETURN, 0},
 	{"Manual", expSetting, ACTION, 0},
 	{"About AHDK", ahdkInfo, ACTION, 0},
-	#ifdef ALLOCTEST
-		{"Alloc test", allocTest, ACTION, 0},
-	#endif
-	#ifdef SCRIPTS
-		{"Scripts", showScripts, ACTION, 0},
-	#endif
-	#ifdef BFEXEC
-		{"BF Exec", bfExec, ACTION, 0},
-	#endif
-	#ifdef RUNCINS
-		{"BF Exec", runCins, ACTION, 0},
-	#endif
+	{"Exec Ambsh", showScripts, ACTION, 0},
+	{"Alloc test", allocTest, ACTION, 0},
+	{"Scripts", showScripts, ACTION, 0},
+	{"Run BF", bfExec, ACTION, 0},
+	{"Run CINS", runCins, ACTION, 0},
 	{0}
 };
 

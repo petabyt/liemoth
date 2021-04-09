@@ -26,7 +26,7 @@
 #define UI_WAIT 150
 
 enum OptionType {
-	SELECT, ACTION
+	SELECT, ACTION, RETURN
 };
 
 struct ItemInfo {
@@ -46,6 +46,7 @@ struct Font {
     char code[7][5];
 };
 
+// Graphics/UI functionss
 void drawPixel(int x, int y, unsigned char col);
 void clearScreen();
 int printString(int x, int y, char *string, char color);
@@ -54,9 +55,25 @@ int printChar(int x, int y, char c, char color);
 void fillRect(int x, int y, int x1, int y1, int col);
 void drawBox(int x, int y, int x1, int y1, int col);
 
-int strlen(char *buffer);
+// Menu API functions
+int runMenu(struct MenuItem menu[]);
+int getButton();
+int waitButton(int id);
+void drawMenu(struct MenuItem menu[]);
+void drawGUI();
+void print(char *string);
+void countdown(int sec);
+void notify();
 
-// Arm division functions, may or may not use
+extern int *envg;
+extern int line;
+extern int sel;
+extern char buffer[100];
+
+extern struct MenuItem mainMenu[];
+
+// Library Functions
+int strlen(char *buffer);
 int divmod(int a, int b, int o);
 int __aeabi_idiv(int a, int b);
 int __aeabi_idivmod(int a, int b);

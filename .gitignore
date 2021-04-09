@@ -6,3 +6,4 @@ scr_*
 *.out
 emulate/temp/*
 link.ld
+test2/

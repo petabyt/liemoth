@@ -4,3 +4,4 @@ sleep 1
 [writeBin "loader.o" MEM_LOADER]
 cardmgr
 resume {P_CTRLMAN}
+d:/ahdk/a.ash
