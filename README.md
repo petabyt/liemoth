@@ -28,6 +28,7 @@ Contains extensive documentation on the Ambsh programming language.
 # Help Needed
 - Porting to other models
 - Stabilizing the hack
+- Organizing the build system
 
 # Thanks to
 - http://spritesmods.com/?art=zx3hack&page=4 for the work done back in 2010.
