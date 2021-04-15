@@ -14,7 +14,6 @@
 #define COL_PURPLE 253
 #define COL_TRANSPARENT 255
 #define COL_BLUE 103
-
 // Blue: also range 71-129
 // Grey: also range 16-71
 
@@ -22,8 +21,6 @@
 #define BTN_DOWN_COL 120
 #define MENU_COL 93
 #define TEXT_COL COL_WHITE
-
-#define UI_WAIT 150
 
 enum OptionType {
 	SELECT, ACTION, RETURN
@@ -46,7 +43,7 @@ struct Font {
     char code[7][5];
 };
 
-// Graphics/UI functionss
+// Graphics/UI functions
 void drawPixel(int x, int y, unsigned char col);
 void clearScreen();
 int printString(int x, int y, char *string, char color);

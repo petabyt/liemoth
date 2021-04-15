@@ -1,7 +1,7 @@
 p ?= activeondx
 d ?= /media/dan/8765-4321/
 
-# Using a C makefile would be alternative, but this is spiffier
+# Using a "C Makefile" would be alternative, but this is spiffier
 MEM_LOADER := $(shell awk '/MEM_LOADER/{print $$3}' <../platform/${p}.h)
 MEM_MAIN := $(shell awk '/MEM_MAIN/{print $$3}' <../platform/${p}.h)
 INCLUDE := -include "../platform/${p}.h"
@@ -48,7 +48,7 @@ all:
 	@hexdump -C main.o | head
 	@ls -l main.o
 
-# Write AHDK
+# Install AHDK
 	@cat main.o > ${d}ahdk/ahdk.bin
 	@cc ../ashp/main.c script.c ${INCLUDE} -o gen.o
 	@./gen.o > ${d}autoexec.ash

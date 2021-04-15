@@ -41,12 +41,11 @@ _start:
 
 #ifdef P_ARM
 _start:
-	// TODO: ARM support if absolutely
-	// needed
+	// TODO: ARM support
 	ldmia sp!,{r4 lr}
 #endif
 
-file: .string "d:\\ahdk\\ahdk.bin"
+file: .string "d:/ahdk/ahdk.bin"
 read: .string "r"
 
 

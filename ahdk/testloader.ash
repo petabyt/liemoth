@@ -1,3 +1,4 @@
+# This is experimental
 # Pull out SD, put in to run AHDK.
 [writeBin "loader.o" MEM_LOADER]
 while true; do

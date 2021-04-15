@@ -8,7 +8,6 @@ int sel;
 char buffer[100];
 
 struct Font font[100];
-char shutterCode[][4] = {"1", "24", "85", "126", "178", "252", "378"};
 
 void notify() {
 	drawBox(10, 10, 200, 40, MENU_COL);
@@ -74,7 +73,7 @@ int waitButton(int id) {
 	}
 }
 
-// Check for button
+// Check for button status
 int getButton() {
 	int id;
 	if (gpioStat(P_SELBTN)) {
@@ -95,6 +94,8 @@ int getButton() {
 
 // This interprets and runs a menu from the structure.
 int runMenu(struct MenuItem menu[]) {
+	int temp;
+	
 	drawGUI();
 	drawMenu(menu);
 	while (1) {
@@ -102,9 +103,10 @@ int runMenu(struct MenuItem menu[]) {
 		if (r == P_SELBTN) {
 			if (menu[sel].type == ACTION) {
 				drawGUI();
-				if (menu[sel].action(sel) != 0) {
-					sel = 0;
-					line = 0;
+				temp = sel;
+				sel = 0;
+				line = 0;
+				if (menu[temp].action(temp) != 0) {
 					return 0;
 				}
 			} else if (menu[sel].type == SELECT) {
@@ -125,7 +127,7 @@ int runMenu(struct MenuItem menu[]) {
 					amb_msleep(1);
 				}
 			} else if (menu[sel].type == RETURN) {
-				int temp = sel;
+				temp = sel;
 				sel = 0;
 				return temp;
 			}
@@ -146,30 +148,33 @@ int runMenu(struct MenuItem menu[]) {
 	}
 }
 
-struct ItemInfo selectISO = {
-	0, {"200", "800", "1600", "3200", "6400", 0}
-};
+#ifdef AMB_EXP
+	struct ItemInfo selectISO = {
+		0, {"200", "800", "1600", "3200", "6400", 0}
+	};
 
-struct ItemInfo selectExp = {
-	0, {"8", "7", "6", "5", "4", "3", "2", "1", 0}
-};
+	struct ItemInfo selectExp = {
+		0, {"8", "7", "6", "5", "4", "3", "2", "1", 0}
+	};
 
-char *hijackExp[] = {"ia2", "-ae", "exp", 0, 0};
+	char *shutterCode[] = {"1", "24", "85", "126", "178", "252", "378"};
+	char *hijackExp[] = {"ia2", "-ae", "exp", 0, 0};
 
-int expTake() {
-	hijackExp[3] = selectISO.elements[selectISO.s];
-	hijackExp[4] = shutterCode[selectExp.s];
-	amb_exp(envg, hijackExp);
-	return 0;
-}
+	int expTake() {
+		hijackExp[3] = selectISO.elements[selectISO.s];
+		hijackExp[4] = shutterCode[selectExp.s];
+		amb_exp(envg, hijackExp);
+		return 0;
+	}
 
-struct MenuItem expMenu[] = {
-	{"ISO", 0, SELECT, &selectISO},
-	{"Exp", 0, SELECT, &selectExp},
-	{"Apply", expTake, ACTION, 0},
-	{"Exit", 0, RETURN, 0},
-	{0}
-};
+	struct MenuItem expMenu[] = {
+		{"ISO", 0, SELECT, &selectISO},
+		{"Exp", 0, SELECT, &selectExp},
+		{"Apply", expTake, ACTION, 0},
+		{"Exit", 0, RETURN, 0},
+		{0}
+	};
+#endif
 
 int expSetting() {
 	runMenu(expMenu);
@@ -178,13 +183,13 @@ int expSetting() {
 
 struct MenuItem mainMenu[] = {
 	{"Exit", 0, RETURN, 0},
-	{"Manual", expSetting, ACTION, 0},
 	{"About AHDK", ahdkInfo, ACTION, 0},
-	{"Exec Ambsh", showScripts, ACTION, 0},
-	{"Alloc test", allocTest, ACTION, 0},
-	{"Scripts", showScripts, ACTION, 0},
-	{"Run BF", bfExec, ACTION, 0},
-	{"Run CINS", runCins, ACTION, 0},
+#ifdef AMB_EXP
+	{"Manual", expSetting, ACTION, 0},
+#endif
+	{"Run Ambsh", showScripts, ACTION, 0},
+	{"BrainF*ck", bfExec, ACTION, 0},
+	{"CrypticOS", runCins, ACTION, 0},
 	{0}
 };
 
