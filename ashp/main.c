@@ -90,7 +90,26 @@ void defineInt(char name[], long value) {
 	mem.len++;
 }
 
+void defineStr(char name[], char value[]) {
+	strcpy(mem.t[mem.len].name, name);
+	strcpy(mem.t[mem.len].value, value);
+	mem.t[mem.len].type = STRING;
+	mem.len++;
+}
+
 void parseStatement(char *buffer) {
+	// Skip all ashp commands until end is defined
+	if (!strcmp(buffer, "end")) {
+		inStatement--;
+		if (skipping) {
+			skipping--;
+		}
+	}
+
+	if (skipping) {
+		return;
+	}
+
 	// A simple token parser. Overkill, but flexible
 	// just in case I ever need to extend it
 	int len = 0;
@@ -164,18 +183,6 @@ void parseStatement(char *buffer) {
 
 		tokens[len].text[tokens[len].len] = '\0';
 		len++;
-	}
-
-	// Skip all ashp commands until end is defined
-	if (!strcmp(tokens[0].text, "end")) {
-		inStatement--;
-		if (skipping) {
-			skipping--;
-		}
-	}
-
-	if (skipping) {
-		return;
 	}
 
 	if (!strcmp(tokens[0].text, "define")) {
@@ -266,10 +273,12 @@ int parseAmbsh(char *file) {
 					len++;
 				}
 
+				if (skipping) {
+					break;
+				}
+
 				statement[len] = '\0';
 
-				
-				
 				int i = findMem(statement);
 				if (mem.t[i].type == INTEGER) {
 					printf("%li", mem.t[i].integer);

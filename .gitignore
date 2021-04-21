@@ -7,3 +7,5 @@ scr_*
 emulate/temp/*
 link.ld
 test2/
+ahdk/font.c
+font.c

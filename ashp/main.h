@@ -1,3 +1,6 @@
+#ifndef __MAIN
+#define __MAIN
+
 // Default platform
 #ifndef P_NAME
 	#include "../platform/activeondx.h"
@@ -34,3 +37,6 @@ void writeBin(char file[], long location);
 void writeFile(char file[]);
 int parseAmbsh(char *file);
 void defineInt(char name[], long value);
+void defineStr(char name[], char value[]);
+
+#endif

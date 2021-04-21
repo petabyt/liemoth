@@ -1,3 +1,6 @@
+#ifndef __HEADER
+#define __HEADER
+
 // Default platform
 #ifndef P_NAME
 	#include "../platform/activeondx.h"
@@ -74,3 +77,5 @@ int strlen(char *buffer);
 int divmod(int a, int b, int o);
 int __aeabi_idiv(int a, int b);
 int __aeabi_idivmod(int a, int b);
+
+#endif

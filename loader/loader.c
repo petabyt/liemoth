@@ -8,5 +8,8 @@ int main(int argc, char *argv[]) {
 		defineInt("MEM_GPIOHACK", MEM_GPIOHACK);
 	#endif
 	defineInt("P_CTRLMAN", P_CTRLMAN);
+
+	defineStr("TEST", "hello, world");
+	
 	parseAmbsh(argv[1]);
 }
