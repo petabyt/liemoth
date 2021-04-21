@@ -6,6 +6,8 @@
 #include "header.h"
 #include "ambarella.h"
 
+#define SHOWSCRIPTS
+
 // Graphical BrainF*ck Interpreter
 // Stolen from: https://github.com/kgabis/business-card-brainfuck
 // MIT License

@@ -13,13 +13,20 @@ ASMFLAGS := -c -Wa,-mthumb
 HOSTCC := cc
 CC := arm-none-eabi-
 
-default: ahdk write info clean
-setup: init font ahdk write clean
+default: loader ahdk write info clean
+setup: init font loader ahdk write clean
+demo: loader testC write info clean
 
 help:
 	@echo 'Examples:'
 	@echo 'make p=activeondx d=/media/user/mycam		(Assumes files are set up)'
 	@echo 'make setup p=activeondx d=/media/user/mycam	(Setup on new camera)'
+
+testC:
+	@${CC}gcc ${ASMFLAGS} ${INCLUDE} main.S -o mains.o
+	@${CC}gcc ${CFLAGS} ${INCLUDE} test.c -o main.o
+	@${CC}ld -Bstatic mains.o main.o -T link.ld -o main.elf
+	@${CC}objcopy -O binary main.elf main.o
 
 init:
 # Write initial files
@@ -28,9 +35,9 @@ init:
 	@touch ${d}ahdk/font.bin
 	@touch ${d}autoexec.ash
 
-ahdk:
+loader:
 # Preprocess linker script
-	@${CC}gcc -include "../platform/${p}.h" -P -E link.c -o link.ld
+	@${HOSTCC} -include "../platform/${p}.h" -P -E link.c -o link.ld
 	
 # Binary loader
 	@${CC}gcc ${ASMFLAGS} ${INCLUDE} -o loader.o loader.S
@@ -38,19 +45,13 @@ ahdk:
 	@${CC}objcopy -O binary loader.elf loader.o
 
 # Compile Main AHDK
-	@${CC}gcc ${ASMFLAGS} ${INCLUDE} main.S -o mains.o
+ahdk:
 	@${CC}gcc ${CFLAGS} ${INCLUDE} screen.c  -o screen.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} mainmenu.c  -o mainmenu.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} lib.c -o lib.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} main.c -o main.o
 	@${CC}ld -Bstatic mains.o main.o screen.o mainmenu.o lib.o -T link.ld -o main.elf
 	@${CC}objcopy -O binary main.elf main.o
-
-# Write AHDK
-write:
-	@cp main.o ${d}ahdk/ahdk.bin
-	@${HOSTCC} ../ashp/main.c script.c ${INCLUDE} -o gen.o
-	@./gen.o > ${d}autoexec.ash
 
 # Dump some helpful info
 info:
@@ -59,6 +60,12 @@ info:
 	@echo "Main:"
 	@hexdump -C main.o | head
 	@ls -l main.o
+
+# Write AHDK
+write:
+	@cp main.o ${d}ahdk/ahdk.bin
+	@${HOSTCC} ../ashp/main.c script.c ${INCLUDE} -o gen.o
+	@./gen.o > ${d}autoexec.ash
 
 # Build font
 font:
