@@ -1,3 +1,4 @@
+# Regular onboot loader
 [ifeq "FANCY" 0]
 	sleep 1
 	suspend {P_CTRLMAN}
@@ -10,6 +11,7 @@
 	d:/ahdk/a.ash
 [end]
 
+# Fancy SD card controlled loader
 [ifeq "FANCY" 1]
 	# This is experimental
 	# Pull out SD, put in to run AHDK.
