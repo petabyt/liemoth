@@ -29,7 +29,7 @@ struct Memory {
 	}t[100];
 };
 
-struct Memory mem;
+extern struct Memory mem;
 
 void genUnicode(char string[], long location);
 void writeBytes(short opcode[], long location);

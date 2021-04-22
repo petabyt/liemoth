@@ -147,7 +147,7 @@ void parseStatement(char *buffer) {
 		// Quick hex parser. Not the best, but works if
 		// You don't try to break it.
 		tokens[len].value = 0;
-		if (buffer[c] == '0' || buffer[c + 1] == 'x') {
+		if (buffer[c] == '0' && buffer[c + 1] == 'x') {
 			c += 2;
 			while (isHex(buffer[c])) {
 				tokens[len].type = INTEGER;
@@ -280,6 +280,11 @@ int parseAmbsh(char *file) {
 				statement[len] = '\0';
 
 				int i = findMem(statement);
+				if (i == -1) {
+					puts("# NO DEFINITION FOUND");
+					break;
+				}
+				
 				if (mem.t[i].type == INTEGER) {
 					printf("%li", mem.t[i].integer);
 				} else if (mem.t[i].type == STRING) {

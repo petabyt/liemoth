@@ -1,5 +1,6 @@
 # Regular onboot loader
-[ifeq "FANCY" 0]
+
+[ifndef "FANCY"]
 	sleep 1
 	suspend {P_CTRLMAN}
 	sleep 1
@@ -7,12 +8,12 @@
 	cardmgr
 	resume {P_CTRLMAN}
 
-	# This runs another reference to a script
+	# This runs copied reference to script
 	d:/ahdk/a.ash
 [end]
 
 # Fancy SD card controlled loader
-[ifeq "FANCY" 1]
+[ifdef "FANCY"]
 	# This is experimental
 	# Pull out SD, put in to run AHDK.
 	[writeBin "loader.o" MEM_LOADER]
@@ -32,3 +33,4 @@
 		resume {P_CTRLMAN}
 	done
 [end]
+

@@ -5,7 +5,7 @@
 int main() {
 	defineInt("MEM_LOADER", MEM_LOADER);
 	defineInt("P_CTRLMAN", P_CTRLMAN);
-	defineInt("FANCY", 0);
+	//defineInt("FANCY", 0);
 	
 	parseAmbsh("loader.ash");
 }

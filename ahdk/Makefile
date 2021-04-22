@@ -46,6 +46,7 @@ loader:
 
 # Compile Main AHDK
 ahdk:
+	@${CC}gcc ${ASMFLAGS} ${INCLUDE} main.S -o mains.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} screen.c  -o screen.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} mainmenu.c  -o mainmenu.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} lib.c -o lib.o
