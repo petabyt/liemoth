@@ -1,11 +1,6 @@
 #ifndef __MAIN
 #define __MAIN
 
-// Default platform
-#ifndef P_NAME
-	#include "../platform/activeondx.h"
-#endif
-
 enum Types {
 	TEXT,
 	INTEGER,

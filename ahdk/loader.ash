@@ -1,11 +1,12 @@
 # Regular onboot loader
 
 [ifndef "FANCY"]
+	[ifdef "LOG"]touch log[end]#
 	sleep 1
 	suspend {P_CTRLMAN}
 	sleep 1
 	[writeBin "loader.o" MEM_LOADER]
-	cardmgr
+	cardmgr [ifdef "LOG"]> log[end]#
 	resume {P_CTRLMAN}
 
 	# This runs copied reference to script

@@ -13,6 +13,8 @@ ASMFLAGS := -c -Wa,-mthumb
 HOSTCC := cc
 CC := arm-none-eabi-
 
+FONTSIZE := $(shell ls -l $(d)ahdk/font.bin | awk '{print $$5}')
+
 default: loader ahdk write info clean
 setup: init font loader ahdk write clean
 demo: loader testC write info clean
@@ -50,7 +52,7 @@ ahdk:
 	@${CC}gcc ${CFLAGS} ${INCLUDE} screen.c  -o screen.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} mainmenu.c  -o mainmenu.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} lib.c -o lib.o
-	@${CC}gcc ${CFLAGS} ${INCLUDE} main.c -o main.o
+	@${CC}gcc ${CFLAGS} -D FONTSIZE=$(FONTSIZE) ${INCLUDE} main.c -o main.o
 	@${CC}ld -Bstatic mains.o main.o screen.o mainmenu.o lib.o -T link.ld -o main.elf
 	@${CC}objcopy -O binary main.elf main.o
 
@@ -70,7 +72,7 @@ write:
 
 # Build font
 font:
-	curl https://raw.githubusercontent.com/petabyt/font/master/font.h > font.c
+	@curl https://raw.githubusercontent.com/petabyt/font/master/font.h > font.c
 	@${CC}gcc ${CFLAGS} font.c -o font.o
 	@${CC}objcopy -O binary font.o ${d}ahdk/font.bin
 	@rm font.o font.c

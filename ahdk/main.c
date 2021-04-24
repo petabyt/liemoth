@@ -2,12 +2,18 @@
 #include "ambarella.h"
 #include "mainmenu.h"
 
+#ifndef FONTSIZE
+	#define FONTSIZE 2737
+#endif
+
+// Global env
 int *envg;
 int line;
 int sel;
-char buffer[100];
-
 struct Font font[100];
+
+// General purpose buffer
+char buffer[100];
 
 void notify() {
 	drawBox(10, 10, 200, 40, MENU_COL);
@@ -108,7 +114,7 @@ int runMenu(struct MenuItem menu[]) {
 				line = 0;
 				if (menu[temp].action(temp) != 0) {
 					return 0;
-				}
+			}
 			} else if (menu[sel].type == SELECT) {
 				while (1) {
 					r = getButton();
@@ -195,15 +201,16 @@ struct MenuItem mainMenu[] = {
 
 void start(int *env) {
 	envg = env;
-	amb_printf(env, "AHDK Started");
 	line = 0;
 	sel = 0;
 
 	// Copy font into memory
 	FILE *file = amb_fopen("d:/ahdk/font.bin", "r");
 	if (!file) {amb_printf(env, "No font"); return;}
-	amb_fread(font, 2737, 2737, file);
+	amb_fread(font, FONTSIZE, FONTSIZE, file);
 	amb_fclose(file);
+
+	amb_printf(env, "Loaded font, %d bytes\n", FONTSIZE);
 
 	runMenu(mainMenu);
 }

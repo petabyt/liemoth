@@ -1,5 +1,8 @@
-#include <stdio.h>
-#include <string.h>
+// Default platform
+#ifndef P_NAME
+	#include "../platform/activeondx.h"
+#endif
+
 #include "../ashp/main.h"
 
 int main() {

@@ -1,3 +1,5 @@
+// Quick demonstration of custom boot stuff
+
 #include "ambarella.h"
 #include "header.h"
 
