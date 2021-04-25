@@ -10,39 +10,28 @@
 #  add sp, #0x1c
 # With 0x10 being the output var.
 
+[define HALT "while true; do; sleep 100; done"]
+
 # Now write the preassembled 8 byte binary
 [writeBin "gpioasm.bin" MEM_GPIOHACK]
-
-[define P_MODEBTN 139]
-[define P_SELBTN 140]
 
 # Predefined script names. Max 5 chars
 [define firstName "SCR 1"]
 [define secondName "SCR 2"]
 [define thirdName "SCR 3"]
 
-# We sadly don't have GOTO or BREAK,
-# but we can kill the autoexec.ash task
-[define AUTOEXECTASK 59]
-
-# Two button tasks. After closing, all of the previously
-# pressed button requests are opened to control manager task.
-# These are two button related tasks? Fixed it I think?
-[define BUTTONTASKA 17]
-[define BUTTONTASKB 16]
-
 suspend {P_CTRLMAN}
-suspend {BUTTONTASKA}
-suspend {BUTTONTASKB}
+suspend {P_BUTTONTASKA}
+suspend {P_BUTTONTASKB}
 while true; do
 	t app fp_string 'AHDK    {firstName} {secondName}  {thirdName}  EXIT '
 	# While mode button not up
 	while (t gpio {P_MODEBTN}); do
 		# If select button down
 		if (t gpio {P_SELBTN}); then
-			t app fp_string 'Hello  World'
+			t app fp_string 'HELLO  WORLD'
 			sleep 5
-			t app fp_string 'AHDK    {firstName} {secondName}  {thirdName}  EXIT '
+			t app fp_string 'AHDK    SCR 1 SCR 2  SCR 3  EXIT '
 		fi
 	done
 	# Wait until button is up
@@ -57,9 +46,7 @@ while true; do
 			resume {P_CTRLMAN}
 			sleep 5
 			t app fp_string 'SCRIPT2'
-			while true; do
-				sleep 100
-			done
+			{HALT}
 		fi
 	done
 	until (t gpio {P_MODEBTN}); do
@@ -82,10 +69,17 @@ while true; do
 	t app fp_string 'AHDK   {firstName}  {secondName}  {thirdName}   EXIT'
 	while (t gpio {P_MODEBTN}); do
 		if (t gpio {P_SELBTN}); then
-			suspend {BUTTONTASKA}
-			suspend {BUTTONTASKB}
+			# Two button tasks. After closing, all of the previously
+			# pressed button requests are opened to control manager task.
+			# These are two button related tasks? Fixed it I think?
+			suspend {P_BUTTONTASKA}
+			suspend {P_BUTTONTASKB}
+
 			resume {P_CTRLMAN}
-			kill {AUTOEXECTASK}
+			
+			# We sadly don't have GOTO or BREAK,
+			# but we can kill the autoexec.ash task
+			kill {P_AUTOEXECTASK}
 		fi
 	done
 	until (t gpio {P_MODEBTN}); do

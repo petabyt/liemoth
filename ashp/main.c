@@ -1,12 +1,12 @@
-// This an Ambsh/Ambashell parser, with a sort of
-// "preprocessor" built in. It can be used to generate
+// Ambashell preprocessor. It can be used to generate
 // ASH scripts.
+
+// You could use a general purpose preprocessor, but this
+// is spiffier.
 
 #include <stdio.h>
 #include <string.h>
 #include "main.h"
-
-// TODO: Actual error handling
 
 struct Memory mem;
 int skipping = 0;
@@ -123,6 +123,8 @@ void parseStatement(char *buffer) {
 		}
 		
 		tokens[len].len = 0;
+		tokens[len].value = 0;
+		
 		if (isChar(buffer[c])) {
 			while (isChar(buffer[c])) {
 				tokens[len].type = TEXT;
@@ -131,14 +133,15 @@ void parseStatement(char *buffer) {
 				c++;
 			}
 
+			tokens[len].text[tokens[len].len] = '\0';
+
 			// Once a text token is parsed, check to see if
 			// it was define'd.
 			for (int i = 0; i < mem.len; i++) {
 				if (!strcmp(mem.t[i].name, tokens[len].text)) {
-					strcpy(tokens[len].text, mem.t[i].value);
+					//strcpy(tokens[len].text, mem.t[i].value);
 					tokens[len].value = mem.t[i].integer;
-
-					len++;
+					tokens[len].type = INTEGER;
 					continue;
 				}
 			}
@@ -146,7 +149,6 @@ void parseStatement(char *buffer) {
 
 		// Quick hex parser. Not the best, but works if
 		// You don't try to break it.
-		tokens[len].value = 0;
 		if (buffer[c] == '0' && buffer[c + 1] == 'x') {
 			c += 2;
 			while (isHex(buffer[c])) {
@@ -161,7 +163,7 @@ void parseStatement(char *buffer) {
 				c++;
 			}
 		}
-		
+
 		while (isDec(buffer[c])) {
 			tokens[len].type = INTEGER;
 			tokens[len].value *= 10;
@@ -173,15 +175,21 @@ void parseStatement(char *buffer) {
 			c++;
 			tokens[len].type = STRING;
 			while (buffer[c] != '"') {
+				if (buffer[c] == '\\' && buffer[c + 1] == 'n') {
+					tokens[len].text[tokens[len].len] = '\n';
+					tokens[len].len++;
+					c += 2;
+				}
+				
 				tokens[len].text[tokens[len].len] = buffer[c];
 				tokens[len].len++;
 				c++;
 			}
 			
 			c++;
+			tokens[len].text[tokens[len].len] = '\0';
 		}
 
-		tokens[len].text[tokens[len].len] = '\0';
 		len++;
 	}
 
@@ -256,7 +264,7 @@ int parseAmbsh(char *file) {
 					c++;
 					len++;
 				}
-
+				
 				statement[len] = '\0';
 				parseStatement(statement);
 

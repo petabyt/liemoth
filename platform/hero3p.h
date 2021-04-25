@@ -12,6 +12,9 @@ Gopro Hero 3+
 #define P_CTRLMAN 37
 #define P_MODEBTN 139
 #define P_SELBTN 140
+#define P_AUTOEXECTASK 59
+#define P_BUTTONTASKA 17
+#define P_BUTTONTASKB 16
 
 #define MEM_BASEADDR 0xC0000000
 
