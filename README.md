@@ -6,9 +6,9 @@ too polished at the moment.
 Demonstration: https://www.youtube.com/watch?v=8iN3dRujXYc
 
 # Goals
+- Magic Lantern/CHDK like GUI program loaded onto camera
+- Ambsh preprocessor + minimizer
 - Extensive Ambsh documentation
-- Magic lantern/CHDK like GUI program loaded onto camera
-- Ambsh interpreter/minimizer
 
 # File Structure:
 [ahdk](ahdk/) Contains the main AHDK UI and source code that is injected into the device.  
@@ -19,8 +19,16 @@ Demonstration: https://www.youtube.com/watch?v=8iN3dRujXYc
 [ambsh.md](ambsh.md) Contains extensive documentation on the Ambsh programming language.  
 
 # Building
+Dependencies:
+- Host gcc
+- arm-none-eabi-gcc
+- curl, awk, make (standard Linux utilities)
 Head into a directory and type `make help`.  
 It should be pretty straightforward.  
+
+This is the compiler used by Ambarella. You should be able to  
+use it to compile apps that run on the camera's Linux system.  
+https://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
 
 # Help Needed
 - Porting to other models
@@ -33,5 +41,6 @@ It should be pretty straightforward.
 ## Other
 - Currently my only camera (with a screen) is the Activeon DX, but I also have a Gopro Hero 3+  
 - Any help and/or questions are welcome  
+- No warranty - If you break it, you keep both pieces.
 
 ![Screen hacks](screen.jpg)
