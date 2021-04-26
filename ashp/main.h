@@ -12,13 +12,13 @@ struct Token {
 	int len;
 	int type;
 	long value;
-}tokens[5];
+};
 
 struct Memory {
 	int len;
 	struct T {
 		char name[100];
-		char value[100];
+		char value[1024];
 		long integer;
 		int type;
 	}t[100];

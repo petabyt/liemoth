@@ -9,6 +9,7 @@
 #include "main.h"
 
 struct Memory mem;
+struct Token tokens[6];
 int skipping = 0;
 int inStatement = 0;
 
