@@ -10,6 +10,7 @@
 
 int main(int argc, char *argv[]) {
 	if (argc == 1) {return -1;}
+	init();
 	defineInt("MEM_GPIOHACK", MEM_GPIOHACK);
 	defineInt("P_CTRLMAN", P_CTRLMAN);
 	defineInt("P_AUTOEXECTASK", P_AUTOEXECTASK);

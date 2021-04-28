@@ -1,51 +1,89 @@
-# Early Gopro models script chooser
-# Needs 7x7 front panel and commands.
-# If files aren't found, it's okay,
-# comments will be left in the output.
+# This loader will use buttons to load scripts.
+# This is currently configured to work on GoPro Hero 3+
 
-# Suspend Host Control Manager. Ambsh will be fine.
+# This is where the GPIO hack function return is located.
+# Instead of:
+#  add sp, #0x1c
+#  mov r0, r6
+# We inject:
+#  ldrb r0, [sp, 0x10]
+#  add sp, #0x1c
+# With 0x10 being the output var.
+
+# "Macro" test
+[define HALT "while true; do\nsleep 100\ndone"]
+
+# Now write the preassembled 8 byte binary
+[writeBin "gpioasm.bin" MEM_GPIOHACK]
+
+# Predefined script names. Max 5 chars
+[define firstName "HELLO"]
+[define secondName "SCR 1"]
+[define thirdName "SCR 2"]
+
 suspend {P_CTRLMAN}
-t app fp_string 'AHDK'
-loop 5; do
-	# Wait if SD in
-	if (cd d:\); then
-		sleep 1
-	else
-		# Else, SD out, and user wants to run script.
-		t app fp_string 'AHDK   0SCR 1 SCR 2  SCR 3  '
-		sleep 3
-		if (cd d:\); then
+suspend {P_BUTTONTASKA}
+suspend {P_BUTTONTASKB}
+while true; do
+	t app fp_string 'AHDK    {firstName} {secondName}  {thirdName}  EXIT '
+	# While mode button not up
+	while (t gpio {P_MODEBTN}); do
+		# If select button down
+		if (t gpio {P_SELBTN}); then
+			t app fp_string 'HELLO  WORLD'
+			sleep 5
+			t app fp_string 'AHDK    SCR 1 SCR 2  SCR 3  EXIT '
+		fi
+	done
+	# Wait until button is up
+	until (t gpio {P_MODEBTN}); do
+		# Just send an invalid command.
+		# The script won't quit.
+		a
+	done
+	t app fp_string 'AHDK   {firstName}   {secondName} {thirdName}  EXIT '
+	while (t gpio {P_MODEBTN}); do
+		if (t gpio {P_SELBTN}); then
 			resume {P_CTRLMAN}
-			sleep 2
-			[writeFile "scr_1.ash"]
+			sleep 5
+			t app fp_string 'SCRIPT2'
+			{HALT}
+		fi
+	done
+	until (t gpio {P_MODEBTN}); do
+		a
+	done
+	t app fp_string 'AHDK   {firstName}  {secondName}   {thirdName} EXIT '
+	while (t gpio {P_MODEBTN}); do
+		if (t gpio {P_SELBTN}); then
+			resume {P_CTRLMAN}
+			sleep 5
+			t app fp_string 'SCRIPT3'
 			while true; do
 				sleep 100
 			done
 		fi
-		t app fp_string 'AHDK   SCR 1  0SCR 2 SCR 3  '
-		sleep 3
-		if (cd d:\); then
+	done
+	until (t gpio {P_MODEBTN}); do
+		a
+	done
+	t app fp_string 'AHDK   {firstName}  {secondName}  {thirdName}   EXIT'
+	while (t gpio {P_MODEBTN}); do
+		if (t gpio {P_SELBTN}); then
+			# Two button tasks. After closing, all of the previously
+			# pressed button requests are opened to control manager task.
+			# These are two button related tasks? Fixed it I think?
+			suspend {P_BUTTONTASKA}
+			suspend {P_BUTTONTASKB}
+
 			resume {P_CTRLMAN}
-			sleep 2
-			[writeFile "scr_2.ash"]
-			while true; do
-				sleep 100
-			done
+			
+			# We sadly don't have GOTO or BREAK,
+			# but we can kill the autoexec.ash task
+			kill {P_AUTOEXECTASK}
 		fi
-		t app fp_string 'AHDK   SCR 1  SCR 2  0SCR 3 '
-		sleep 3
-		if (cd d:\); then
-			resume {P_CTRLMAN}
-			sleep 2
-			[writeFile "scr_3.ash"]
-			while true; do
-				sleep 100
-			done
-		fi
-		sleep 1
-		t app fp_string 'NO     SCRIPT                      '
-		sleep 2
-	fi
+	done
+	until (t gpio {P_MODEBTN}); do
+		a
+	done
 done
-resume {P_CTRLMAN}
-# No changes made.

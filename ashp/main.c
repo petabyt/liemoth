@@ -1,14 +1,15 @@
 // Ambashell preprocessor. It can be used to generate
 // ASH scripts.
-
 // You could use a general purpose preprocessor, but this
 // is spiffier.
+// `cc main.c cli.c`
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "main.h"
 
-struct Memory mem;
+struct Memory *mem;
 struct Token tokens[6];
 int skipping = 0;
 int inStatement = 0;
@@ -73,10 +74,10 @@ int isHex(char a) {
 	return (a >= '0' && a <= '9') || (a >= 'a' && a <= 'f') || (a >= 'A' && a <= 'F');
 }
 
-// Find a token in memory structure
+// Find a token in mem->ry structure
 int findMem(char string[]) {
-	for (int i = 0; i < mem.len; i++) {
-		if (!strcmp(mem.t[i].name, string)) {
+	for (int i = 0; i < mem->len; i++) {
+		if (!strcmp(mem->t[i].name, string)) {
 			return i;
 		}
 	}
@@ -85,17 +86,17 @@ int findMem(char string[]) {
 }
 
 void defineInt(char name[], long value) {
-	strcpy(mem.t[mem.len].name, name);
-	mem.t[mem.len].type = INTEGER;
-	mem.t[mem.len].integer = value;
-	mem.len++;
+	strcpy(mem->t[mem->len].name, name);
+	mem->t[mem->len].type = INTEGER;
+	mem->t[mem->len].integer = value;
+	mem->len++;
 }
 
 void defineStr(char name[], char value[]) {
-	strcpy(mem.t[mem.len].name, name);
-	strcpy(mem.t[mem.len].value, value);
-	mem.t[mem.len].type = STRING;
-	mem.len++;
+	strcpy(mem->t[mem->len].name, name);
+	strcpy(mem->t[mem->len].value, value);
+	mem->t[mem->len].type = STRING;
+	mem->len++;
 }
 
 void parseStatement(char *buffer) {
@@ -138,10 +139,10 @@ void parseStatement(char *buffer) {
 
 			// Once a text token is parsed, check to see if
 			// it was define'd.
-			for (int i = 0; i < mem.len; i++) {
-				if (!strcmp(mem.t[i].name, tokens[len].text)) {
-					//strcpy(tokens[len].text, mem.t[i].value);
-					tokens[len].value = mem.t[i].integer;
+			for (int i = 0; i < mem->len; i++) {
+				if (!strcmp(mem->t[i].name, tokens[len].text)) {
+					//strcpy(tokens[len].text, mem->t[i].value);
+					tokens[len].value = mem->t[i].integer;
 					tokens[len].type = INTEGER;
 					continue;
 				}
@@ -180,6 +181,7 @@ void parseStatement(char *buffer) {
 					tokens[len].text[tokens[len].len] = '\n';
 					tokens[len].len++;
 					c += 2;
+					continue;
 				}
 				
 				tokens[len].text[tokens[len].len] = buffer[c];
@@ -195,11 +197,11 @@ void parseStatement(char *buffer) {
 	}
 
 	if (!strcmp(tokens[0].text, "define")) {
-		strcpy(mem.t[mem.len].name, tokens[1].text);
-		strcpy(mem.t[mem.len].value, tokens[2].text);
-		mem.t[mem.len].integer = tokens[2].value;
-		mem.t[mem.len].type = tokens[2].type;
-		mem.len++;
+		strcpy(mem->t[mem->len].name, tokens[1].text);
+		strcpy(mem->t[mem->len].value, tokens[2].text);
+		mem->t[mem->len].integer = tokens[2].value;
+		mem->t[mem->len].type = tokens[2].type;
+		mem->len++;
 	} else if (!strcmp(tokens[0].text, "genUnicode")) {
 		genUnicode(tokens[1].text, tokens[2].value);
 	} else if (!strcmp(tokens[0].text, "writeBin")) {
@@ -219,25 +221,29 @@ void parseStatement(char *buffer) {
 	} else if (!strcmp(tokens[0].text, "ifeq")) {
 		inStatement++;
 		int i = findMem(tokens[1].text);
-		if (mem.t[i].type == INTEGER) {
-			if (mem.t[i].integer != tokens[2].value) {
+		if (mem->t[i].type == INTEGER) {
+			if (mem->t[i].integer != tokens[2].value) {
 				skipping++;
 			}
-		} else if (mem.t[i].type == STRING) {
-			if (strcmp(mem.t[i].value, tokens[2].text)) {
+		} else if (mem->t[i].type == STRING) {
+			if (strcmp(mem->t[i].value, tokens[2].text)) {
 				skipping++;
 			}
 		}
 	}
 }
 
+void init() {
+	mem = malloc(sizeof(struct Memory));
+}
+
 int parseAmbsh(char *file) {
-	char buffer[500];
-	char statement[500];
 
+	char buffer[MAX_LINE];
+	char statement[MAX_LINE];
+	
 	FILE *reader = fopen(file, "r");
-
-	while (fgets(buffer, 500, reader) != NULL) {
+	while (fgets(buffer, MAX_LINE, reader) != NULL) {
 		int c = 0;
 		while (buffer[c] == '\t' || buffer[c] == '\n' || buffer[c] == ' ') {
 			c++;
@@ -294,10 +300,10 @@ int parseAmbsh(char *file) {
 					break;
 				}
 				
-				if (mem.t[i].type == INTEGER) {
-					printf("%li", mem.t[i].integer);
-				} else if (mem.t[i].type == STRING) {
-					printf("%s", mem.t[i].value);
+				if (mem->t[i].type == INTEGER) {
+					printf("%li", mem->t[i].integer);
+				} else if (mem->t[i].type == STRING) {
+					printf("%s", mem->t[i].value);
 				}
 			} else if (!skipping) {
 				putchar(buffer[c]);

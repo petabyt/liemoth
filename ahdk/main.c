@@ -2,9 +2,7 @@
 #include "ambarella.h"
 #include "mainmenu.h"
 
-#ifndef FONTSIZE
-	#define FONTSIZE 2737
-#endif
+#define FONTSIZE 2737
 
 // Global env
 int *envg;
@@ -193,8 +191,8 @@ struct MenuItem mainMenu[] = {
 #ifdef AMB_EXP
 	{"Manual", expSetting, ACTION, 0},
 #endif
-	{"Run Ambsh", showScripts, ACTION, 0},
-	{"BrainF*ck", bfExec, ACTION, 0},
+	{"Run Script", showScripts, ACTION, 0},
+	{"BrainF", bfExec, ACTION, 0},
 	{"CrypticOS", runCins, ACTION, 0},
 	{0}
 };

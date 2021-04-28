@@ -1,4 +1,5 @@
 // Quick demonstration of custom boot stuff
+// `make demo`
 
 #include "ambarella.h"
 #include "header.h"

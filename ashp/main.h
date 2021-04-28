@@ -1,6 +1,8 @@
 #ifndef __MAIN
 #define __MAIN
 
+#define MAX_LINE 1024
+
 enum Types {
 	TEXT,
 	INTEGER,
@@ -24,13 +26,16 @@ struct Memory {
 	}t[100];
 };
 
-extern struct Memory mem;
+extern struct Memory *mem;
+
+int parseAmbsh(char *file);
+void init();
 
 void genUnicode(char string[], long location);
 void writeBytes(short opcode[], long location);
 void writeBin(char file[], long location);
 void writeFile(char file[]);
-int parseAmbsh(char *file);
+
 void defineInt(char name[], long value);
 void defineStr(char name[], char value[]);
 

@@ -5,9 +5,7 @@
 #include "../ashp/main.h"
 
 int main(int argc, char *argv[]) {
-	strcpy(mem.t[0].name, "MEM_LOADER");
-	mem.t[0].integer = strtol(argv[1], NULL, 16);
-	mem.len = 1;
-	
+	init();
+	defineInt("MEM_LOADER", strtol(argv[1], NULL, 16));	
 	parseAmbsh("loader.ash");
 }

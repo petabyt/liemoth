@@ -2,7 +2,7 @@
 [define HACK_LOC 0xc156bea6]
 [genUnicode "Hello World" HACK_LOC]
 
-# Logic demonstration
+# Logic Test
 # Should produce a, d, e
 [ifeq "HACK_LOC" 0xc156bea6]
 	[ifdef ASD]

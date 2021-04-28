@@ -33,3 +33,11 @@ done
 ```
 - GPIO function: "gpio%d:\t %s %d %s\n" (it should accept 4 parameters?)
 - Dir Openers: "start time = %d ms\n"
+
+# TODO:
+- Understand the screen buffer system and make a new  
+buffer, not writing to some random one
+- Real time code execution (no restart)
+- Disable/shutdown Linux side (?)
+- Interact with Linux side
+- Power saving options

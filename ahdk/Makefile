@@ -7,13 +7,14 @@ MEM_LOADER := $(shell awk '/MEM_LOADER/{print $$3}' <../platform/${p}.h)
 MEM_MAIN := $(shell awk '/MEM_MAIN/{print $$3}' <../platform/${p}.h)
 INCLUDE := -include "../platform/${p}.h"
 
-CFLAGS := -std=c99 -march=armv6 -c -mthumb -nostartfiles -nostdlib
+# Try to get font binary size
+FONTSIZE := $(shell ls -l $(d)ahdk/font.bin | awk '{print $$5}')
+
+CFLAGS := -std=c99 -march=armv6 -c -mthumb -nostartfiles -nostdlib -DFONTSIZE=$(FONTSIZE)
 ASMFLAGS := -c -Wa,-mthumb
 
 HOSTCC := cc
 CC := arm-none-eabi-
-
-FONTSIZE := $(shell ls -l $(d)ahdk/font.bin | awk '{print $$5}')
 
 default: loader ahdk write info clean
 setup: init font loader ahdk write clean
@@ -52,7 +53,7 @@ ahdk:
 	@${CC}gcc ${CFLAGS} ${INCLUDE} screen.c  -o screen.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} mainmenu.c  -o mainmenu.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} lib.c -o lib.o
-	@${CC}gcc ${CFLAGS} -D FONTSIZE=$(FONTSIZE) ${INCLUDE} main.c -o main.o
+	@${CC}gcc ${CFLAGS} ${INCLUDE} main.c -o main.o
 	@${CC}ld -Bstatic mains.o main.o screen.o mainmenu.o lib.o -T link.ld -o main.elf
 	@${CC}objcopy -O binary main.elf main.o
 
