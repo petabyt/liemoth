@@ -12,80 +12,80 @@ _start:
 
 // Stub routers, dont
 // want to bother with blx for now
-.global amb_printf
-amb_printf:
+.global printf
+printf:
 	push {r7, lr}
 	bl AMB_PRINTF
 	pop {r7, pc}
 
-.global amb_msleep
-amb_msleep:
+.global msleep
+msleep:
 	push {r7, lr}
 	bl AMB_MSLEEP
 	pop {r7, pc}
 
-.global amb_sprintf
-amb_sprintf:
+.global sprintf
+sprintf:
 	push {r7, lr}
 	bl AMB_SPRINTF
 	pop {r7, pc}
 
-.global amb_fopen
-amb_fopen:
+.global fopen
+fopen:
 	push {r7, lr}
 	bl AMB_FOPEN
 	pop {r7, pc}
 
-.global amb_fread
-amb_fread:
+.global fread
+fread:
 	push {r7, lr}
 	bl AMB_FREAD
 	pop {r7, pc}
 
-.global amb_fwrite
-amb_fwrite:
+.global fwrite
+fwrite:
 	push {r7, lr}
 	bl AMB_FWRITE
 	pop {r7, pc}
 
-.global amb_fclose
-amb_fclose:
+.global fclose
+fclose:
 	push {r7, lr}
 	bl AMB_FCLOSE
 	pop {r7, pc}
 
-.global amb_gpio
-amb_gpio:
+.global gpio
+gpio:
 	push {r7, lr}
 	bl AMB_GPIO
 	pop {r7, pc}
 
-.global amb_exp
-amb_exp:
+.global setExp
+setExp:
 	push {r7, lr}
 	bl AMB_EXP
 	pop {r7, pc}
 
-.global amb_alloc
-amb_alloc:
+.global malloc
+malloc:
 	push {r7, lr}
 	bl AMB_ALLOC
 	pop {r7, pc}
 
-.global amb_free
-amb_free:
+.global free
+free:
 	push {r7, lr}
 	bl AMB_FREE
 	pop {r7, pc}
 
-.global amb_openDir
-amb_openDir:
+.global openDir
+openDir:
 	push {r7, lr}
 	bl AMB_OPENDIR
 	pop {r7, pc}
 
-.global amb_nextFile
-amb_nextFile:
+.global nextFile
+nextFile:
 	push {r7, lr}
 	bl AMB_NEXTFILE
 	pop {r7, pc}

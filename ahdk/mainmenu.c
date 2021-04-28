@@ -22,12 +22,12 @@ int bfExec() {
 		int p[65536];
 		int d[1024];
 		
-		FILE *f = amb_fopen("d:/ahdk/autoexec.bf", "r");
+		FILE *f = fopen("d:/ahdk/autoexec.bf", "r");
 		if (!f) {
 			return 0;
 		}
 		
-		while (amb_fread(&c, 1, 1, f)) {
+		while (fread(&c, 1, 1, f)) {
 			p[r] = c;
 			r++;
 		}
@@ -90,13 +90,13 @@ int runCins() {
 		
 	// Allocate 1 megabyte of memory
 	char *input;
-	int r = amb_alloc(1, 102400, &input);
+	int r = malloc(1, 102400, &input);
 
 	// Read file into memory
-	FILE *file = amb_fopen("d:/ahdk/autoexec.cins", "r");
+	FILE *file = fopen("d:/ahdk/autoexec.cins", "r");
 	char c;
 	r = 0;
-	while (amb_fread(&c, 1, 1, file)) {
+	while (fread(&c, 1, 1, file)) {
 		input[r] = c;
 		r++;
 	}
@@ -182,9 +182,9 @@ int runCins() {
 
 int ahdkInfo() {
 	line = 0;
-	amb_sprintf(buffer, "AHDK: Model: %s", P_NAME);
+	sprintf(buffer, "AHDK: Model: %s", P_NAME);
 	print(buffer);
-	amb_sprintf(buffer, "Built on: %s", __DATE__);
+	sprintf(buffer, "Built on: %s", __DATE__);
 	print(buffer);
 	print("Press select button to exit.");
 	drawImage(140, 70, 150, 150, "d:/ahdk/logo.bin");
@@ -200,15 +200,15 @@ int showScripts() {
 		char *names = buffer;
 		int i = 0;
 		
-		struct Ambarella_dirReader dirReader;
-		if (amb_openDir("d:/ahdk/scripts/*", NORMALDIR, &dirReader)) {
+		struct DirReader dirReader;
+		if (openDir("d:/ahdk/scripts/*", NORMALDIR, &dirReader)) {
 			waitButton(P_SELBTN);
 			return 0;
 		}
 
 		// Generate a menu based on the scripts folder
-		while (!amb_nextFile(&dirReader)) {
-			amb_sprintf(names, dirReader.name);
+		while (!nextFile(&dirReader)) {
+			sprintf(names, dirReader.name);
 			scriptMenu[i].text = names;
 			scriptMenu[i].action = 0;
 			scriptMenu[i].type = RETURN;
@@ -224,10 +224,10 @@ int showScripts() {
 
 		// Copy it to a.ash, which is run after AHDK
 		char buffer2[128];
-		amb_sprintf(buffer2, "d:/ahdk/scripts/%s\n\n", scriptMenu[r].text);
-		FILE *file = amb_fopen("d:/ahdk/a.ash", "w");
-		amb_fwrite(buffer2, 1, strlen(buffer2), file);
-		amb_fclose(file);
+		sprintf(buffer2, "d:/ahdk/scripts/%s\n\n", scriptMenu[r].text);
+		FILE *file = fopen("d:/ahdk/a.ash", "w");
+		fwrite(buffer2, 1, strlen(buffer2), file);
+		fclose(file);
 	#endif
 	return 0;
 }

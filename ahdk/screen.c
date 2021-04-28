@@ -44,6 +44,7 @@ void drawBox(int x, int y, int x1, int y1, int col) {
 	}
 }
 
+// https://github.com/petabyt/font/
 int printChar(int x, int y, char c, char color) {
 	int match = 0;
 	for (int l = 0; l < (int)(sizeof(font) / sizeof(font[0])); l++) {
@@ -92,16 +93,16 @@ void drawImage(int x, int y, int width, int height, char image[]) {
 	width += x;
 	height += y;
 
-	FILE *file = amb_fopen(image, "r");
+	FILE *file = fopen(image, "r");
 	if (!file) {
 		return;
 	}
 
 	char c;
 	int i = 0;
-	for (;y < height; y++) {
+	for (; y < height; y++) {
 		for (int tx = x; tx < width; tx++) {
-			if (!amb_fread(&c, 1, 1, file)) {
+			if (!fread(&c, 1, 1, file)) {
 				return;
 			}
 			
@@ -110,5 +111,5 @@ void drawImage(int x, int y, int width, int height, char image[]) {
 		}
 	}
 
-	amb_fclose(file);
+	fclose(file);
 }

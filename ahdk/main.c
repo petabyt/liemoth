@@ -2,8 +2,6 @@
 #include "ambarella.h"
 #include "mainmenu.h"
 
-#define FONTSIZE 2737
-
 // Global env
 int *envg;
 int line;
@@ -20,9 +18,9 @@ void notify() {
 
 void countdown(int sec) {
 	for (; sec != 0; sec--) {
-		amb_sprintf(buffer, "Waiting %d...", sec);
+		sprintf(buffer, "Waiting %d...", sec);
 		notify();
-		amb_msleep(1000);
+		msleep(1000);
 	}
 }
 
@@ -62,18 +60,18 @@ void drawMenu(struct MenuItem menu[]) {
 // Return GPIO status
 int gpioStat(int id) {
 	int b, c, d;
-	amb_gpio(id, &b, &c, &d);
+	gpio(id, &b, &c, &d);
 	return !(c & 0xff);
 }
 
 // Wait until a button is pressed
 int waitButton(int id) {
 	while (!gpioStat(id)) {
-		amb_msleep(1);
+		msleep(1);
 	}
 
 	while (gpioStat(id)) {
-		amb_msleep(1);
+		msleep(1);
 	}
 }
 
@@ -90,7 +88,7 @@ int getButton() {
 
 	// Wait until button is up
 	while (gpioStat(id)) {
-		amb_msleep(1);
+		msleep(1);
 	}
 
 	return id;
@@ -128,7 +126,7 @@ int runMenu(struct MenuItem menu[]) {
 						break;
 					}
 					
-					amb_msleep(1);
+					msleep(1);
 				}
 			} else if (menu[sel].type == RETURN) {
 				temp = sel;
@@ -148,7 +146,7 @@ int runMenu(struct MenuItem menu[]) {
 		drawGUI();
 		drawMenu(menu);
 		
-		amb_msleep(10);
+		msleep(10);
 	}
 }
 
@@ -167,7 +165,7 @@ int runMenu(struct MenuItem menu[]) {
 	int expTake() {
 		hijackExp[3] = selectISO.elements[selectISO.s];
 		hijackExp[4] = shutterCode[selectExp.s];
-		amb_exp(envg, hijackExp);
+		setExp(envg, hijackExp);
 		return 0;
 	}
 
@@ -203,12 +201,12 @@ void start(int *env) {
 	sel = 0;
 
 	// Copy font into memory
-	FILE *file = amb_fopen("d:/ahdk/font.bin", "r");
-	if (!file) {amb_printf(env, "No font"); return;}
-	amb_fread(font, FONTSIZE, FONTSIZE, file);
-	amb_fclose(file);
+	FILE *file = fopen("d:/ahdk/font.bin", "r");
+	if (!file) {printf(env, "No font"); return;}
+	fread(font, FONTSIZE, FONTSIZE, file);
+	fclose(file);
 
-	amb_printf(env, "Loaded font, %d bytes\n", FONTSIZE);
+	printf(env, "Loaded font, %d bytes\n", FONTSIZE);
 
 	runMenu(mainMenu);
 }

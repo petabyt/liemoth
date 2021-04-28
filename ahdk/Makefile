@@ -10,7 +10,7 @@ INCLUDE := -include "../platform/${p}.h"
 # Try to get font binary size
 FONTSIZE := $(shell ls -l $(d)ahdk/font.bin | awk '{print $$5}')
 
-CFLAGS := -std=c99 -march=armv6 -c -mthumb -nostartfiles -nostdlib -DFONTSIZE=$(FONTSIZE)
+CFLAGS := -std=c99 -march=armv6 -c -mthumb -nostartfiles -nostdlib -ffreestanding -DFONTSIZE=$(FONTSIZE)
 ASMFLAGS := -c -Wa,-mthumb
 
 HOSTCC := cc

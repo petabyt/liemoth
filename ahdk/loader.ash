@@ -2,15 +2,15 @@
 
 [ifndef "FANCY"]
 	[ifdef "LOG"]touch log[end]#
-	#sleep 1
-	#suspend {P_CTRLMAN}
-	#sleep 1
+	sleep 1
+	suspend {P_CTRLMAN}
+	sleep 1
 	[writeBin "loader.o" MEM_LOADER]
 	cardmgr [ifdef "LOG"]> log[end]#
-	#resume {P_CTRLMAN}
+	resume {P_CTRLMAN}
 
 	# This runs copied reference to script
-	#d:/ahdk/a.ash
+	d:/ahdk/a.ash
 [end]
 
 # Fancy SD card controlled loader

@@ -6,6 +6,10 @@
 	#include "../platform/activeondx.h"
 #endif
 
+#ifndef FONTSIZE
+	#define FONTSIZE 2737
+#endif
+
 // Color chart: https://petabyte.heb12.com/filedump/public/ambacol.jpg
 #define COL_BLACK 71
 #define COL_WHITE 0
@@ -65,15 +69,24 @@ void print(char *string);
 void countdown(int sec);
 void notify();
 
+// Global environment var
 extern int *envg;
+
+// Current print() line
 extern int line;
+
+// Current menu selector
 extern int sel;
+
+// General purpose buffer
 extern char buffer[100];
 
 extern struct MenuItem mainMenu[];
 
-// Library Functions
+// Standard functions
 int strlen(char *buffer);
+
+// Experimental
 int divmod(int a, int b, int o);
 int __aeabi_idiv(int a, int b);
 int __aeabi_idivmod(int a, int b);
