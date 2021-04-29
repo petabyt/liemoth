@@ -2,7 +2,7 @@
 // `make demo`
 
 #include "ambarella.h"
-#include "header.h"
+#include "ahdk.h"
 
 void start() {
 	// Fill half the screen

@@ -1,6 +1,4 @@
-// Temporary Library Functions
-// These may be used sometime in the future
-
+// Hand made math ARM functions
 int divmod(int a, int b, int o) {
 	int di = 0;
 	int re = 0;
