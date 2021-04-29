@@ -61,7 +61,13 @@ void drawMenu(struct MenuItem menu[]) {
 int gpioStat(int id) {
 	int b, c, d;
 	gpio(id, &b, &c, &d);
-	return !(c & 0xff);
+	b = (c & 0xff);
+
+	// Rec btn is opposite? 1 for up, 0 for down
+	if (id == P_RECBTN) {
+		return b;
+	}
+	return !b;
 }
 
 // Wait until a button is pressed
@@ -82,6 +88,8 @@ int getButton() {
 		id = P_SELBTN;
 	} else if (gpioStat(P_MODEBTN)) {
 		id = P_MODEBTN;
+	} else if (gpioStat(P_RECBTN)) {
+		id = P_RECBTN;
 	} else {
 		return 0;
 	}
@@ -183,15 +191,25 @@ int expSetting() {
 	return 0;
 }
 
+int asd() {
+	while (1) {
+		drawGUI();
+		sprintf(buffer, "%d", gpioStat(P_SELBTN));
+		printString(50, 50, buffer, COL_WHITE);
+		msleep(10);
+	}
+}
+
 struct MenuItem mainMenu[] = {
 	{"Exit", 0, RETURN, 0},
 	{"About AHDK", ahdkInfo, ACTION, 0},
 #ifdef AMB_EXP
-	{"Manual", expSetting, ACTION, 0},
+	{"Manual", asd, ACTION, 0},
 #endif
 	{"Run Script", showScripts, ACTION, 0},
 	{"BrainF", bfExec, ACTION, 0},
 	{"CrypticOS", runCins, ACTION, 0},
+	{"Tetris", tetris, ACTION, 0},
 	{0}
 };
 

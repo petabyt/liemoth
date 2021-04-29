@@ -1,7 +1,6 @@
 // Temporary Library Functions
 // These may be used sometime in the future
 
-#if 0
 int divmod(int a, int b, int o) {
 	int di = 0;
 	int re = 0;
@@ -47,8 +46,6 @@ int __aeabi_idivmod(int a, int b) {
 	return divmod(a, b, 1);
 }
 
-#endif
-
 int strlen(char *buffer) {
 	int a = 0;
 	while (*buffer != 0) {
@@ -57,4 +54,14 @@ int strlen(char *buffer) {
 	}
 
 	return a;
+}
+
+void *memcpy(void* dest, const void* src, int count) {
+	char* dst8 = (char*)dest;
+	char* src8 = (char*)src;
+	while (count--) {
+		*dst8++ = *src8++;
+	}
+	
+	return dest;
 }

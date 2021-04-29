@@ -57,6 +57,7 @@ Display Info:
 #define P_CTRLMAN 18
 
 // Button GPIO codes
+#define P_RECBTN 47
 #define P_MODEBTN 48
 #define P_SELBTN 49
 
