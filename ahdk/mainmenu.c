@@ -235,6 +235,8 @@ int showScripts() {
 #ifdef TETRIS
 
 /*
+*The following tetris code is licensed under GPL3 and not the AHDK License.
+
 Tetris for Zx3
 (C) 2010 Jeroen Domburg (jeroen AT spritesmods.com)
 
@@ -250,8 +252,13 @@ GNU General Public License for more details.
 			    
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
-(Modified to work with AHDK/Ambarella A7)
+/*
+Modified to work with AHDK/Ambarella A7
+Find the full original source here: http://spritesmods.com/zx3hack/zx3-hack_src.tgz
+
+TODO: Fix RNG
 */
 
 #define BLOCK_HEIGHT 10
@@ -264,7 +271,15 @@ typedef struct {
 	int currBlockX, currBlockY;
 }playfield_t;
 
-const unsigned char availBlocks[7][4][4] = {
+unsigned int palette[8] = {
+	COL_GREY, COL_RED, COL_GREEN, COL_ORANGE, COL_PINK,
+	COL_PURPLE, COL_ORANGE + 5, COL_WHITE
+};
+
+int score;
+int a;
+
+unsigned char availBlocks[7][4][4] = {
 	{
 		{0, 0, 0, 0},
 		{0, 0, 0, 0},
@@ -308,9 +323,6 @@ const unsigned char availBlocks[7][4][4] = {
 		{0, 0, 0, 0},
 	}
 };
-
-int score;
-int a;
 
 void fieldClear(playfield_t* field) {
 	int x, y;
@@ -436,11 +448,6 @@ int fieldFixBlock(playfield_t *field) {
 
 	return 1;
 }
-
-unsigned int palette[8] = {
-	COL_GREY, COL_RED, COL_GREEN, COL_ORANGE, COL_PINK,
-	COL_PURPLE, COL_ORANGE + 5, COL_WHITE
-};
 
 static void placeBlock(int col, int bx, int by) {	
 	int x,y;
