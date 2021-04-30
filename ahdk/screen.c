@@ -72,7 +72,7 @@ int printChar(int x, int y, char c, char color) {
 	return maxLength;
 }
 
-int printString(int x, int y, char *string, char color) {
+int drawString(int x, int y, char *string, char color) {
 	int cx = x;
 	int cy = y;
 	for (int c = 0; string[c] != '\0'; c++) {

@@ -13,7 +13,7 @@ char buffer[100];
 
 void notify() {
 	drawBox(10, 10, 200, 40, MENU_COL);
-	printString(20, 20, buffer, TEXT_COL);
+	drawString(20, 20, buffer, TEXT_COL);
 }
 
 void countdown(int sec) {
@@ -25,7 +25,7 @@ void countdown(int sec) {
 }
 
 void print(char *string) {
-	printString(20, 20 + (line * 14), string, TEXT_COL);
+	drawString(20, 20 + (line * 14), string, TEXT_COL);
 	line++;
 }
 
@@ -46,11 +46,11 @@ void drawMenu(struct MenuItem menu[]) {
 		}
 
 		fillRect(20, 20 + y, SCREEN_WIDTH - 30, 40 + y, col);
-		printString(26, 26 + y, menu[i].text, TEXT_COL);
+		drawString(26, 26 + y, menu[i].text, TEXT_COL);
 
 		// Print
 		if (menu[i].type == SELECT) {
-			printString(SCREEN_WIDTH - 120, 26 + y, menu[i].info->elements[menu[i].info->s], TEXT_COL);
+			drawString(SCREEN_WIDTH - 120, 26 + y, menu[i].info->elements[menu[i].info->s], TEXT_COL);
 		}
 
 		y += 22;
@@ -195,7 +195,7 @@ int asd() {
 	while (1) {
 		drawGUI();
 		sprintf(buffer, "%d", gpioStat(P_SELBTN));
-		printString(50, 50, buffer, COL_WHITE);
+		drawString(50, 50, buffer, COL_WHITE);
 		msleep(10);
 	}
 }

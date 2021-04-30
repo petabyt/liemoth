@@ -53,7 +53,7 @@ struct Font {
 // Graphics/UI functions
 void drawPixel(int x, int y, unsigned char col);
 void clearScreen();
-int printString(int x, int y, char *string, char color);
+int drawString(int x, int y, char *string, char color);
 void drawImage(int x, int y, int width, int height, char image[]);
 int printChar(int x, int y, char c, char color);
 void fillRect(int x, int y, int x1, int y1, int col);
@@ -85,7 +85,7 @@ extern struct MenuItem mainMenu[];
 
 // Standard functions
 int strlen(char *buffer);
-void *memcpy(void* dest, const void* src, int count);
+void memcpy(void* dest, const void* src, int count);
 
 // Custom math library functions
 int divmod(int a, int b, int o);

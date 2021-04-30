@@ -10,7 +10,7 @@ INCLUDE := -include "../platform/${p}.h"
 # Try to get font binary size
 FONTSIZE := $(shell ls -l $(d)ahdk/font.bin | awk '{print $$5}')
 
-CFLAGS := -std=c99 -march=armv6 -c -mthumb -nostartfiles -nostdlib -ffreestanding -DFONTSIZE=$(FONTSIZE)
+CFLAGS := -std=c99 -march=armv6 -c -mthumb -ffreestanding -DFONTSIZE=$(FONTSIZE) -O2
 ASMFLAGS := -c -Wa,-mthumb
 
 HOSTCC := cc
@@ -25,14 +25,15 @@ help:
 	@echo 'make p=activeondx d=/media/user/mycam		(Assumes files are set up)'
 	@echo 'make setup p=activeondx d=/media/user/mycam	(Setup on new camera)'
 
+# Compile with test.c, not main gui
 testC:
 	@${CC}gcc ${ASMFLAGS} ${INCLUDE} main.S -o mains.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} test.c -o main.o
 	@${CC}ld -Bstatic mains.o main.o -T link.ld -o main.elf
 	@${CC}objcopy -O binary main.elf main.o
 
-init:
 # Write initial files
+init:
 	@touch ${d}ahdk/ahdk.bin
 	@touch ${d}ahdk/a.ash
 	@touch ${d}ahdk/font.bin

@@ -1,90 +1,90 @@
 // Main menu related functions
 // (don't clog up the main file)
 
-// Also, some apps are left blank by default.
-
 #include "ahdk.h"
 #include "ambarella.h"
 
-// Graphical BrainF*ck Interpreter
+#define TETRIS
+
+// Graphical BrainF*ck Interpreter, Test it with mandelbrot.bf
 // Stolen from: https://github.com/kgabis/business-card-brainfuck
 // MIT License
 int bfExec() {
 	#ifdef BF
-		int x = 0;
-		int y = 0;
-		int r = 0;
-		int c = 0;
-		int t = 0;
-		int e = 0;
-		int p[65536];
-		int d[1024];
-		
-		FILE *f = fopen("d:/ahdk/autoexec.bf", "r");
-		if (!f) {
-			return 0;
+	int x = 0;
+	int y = 0;
+	int r = 0;
+	int c = 0;
+	int t = 0;
+	int e = 0;
+	int p[65536];
+	int d[1024];
+	
+	FILE *f = fopen("d:/ahdk/autoexec.bf", "r");
+	if (!f) {
+		return 0;
+	}
+	
+	while (fread(&c, 1, 1, f)) {
+		p[r] = c;
+		r++;
+	}
+	
+	r = 0;
+	while((c = p[r])) {
+		e = 0;
+		if (c == '>') {
+			t++;
+		} else if (c == '<') {
+			t--;
+		} else if (c == '+') {
+			d[t]++;
+		} else if (c == '-') {
+			d[t]--;
+		} else if (c == '.') {
+			if (d[t] == 10) {
+				y++;
+				x = 0;
+			} else {
+				drawPixel(x, y, d[t] * 2);
+				x++;
+			}
 		}
 		
-		while (fread(&c, 1, 1, f)) {
-			p[r] = c;
-			r++;
-		}
-		
-		r = 0;
-		while((c = p[r])) {
-			e = 0;
-			if (c == '>') {
-				t++;
-			} else if (c == '<') {
-				t--;
-			} else if (c == '+') {
-				d[t]++;
-			} else if (c == '-') {
-				d[t]--;
-			} else if (c == '.') {
-				if (d[t] == 10) {
-					y++;
-					x = 0;
-				} else {
-					drawPixel(x, y, d[t] * 2);
-					x++;
-				}
+		while (c == '[' && !d[t]) {
+			if (p[r] == '[') {
+				e++;
 			}
 			
-			while (c == '[' && !d[t]) {
-				if (p[r] == '[') {
-					e++;
-				}
-				
-				if (p[r] == ']' && e-- == 1) {
-					break;
-				}
-				
-				r++;
-			}
-			
-			while (c == ']' && d[t]) {
-				if (p[r] == ']') {
-					e++;
-				}
-				
-				if (p[r] == '[' && e-- == 1) {
-					break;
-				}
-				
-				r--;
+			if (p[r] == ']' && e-- == 1) {
+				break;
 			}
 			
 			r++;
 		}
+		
+		while (c == ']' && d[t]) {
+			if (p[r] == ']') {
+				e++;
+			}
+			
+			if (p[r] == '[' && e-- == 1) {
+				break;
+			}
+			
+			r--;
+		}
+		
+		r++;
+	}
 
-		waitButton(P_SELBTN);
+	waitButton(P_SELBTN);
 	#endif
 	return 0;
 }
 
 int runCins() {
-	#if 0
+	#ifdef RUNCINS
 	line = 0;
 		
 	// Allocate 1 megabyte of memory
@@ -176,8 +176,8 @@ int runCins() {
 	}
 
 	waitButton(P_SELBTN);
-	return 0;
 	#endif
+	return 0;
 }
 
 int ahdkInfo() {
@@ -222,7 +222,7 @@ int showScripts() {
 
 	int r = runMenu(scriptMenu);
 
-	// Copy it to a.ash, which is run after AHDK
+	// Copy reference to a.ash, which is run after AHDK
 	char buffer2[128];
 	sprintf(buffer2, "d:/ahdk/scripts/%s\n\n", scriptMenu[r].text);
 	FILE *file = fopen("d:/ahdk/a.ash", "w");
@@ -231,6 +231,8 @@ int showScripts() {
 	#endif
 	return 0;
 }
+
+#ifdef TETRIS
 
 /*
 Tetris for Zx3
@@ -248,11 +250,13 @@ GNU General Public License for more details.
 			    
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+(Modified to work with AHDK/Ambarella A7)
 */
 
-#define BLKH 10
-#define BLKW 10
-#define SPEED 100
+#define BLOCK_HEIGHT 10
+#define BLOCK_WIDTH 10
+#define SPEED 70
 
 typedef struct {
 	unsigned char field[10][20];
@@ -260,40 +264,90 @@ typedef struct {
 	int currBlockX, currBlockY;
 }playfield_t;
 
-//Routines to play Tetris. I'm too lame to document them now; if you 
-//are interested in reverse engineering, you probably have no problem figuring
-//out what these do yourself :P
+const unsigned char availBlocks[7][4][4] = {
+	{
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+		{1, 1, 1, 1},
+		{0, 0, 0, 0},
+	},
+	{
+		{0, 0, 0, 0},
+		{2, 2, 2, 0},
+		{0, 0, 2, 0},
+		{0, 0, 0, 0},
+	},
+	{
+		{0, 0, 0, 0},
+		{0, 3, 3, 3},
+		{0, 3, 0, 0},
+		{0, 0, 0, 0},
+	},
+	{
+		{0, 0, 0, 0},
+		{0, 4, 4, 0},
+		{0, 4, 4, 0},
+		{0, 0, 0, 0},
+	},
+	{
+		{0, 0, 0, 0},
+		{0, 5, 5, 0},
+		{5, 5, 0, 0},
+		{0, 0, 0, 0},
+	},
+	{
+		{0, 0, 0, 0},
+		{0, 6, 6, 0},
+		{0, 0, 6, 6},
+		{0, 0, 0, 0},
+	},
+	{
+		{0, 0, 0, 0},
+		{0, 7, 7, 7},
+		{0, 0, 7, 0},
+		{0, 0, 0, 0},
+	}
+};
 
-void fieldClear(playfield_t *field) {
-	int x,y;
-	for (x=0; x<10; x++) {
-		for (y=0; y<20; y++) {
-			field->field[x][y]=0;
+int score;
+int a;
+
+void fieldClear(playfield_t* field) {
+	int x, y;
+	for (x = 0; x < 10; x++) {
+		for (y = 0; y < 20; y++) {
+			field->field[x][y] = 0;
 		}
 	}
-	for (x=0; x<4; x++) {
-		for (y=0; y<4; y++) {
-			field->currBlock[x][y]=0;
+	
+	for (x = 0; x < 4; x++) {
+		for (y = 0; y < 4; y++) {
+			field->currBlock[x][y] = 0;
 		}
 	}
 }
 
-int fieldIsPossible(playfield_t *field) {
-	int px,py;
-	int x,y;
-	for (x=0; x<4; x++) {
-		for (y=0; y<4; y++) {
-			if (field->currBlock[x][y]!=0) {
-				px=x+field->currBlockX;
-				py=y+field->currBlockY;
-				if (px<0 || px>=10 || py>=20) return 0;
-				if (py>=0 && field->field[px][py]!=0) return 0;
+int fieldIsPossible(playfield_t* field) {
+	int px, py;
+	int x, y;
+	for (x = 0; x < 4; x++) {
+		for (y = 0; y < 4; y++) {
+			if (field->currBlock[x][y] != 0) {
+				px = x + field->currBlockX;
+				py = y + field->currBlockY;
+				if (px < 0 || px >= 10 || py >= 20) {
+					return 0;
+				}
+				
+				if (py >= 0 && field->field[px][py] != 0) {
+					return 0;
+				}
 			}
 		}
 	}
+	
 	return 1;
 }
-
 
 void fieldDup(playfield_t *dest, playfield_t *src) {
 	memcpy(dest, src, sizeof(playfield_t));
@@ -301,91 +355,56 @@ void fieldDup(playfield_t *dest, playfield_t *src) {
 
 void fieldRotateBlk(playfield_t *field, int dir) {
 	unsigned char buff[4][4];
-	int x,y;
-	for (x=0; x<4; x++) {
-		for (y=0; y<4; y++) {
-			buff[x][y]=field->currBlock[x][y];
+	int x, y;
+	for (x = 0; x < 4; x++) {
+		for (y = 0; y < 4; y++) {
+			buff[x][y] = field->currBlock[x][y];
 		}
 	}
-	for (x=0; x<4; x++) {
-		for (y=0; y<4; y++) {
-			if (dir>0) {
-				field->currBlock[x][y]=buff[3-y][x];
-			} else {
-				field->currBlock[x][y]=buff[y][3-x];
+	
+	for (x = 0; x < 4; x++) {
+		for (y = 0; y < 4; y++) {
+			if (dir > 0) {
+				field->currBlock[x][y] = buff[3 - y][x];
+			}
+			
+			else {
+				field->currBlock[x][y] = buff[y][3 - x];
 			}
 		}
 	}
 }
 
 void fieldSelectBlk(playfield_t *field, int blkNo) {
-	int x,y;
-	const unsigned char availBlocks[7][4][4]={
-		{
-			{0,0,0,0},
-			{0,0,0,0},
-			{1,1,1,1},
-			{0,0,0,0},
-		}, {
-			{0,0,0,0},
-			{2,2,2,0},
-			{0,0,2,0},
-			{0,0,0,0},
-		}, {
-			{0,0,0,0},
-			{0,3,3,3},
-			{0,3,0,0},
-			{0,0,0,0},
-		}, {
-			{0,0,0,0},
-			{0,4,4,0},
-			{0,4,4,0},
-			{0,0,0,0},
-		}, {
-			{0,0,0,0},
-			{0,5,5,0},
-			{5,5,0,0},
-			{0,0,0,0},
-		}, {
-			{0,0,0,0},
-			{0,6,6,0},
-			{0,0,6,6},
-			{0,0,0,0},
-		}, {
-			{0,0,0,0},
-			{0,7,7,7},
-			{0,0,7,0},
-			{0,0,0,0},
-		}
-	};
-
-	for (x=0; x<4; x++) {
-		for (y=0; y<4; y++) {
-			field->currBlock[x][y]=availBlocks[blkNo][x][y];
+	int x, y;
+	for (x = 0; x < 4; x++) {
+		for (y = 0; y < 4; y++) {
+			field->currBlock[x][y] = availBlocks[blkNo][x][y];
 		}
 	}
-	
-	field->currBlockX=3;
-	field->currBlockY=-2;
+
+	field->currBlockX = 3;
+	field->currBlockY = -2;
 }
 
-
-static int checkAndKillALine(playfield_t *field) {
-	int x,y,ry;
+static int checkAndKillALine(playfield_t* field) {
+	int x, y, ry;
 	int found;
-	for (y=0; y<20; y++) {
-		found=1;
-		for (x=0; x<10; x++) {
-			if (field->field[x][y]==0) found=0;
+	for (y = 0; y < 20; y++) {
+		found = 1;
+		for (x = 0; x < 10; x++) {
+			if (field->field[x][y] == 0)
+				found = 0;
 		}
+		
 		if (found) {
-			//Remove line
-			for (ry=y; ry>=0; ry--) {
-				for (x=0; x<10; x++) {
-					if (ry!=0) {
-						field->field[x][ry]=field->field[x][ry-1];
+			// Remove line
+			for (ry = y; ry >= 0; ry--) {
+				for (x = 0; x < 10; x++) {
+					if (ry != 0) {
+						field->field[x][ry] = field->field[x][ry - 1];
 					} else {
-						field->field[x][ry]=0;
+						field->field[x][ry] = 0;
 					}
 				}
 			}
@@ -396,64 +415,75 @@ static int checkAndKillALine(playfield_t *field) {
 }
 
 int fieldFixBlock(playfield_t *field) {
-	int px,py;
-	int x,y;
-	for (x=0; x<4; x++) {
-		for (y=0; y<4; y++) {
-			px=x+field->currBlockX; py=y+field->currBlockY;
-			if (field->currBlock[x][y]!=0) field->field[px][py]=field->currBlock[x][y];
+	int px, py;
+	int x, y;
+	for (x = 0; x < 4; x++) {
+		for (y = 0; y < 4; y++) {
+			px = x + field->currBlockX;
+			py = y + field->currBlockY;
+			if (field->currBlock[x][y] != 0) {
+				field->field[px][py] = field->currBlock[x][y];
+			}
 		}
 	}
-	while (checkAndKillALine(field)); //todo: increment score?
+	
+	while (checkAndKillALine(field)) {
+		score++;
+
+		// Clear so score can update
+		clearScreen();
+	}
+
 	return 1;
 }
 
-//ToDo: Rewrite to place 32bit words instead of 8bit chars
-//Place a block at a certain place on the screen.
-static void placeBlock(int col, int bx, int by) {
-	unsigned int palette[8]={
-		COL_GREY, COL_RED, COL_GREEN, COL_ORANGE, COL_PINK,
-		COL_PURPLE, COL_ORANGE + 5, COL_WHITE
-	};
-	
+unsigned int palette[8] = {
+	COL_GREY, COL_RED, COL_GREEN, COL_ORANGE, COL_PINK,
+	COL_PURPLE, COL_ORANGE + 5, COL_WHITE
+};
+
+static void placeBlock(int col, int bx, int by) {	
 	int x,y;
-	for (x=0; x<BLKW; x++) {
-		for (y=0; y<BLKH; y++) {
-			drawPixel((bx*BLKW+x), (by*BLKH+y), palette[col&7]);
+	for (x = 0; x < BLOCK_WIDTH; x++) {
+		for (y = 0; y < BLOCK_HEIGHT; y++) {
+			drawPixel((bx * BLOCK_WIDTH + x), (by * BLOCK_HEIGHT + y), palette[col & 7]);
 		}
 	}
 }
 
-//Display a Tetris playing field
+// Display the game
 void display(playfield_t *field) {
-	int x,y;
-	int px,py;
-	for (x=0; x<10; x++) {
-		for (y=0; y<20; y++) {
+	int x, y;
+	int px, py;
+	for (x = 0; x < 10; x++) {
+		for (y = 0; y < 20; y++) {
 			placeBlock(field->field[x][y], x, y);
 		}
 	}
 
-	for (x=0; x<4; x++) {
-		for (y=0; y<4; y++) {
-			px=x+field->currBlockX;
-			py=y+field->currBlockY;
-			if (field->currBlock[x][y]!=0) {
-				if (px>=0 && py>=0 && px<10 && py<20) {
+	for (x = 0; x < 4; x++) {
+		for (y = 0; y < 4; y++) {
+			px = x + field->currBlockX;
+			py = y + field->currBlockY;
+			if (field->currBlock[x][y] != 0) {
+				if (px >= 0 && py >= 0 && px < 10 && py < 20) {
 					placeBlock(field->currBlock[x][y], px, py);
 				}
 			}
 		}
 	}
+
+	sprintf(buffer, "Score: %d", score);
+	drawString(200, 10, buffer, COL_WHITE);
 }
 
 playfield_t field;
 playfield_t testfield;
 
-// Dumb "random"
-int a;
+char randInts[] = {1, 4, 3, 5, 0, 5, 1, 3, 0, 2, 4, 3};
+
+// Dumb "random" routine
 int rand() {
-	char randInts[] = {1, 4, 3, 5, 0, 5, 1, 3, 0, 2, 4, 3};
 	if (a == sizeof(randInts) - 1) {
 		a = 0;
 	} else {
@@ -462,12 +492,16 @@ int rand() {
 	
 	return randInts[a];
 }
+#endif
 
 //Main routine
 int tetris() {
+	#ifdef TETRIS
 	a = 0;
+	score = 0;
+	
 	int ev;
-	int dead=0;
+	int dead = 0;
 	int mustFixBlk;
 
 	fieldClear(&field);
@@ -476,12 +510,12 @@ int tetris() {
 	clearScreen();
 
 	int i = 0;
-
-	do {
+	while (1) {
 		ev = getButton();
 		fieldDup(&testfield, &field);
-		mustFixBlk=0;
+		mustFixBlk = 0;
 
+		// Accept input while running game loop
 		if (ev == 0) {
 			if (i < SPEED) {
 				msleep(1);
@@ -493,7 +527,7 @@ int tetris() {
 				if (fieldIsPossible(&testfield)) {
 					fieldDup(&field, &testfield);
 				} else {
-					mustFixBlk=1;
+					mustFixBlk = 1;
 				}
 
 				i = 0;
@@ -517,15 +551,17 @@ int tetris() {
 			}
 		}
 			
-		if (mustFixBlk && dead==0) {
+		if (mustFixBlk && dead == 0) {
 			fieldFixBlock(&field);
 			fieldSelectBlk(&field, rand());
 			if (!fieldIsPossible(&field)) {
-				//Player died! Clear currblk and fill field so he can't do anything but quit
 				return 0;
 			}
 		}
 
 		display(&field);
-	} while(1);
+	}
+
+	#endif
+	return 0;
 }
