@@ -6,3 +6,4 @@
 SECTIONS {
 	.text MEM_MAIN: { *(.text) }
 }
+

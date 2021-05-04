@@ -1,0 +1,4 @@
+SECTIONS {
+ .text 0xc0138870: { *(.text) }
+}
+.global nameASD asd:'\n' push {r7, lr} bl 0x1 pop {r7, pc}
