@@ -1,11 +1,6 @@
 #ifndef __HEADER
 #define __HEADER
 
-// Default platform
-#ifndef P_NAME
-	#include "../platform/activeondx.h"
-#endif
-
 #ifndef FONTSIZE
 	#define FONTSIZE 2737
 #endif

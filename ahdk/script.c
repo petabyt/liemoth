@@ -5,12 +5,16 @@
 
 #include "../ashp/main.h"
 
-int main() {
+int main(int argc, char *argv[]) {
 	init();
+
+	// Send flags into preprocessor
+	for (int i = 1; i < argc; i++) {
+		defineInt(argv[i], 1);
+	}
 	
 	defineInt("MEM_LOADER", MEM_LOADER);
 	defineInt("P_CTRLMAN", P_CTRLMAN);
-	//defineInt("FANCY", 0);
 	
 	parseAmbsh("loader.ash");
 }

@@ -1,17 +1,20 @@
 # These are default if not defined values
+# platform, directory, flag
 p ?= activeondx
 d ?= /media/dan/8765-4321/
+f ?= SUSPEND LOG
 
 # Using a "Preprocessed Makefile" would be alternative, but this is spiffier
 MEM_LOADER := $(shell awk '/MEM_LOADER/{print $$3}' <../platform/${p}.h)
 MEM_MAIN := $(shell awk '/MEM_MAIN/{print $$3}' <../platform/${p}.h)
+
 INCLUDE := -include "../platform/${p}.h"
 
-# Try to get font binary size
+# Try to get font binary size for C
 FONTSIZE := $(shell ls -l $(d)ahdk/font.bin | awk '{print $$5}')
 
 CFLAGS := -std=c99 -march=armv6 -c -mthumb -ffreestanding -DFONTSIZE=$(FONTSIZE) -O2
-ASMFLAGS := -c -Wa,-mthumb
+ASMFLAGS := -c
 
 HOSTCC := cc
 CC := arm-none-eabi-
@@ -70,7 +73,7 @@ info:
 write:
 	-@cp main.o ${d}ahdk/ahdk.bin
 	@${HOSTCC} ../ashp/main.c script.c ${INCLUDE} -o gen.o
-	@./gen.o > ${d}autoexec.ash
+	@./gen.o $(f) > ${d}autoexec.ash
 
 # Build font
 font:

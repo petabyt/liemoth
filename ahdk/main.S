@@ -2,11 +2,7 @@
 // It is GCC preprocessed
 
 #ifdef P_THUMB
-
-// Default platform
-#ifndef P_NAME
-	#include "../platform/activeondx.h"
-#endif
+.thumb
 
 // Main entry function
 // (this function is beginning of the binary)
