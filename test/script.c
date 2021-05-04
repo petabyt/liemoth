@@ -6,6 +6,7 @@
 
 int main(int argc, char *argv[]) {
 	init();
-	defineInt("MEM_LOADER", strtol(argv[1], NULL, 16));	
+	defineInt("MEM_LOADER", MEM_LOADER);
+	defineInt("P_CTRLMAN", P_CTRLMAN);
 	parseAmbsh("loader.ash");
 }

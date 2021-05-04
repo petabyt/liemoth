@@ -118,7 +118,7 @@ int runMenu(struct MenuItem menu[]) {
 				line = 0;
 				if (menu[temp].action(temp) != 0) {
 					return 0;
-			}
+				}
 			} else if (menu[sel].type == SELECT) {
 				while (1) {
 					r = getButton();

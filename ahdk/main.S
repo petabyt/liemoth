@@ -1,9 +1,15 @@
+// This is main assembly file to help C
+// It is GCC preprocessed
+
+#ifdef P_THUMB
+
 // Default platform
 #ifndef P_NAME
 	#include "../platform/activeondx.h"
 #endif
 
 // Main entry function
+// (this function is beginning of the binary)
 .global _start
 _start:
 	push {r7, lr}
@@ -89,3 +95,11 @@ nextFile:
 	push {r7, lr}
 	bl AMB_NEXTFILE
 	pop {r7, pc}
+
+.global mkdir
+mkdir:
+	push {r7, lr}
+	bl AMB_MKDIR
+	pop {r7, pc}
+
+#endif

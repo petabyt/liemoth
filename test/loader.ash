@@ -1,4 +1,8 @@
-[writeBin "main.o" MEM_LOADER]
-#[writeBin "arm.o" 0xc0138870]
-touch log
-cardmgr > log
+#[writeBin "main.o" MEM_LOADER]
+#sleep 2
+#suspend {P_CTRLMAN}
+[writeBin "arm.o" MEM_LOADER]
+touch logs
+cardmgr > logs
+#sleep 1
+#resume {P_CTRLMAN}

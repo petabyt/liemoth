@@ -1,13 +1,21 @@
 # Regular onboot loader
 
+
+
 [ifndef "FANCY"]
 	[ifdef "LOG"]touch log[end]#
-	sleep 1
-	suspend {P_CTRLMAN}
-	sleep 1
+
+	[ifdef "WAIT"]
+		sleep 1
+		suspend {P_CTRLMAN}
+		sleep 1
+	[end]
+	
 	[writeBin "loader.o" MEM_LOADER]
 	cardmgr [ifdef "LOG"]> log[end]#
-	resume {P_CTRLMAN}
+	[ifdef "WAIT"]
+		#resume {P_CTRLMAN}
+	[end]
 
 	# This runs copied reference to script
 	d:/ahdk/a.ash

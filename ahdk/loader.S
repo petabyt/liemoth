@@ -7,6 +7,7 @@
 
 #ifdef P_THUMB
 _start:
+	.thumb
 	// Preserve r0, which holds env
 	push {r0}
 	
@@ -41,7 +42,7 @@ _start:
 
 #ifdef P_ARM
 _start:
-	// TODO: ARM support
+	.arm
 	ldmia sp!,{r4 lr}
 #endif
 

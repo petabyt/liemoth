@@ -5,12 +5,12 @@
 #include "ahdk.h"
 
 void start() {
-	// Fill half the screen
-	unsigned char *screen = (unsigned char*)MEM_BUFFER;
-	for (int i = 0; i < (SCREEN_WIDTH / 2) * SCREEN_HEIGHT; i++) {
-		screen[i] = COL_BLUE;
+	char buffer[50];
+	int i = 0;
+	while (1) {
+		sprintf(buffer, "d:/Hi %d", i);
+		mkdir(buffer);
+		i++;
+		msleep(2000);
 	}
-
-	// Halt
-	while (1);
 }

@@ -18,6 +18,8 @@ Gopro Hero 3+
 
 #define MEM_BASEADDR 0xC0000000
 
+#define AMB_PRINTF 0xc0244f9c
+
 // Triggered on invalid command
 #define MEM_PRINT 0xc0246a98
 

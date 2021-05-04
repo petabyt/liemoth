@@ -81,6 +81,7 @@ Display Info:
 // I think around 18kb is free to use.
 #define MEM_MAIN 0xc0138870
 
+// Main required stubs
 #define AMB_PRINTF 0xc0272996
 #define AMB_MSLEEP 0xc026cc9c
 #define AMB_ATOI 0xc01a23ac
@@ -97,16 +98,16 @@ Display Info:
 #define AMB_OPENDIR 0xc0274dd8
 #define AMB_NEXTFILE 0xc0274cbe
 
-// Experiments
+// Etc testing stubs
+#define AMB_MKDIR 0xc0275804
+
+// -- The rest are experiments --
 
 // Text flashed when card removed
 #define MEM_NOCARD 0xc156bfaa
 
 // Text shown on viewer mode menu
 #define MEM_MENU 0xc156bea6
-
-// int result = MKDIR(char *folder)
-#define MKDIR 0xc0275804
 
 #define STRCMP 0xc012de02
 
