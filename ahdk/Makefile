@@ -24,7 +24,9 @@ endif
 
 ASMFLAGS := -c
 
-HOSTCC := tcc
+HOSTCC := ccc
+
+# arm-none-linux-gnueabi- wil also work
 CC := arm-none-eabi-
 
 default: loader ahdk write info clean
@@ -33,10 +35,12 @@ demo: loader testC write info clean
 
 help:
 	@echo 'Examples:'
-	@echo '\tmake p=activeondx d=/media/user/mycam		(Assumes files are set up)'
-	@echo '\tmake setup p=activeondx d=/media/user/mycam	(Setup on new camera)'
+	@echo ' make p=activeondx d=/media/user/mycam		(Assumes files are set up)'
+	@echo ' make setup p=activeondx d=/media/user/mycam	(Setup on new camera)'
 	@echo 'Send script flags:'
-	@echo '\tmake "f=LOG FANCY"'
+	@echo ' make "f=LOG FANCY"'
+	@echo 'GoPro test: make f=LOG p=hero3p demo'
+	@echo 'Also try HOSTCC=tcc for faster compilation'
 
 # Compile with test.c, not main gui
 testC:

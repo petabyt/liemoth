@@ -3,8 +3,13 @@
 
 #include "ambarella.h"
 #include "ahdk.h"
-#include "gopro.h"
+
+#ifdef GOPRO
+	#include "gopro.h"
+#endif
 
 void start(int *env) {
-	printf(env, "Hey, I'm a GoPro Hero 3+!");
+	for (int i = 0; i < 10; i++) {
+		printf(env, "Test demo written in C\n");
+	}
 }
