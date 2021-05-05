@@ -38,3 +38,23 @@ ROUTE mkdir AMB_MKDIR
 ROUTE msleep AMB_MSLEEP
 
 #endif
+
+#ifdef P_ARM
+.arm
+
+.global _start
+_start:
+	stmdb sp!, {r7, lr}
+	bl start
+	ldmia sp!, {r7, pc}
+
+.macro ROUTE name, addr
+.global \name
+\name:
+	stmdb sp!, {r7, lr}
+	bl \addr
+	ldmia sp!, {r7, pc}
+.endm
+
+ROUTE printf AMB_PRINTF
+#endif

@@ -31,9 +31,9 @@ _start:
 
 	pop {r0}
 
-	// No fclose because Im lazy
-	
-	mov r1, #0 // TODO: insert param
+	// TODO: fclose
+
+	// Now jump to code and hope its there
 	bl MEM_MAIN
 				
 	// Hack an early return.
@@ -43,10 +43,29 @@ _start:
 #ifdef P_ARM
 _start:
 	.arm
-	ldmia sp!,{r4 lr}
+	mov r6, r0
+	
+	ldr r0, =file
+	ldr r1, =read
+	bl AMB_FOPEN
+
+	mov r5, r0
+	ldr r4, =MEM_MAIN
+	top:
+		mov r0, r4
+		mov r1, #1
+		mov r2, #255
+		mov r3, r5
+		bl AMB_FREAD
+		add r4, #255
+		cmp r0, #1
+	bgt top
+
+	mov r0, r6
+	bl MEM_MAIN
+	
+	ldmia sp!, {r4, pc}
 #endif
 
 file: .string "d:/ahdk/ahdk.bin"
 read: .string "r"
-
-

@@ -3,14 +3,8 @@
 
 #include "ambarella.h"
 #include "ahdk.h"
+#include "gopro.h"
 
-void start() {
-	char buffer[50];
-	int i = 0;
-	while (1) {
-		sprintf(buffer, "d:/Hi %d", i);
-		mkdir(buffer);
-		i++;
-		msleep(2000);
-	}
+void start(int *env) {
+	printf(env, "Hey, I'm a GoPro Hero 3+!");
 }

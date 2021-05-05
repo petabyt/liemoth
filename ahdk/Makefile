@@ -4,19 +4,27 @@ p ?= activeondx
 d ?= /media/dan/8765-4321/
 f ?= SUSPEND LOG
 
+INCLUDE := -include "../platform/${p}.h"
+
 # Using a "Preprocessed Makefile" would be alternative, but this is spiffier
 MEM_LOADER := $(shell awk '/MEM_LOADER/{print $$3}' <../platform/${p}.h)
 MEM_MAIN := $(shell awk '/MEM_MAIN/{print $$3}' <../platform/${p}.h)
+P_THUMB := $(shell awk '/P_THUMB/{print $$2}' <../platform/${p}.h)
 
-INCLUDE := -include "../platform/${p}.h"
-
-# Try to get font binary size for C
+# Try to get font binary size for C (error is fine)
 FONTSIZE := $(shell ls -l $(d)ahdk/font.bin | awk '{print $$5}')
 
-CFLAGS := -std=c99 -march=armv6 -c -mthumb -ffreestanding -DFONTSIZE=$(FONTSIZE) -O2
+CFLAGS := -std=c99 -c -ffreestanding -DFONTSIZE=$(FONTSIZE)
+ifeq ($(P_THUMB),)
+	# This needs -O2 for proper ldr instructions
+	CFLAGS += -marm -O2
+else
+	CFLAGS += -mthumb -O2
+endif
+
 ASMFLAGS := -c
 
-HOSTCC := cc
+HOSTCC := tcc
 CC := arm-none-eabi-
 
 default: loader ahdk write info clean
@@ -25,8 +33,10 @@ demo: loader testC write info clean
 
 help:
 	@echo 'Examples:'
-	@echo 'make p=activeondx d=/media/user/mycam		(Assumes files are set up)'
-	@echo 'make setup p=activeondx d=/media/user/mycam	(Setup on new camera)'
+	@echo '\tmake p=activeondx d=/media/user/mycam		(Assumes files are set up)'
+	@echo '\tmake setup p=activeondx d=/media/user/mycam	(Setup on new camera)'
+	@echo 'Send script flags:'
+	@echo '\tmake "f=LOG FANCY"'
 
 # Compile with test.c, not main gui
 testC:
@@ -63,11 +73,11 @@ ahdk:
 
 # Dump some helpful info
 info:
-	@echo "Loader:"
-	@hexdump -C loader.o
-	@echo "Main:"
-	@hexdump -C main.o | head
-	@ls -l main.o
+	-@echo "Loader:"
+	-@hexdump -C loader.o
+	-@echo "Main:"
+	-@hexdump -C main.o | head
+	-@ls -l main.o
 
 # Write AHDK
 write:

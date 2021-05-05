@@ -311,5 +311,9 @@ int parseAmbsh(char *file) {
 		}
 	}
 
+	// Sometimes Ambsh parser
+	// needs extra newlines
+	puts("\n");
+
 	return 0;
 }

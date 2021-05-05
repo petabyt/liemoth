@@ -34,6 +34,9 @@ done
 - GPIO function: "gpio%d:\t %s %d %s\n" (it should accept 4 parameters?)
 - Dir Openers: "start time = %d ms\n"
 
+# Gopro
+- fpstring: Search "fp_string"
+
 # TODO:
 - Understand the screen buffer system and make a new  
 buffer, not writing to some random one
