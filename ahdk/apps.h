@@ -1,5 +1,5 @@
-#ifndef __MAINMENU
-#define __MAINMENU
+#ifndef __APPS
+#define __APPS
 
 int tetris();
 int bfExec();

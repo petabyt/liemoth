@@ -69,9 +69,6 @@ Display Info:
 // Top screen buffer (see notes.md)
 #define MEM_BUFFER 0xc2413880
 
-// Random spot in memory
-#define MEM_PARAM 0xc012d5ac
-
 // Run on command "cardmgr", a bunch of prints
 // including the strings, about 1.3k is free to use.
 #define MEM_LOADER 0xc012d5d4
@@ -98,20 +95,5 @@ Display Info:
 #define AMB_OPENDIR 0xc0274dd8
 #define AMB_NEXTFILE 0xc0274cbe
 
-// Etc testing stubs
+// Experimental
 #define AMB_MKDIR 0xc0275804
-
-// -- The rest are experiments --
-
-// Text flashed when card removed
-#define MEM_NOCARD 0xc156bfaa
-
-// Text shown on viewer mode menu
-#define MEM_MENU 0xc156bea6
-
-#define STRCMP 0xc012de02
-
-// Main cardmgr command. Very big
-#define CARDMGR 0xc012db92
-
-#define GPIO 0xc0107f64

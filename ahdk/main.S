@@ -1,26 +1,50 @@
 // This is main assembly file to help C
-// It is GCC preprocessed
+// It is GCC preprocessed for the stubs
 
+// This routes stubs, dont want to bother with blx.
 #ifdef P_THUMB
-.thumb
+	.thumb
 
-// Main entry function
-// (this function is beginning of the binary)
-.global _start
-_start:
-	push {r7, lr}
-	bl start
-	pop {r7, pc}
+	// Main entry function
+	// (this function is beginning of the binary)
+	.global _start
+	_start:
+		push {r7, lr}
+		bl start
+		pop {r7, pc}
 
-// Stub routers, dont
-// want to bother with blx for now
-.macro ROUTE name, addr
-.global \name
-\name:
-	push {r7, lr}
-	bl \addr
-	pop {r7, pc}
-.endm
+	.macro ROUTE name, addr
+	.global \name
+	\name:
+		push {r7, lr}
+		bl \addr
+		pop {r7, pc}
+	.endm
+#endif
+
+#ifdef P_ARM
+	.arm
+
+	.global _start
+	_start:
+		stmdb sp!, {r7, lr}
+		bl start
+		ldmia sp!, {r7, pc}
+
+	.macro ROUTE name, addr
+	.global \name
+	\name:
+		stmdb sp!, {r7, lr}
+		// Check if stub was passed with
+		// blx request (+1).
+		.if (\addr % 4) != 0
+			blx \addr - 1
+		.else
+			bl \addr
+		.endif
+		ldmia sp!, {r7, pc}
+	.endm
+#endif
 
 ROUTE printf AMB_PRINTF
 ROUTE sprintf AMB_SPRINTF
@@ -34,27 +58,17 @@ ROUTE malloc AMB_ALLOC
 ROUTE free AMB_FREE
 ROUTE openDir AMB_OPENDIR
 ROUTE nextFile AMB_NEXTFILE
-ROUTE mkdir AMB_MKDIR
 ROUTE msleep AMB_MSLEEP
 
+// This is experimental
+#ifdef AMB_MKDIR
+	ROUTE mkdir AMB_MKDIR
 #endif
 
-#ifdef P_ARM
-.arm
-
-.global _start
-_start:
-	stmdb sp!, {r7, lr}
-	bl start
-	ldmia sp!, {r7, pc}
-
-.macro ROUTE name, addr
-.global \name
-\name:
-	stmdb sp!, {r7, lr}
-	bl \addr
-	ldmia sp!, {r7, pc}
-.endm
-
-ROUTE printf AMB_PRINTF
+// Platform specific
+#ifdef P_GOPRO
+	ROUTE fpstring GP_FPSTRING
 #endif
+
+// Ghirda experiments here...
+ROUTE FUN_c0219d3a 0xc0219d3a + 1

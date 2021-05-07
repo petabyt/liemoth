@@ -3,13 +3,12 @@
 
 #include "ambarella.h"
 #include "ahdk.h"
+#include "gopro.h"
 
-#ifdef GOPRO
-	#include "gopro.h"
-#endif
+int FUN_c0219d3a();
 
 void start(int *env) {
-	for (int i = 0; i < 10; i++) {
-		printf(env, "Test demo written in C\n");
-	}
+	char buf[100];
+	sprintf(buf, "SPRINTF%d", 1234567);
+	fpstring(buf, 0, 1);
 }

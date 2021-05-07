@@ -1,6 +1,6 @@
 #include "ahdk.h"
 #include "ambarella.h"
-#include "mainmenu.h"
+#include "apps.h"
 
 // Global env
 int *envg;

@@ -20,11 +20,26 @@ Gopro Hero 3+
 // Like Activeon DX, Also cardmgr command
 #define MEM_LOADER 0xc02d16e0
 
+// Regular Stubs
 #define AMB_PRINTF 0xc0244f9c
 #define AMB_MSLEEP 0xc03700b0
 #define AMB_FOPEN 0xc013f3ac
 #define AMB_FREAD 0xc013f768
 #define AMB_FCLOSE 0xc013f4f8
+#define AMB_ATOI 0
+#define AMB_GPIO 0
+#define AMB_FWRITE 0
+#define AMB_EXP 0
+#define AMB_ALLOC 0
+#define AMB_HEAP 0
+#define AMB_FREE 0
+#define AMB_OPENDIR 0
+#define AMB_NEXTFILE 0
+
+// This is ARM code. Tell GCC (not device)
+// To use BLX
+#define AMB_SPRINTF 0xc021a750 + 1
+
 #define GP_FPSTRING 0xc03705c8
 
 // ntfl command
