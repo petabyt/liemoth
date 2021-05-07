@@ -23,7 +23,7 @@ Demonstration: https://www.youtube.com/watch?v=8iN3dRujXYc
 Dependencies:
 - Host gcc (gcc, tcc)
 - ARM GCC
-- curl, awk, make (standard Linux utilities)
+- awk, ls, rm, touch, cp, make (typical Linux apps)
 Head into a directory and type `make help`.  
 It should be pretty straightforward.  
 

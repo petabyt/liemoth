@@ -24,7 +24,7 @@ endif
 
 ASMFLAGS := -c
 
-HOSTCC := ccc
+HOSTCC := cc
 
 # arm-none-linux-gnueabi- wil also work
 CC := arm-none-eabi-
