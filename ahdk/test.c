@@ -5,10 +5,18 @@
 #include "ahdk.h"
 #include "gopro.h"
 
-int FUN_c0219d3a();
+unsigned char screenBuf[1000];
+
+void setPixel(int x, int y) {
+	screenBuf[y * SCREEN_WIDTH + (x >> 3)] |= 1 << (x % 8);
+}
 
 void start(int *env) {
-	char buf[100];
-	sprintf(buf, "SPRINTF%d", 1234567);
-	fpstring(buf, 0, 1);
+	for (int i = 0; i < 1000; i++) {
+		screenBuf[i] = 0;
+	}
+	
+	FILE *f = fopen("d:/LOGO.BIN", "r");
+	fread(&screenBuf, 1000, 1000, f);
+	showBuffer(screenBuf);
 }

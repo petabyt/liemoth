@@ -10,6 +10,7 @@
 	
 	[writeBin "loader.o" MEM_LOADER]
 	cardmgr [ifdef "LOG"]> log[end] 
+	suspend {P_CTRLMAN}
 	[ifdef "SUSPEND"]
 		resume {P_CTRLMAN}
 	[end]

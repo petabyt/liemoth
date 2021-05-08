@@ -35,12 +35,10 @@ Gopro Hero 3+
 #define AMB_FREE 0
 #define AMB_OPENDIR 0
 #define AMB_NEXTFILE 0
-
-// This is ARM code. Tell GCC (not device)
-// To use BLX
-#define AMB_SPRINTF 0xc021a750 + 1
+#define AMB_SPRINTF 0xc021a750 + 1 // ARM
 
 #define GP_FPSTRING 0xc03705c8
+#define GP_SHOWBUFFER 0xc017eadc
 
 // ntfl command
 #define MEM_MAIN 0xc02ded88

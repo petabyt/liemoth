@@ -1,6 +1,3 @@
-// This is main assembly file to help C
-// It is GCC preprocessed for the stubs
-
 // This routes stubs, dont want to bother with blx.
 #ifdef P_THUMB
 	.thumb
@@ -71,4 +68,4 @@ ROUTE msleep AMB_MSLEEP
 #endif
 
 // Ghirda experiments here...
-ROUTE FUN_c0219d3a 0xc0219d3a + 1
+ROUTE showBuffer GP_SHOWBUFFER
