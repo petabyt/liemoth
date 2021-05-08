@@ -1,0 +1,71 @@
+<html>
+<head>
+	<style>
+		canvas {
+			border: 1px solid black;
+		}
+	</style>
+</head>
+
+<body>
+	<p>
+		AHDK Image builder<br>
+		Convert PNG/JPG to a raw 8 bit binary file.<br>
+		Note that colors will be wrong.
+	</p>
+	<canvas id="canvas" width="50" height="50"></canvas>
+	<br>
+</body>
+<script>
+var width = 150;
+var height = 150;
+
+var canvas = document.getElementById("canvas");
+canvas.width = width;
+canvas.height = height;
+var c = canvas.getContext("2d");
+
+var file = document.createElement("input");
+file.type = "file";
+document.body.appendChild(file);
+
+file.onchange = function() {
+	var content = URL.createObjectURL(file.files[0]);
+	var image = document.createElement("img");
+	image.src = content;
+
+	setTimeout(function() {
+		c.drawImage(image, 0, 0, width, height);
+		//c.fillRect(10, 10, 20, 20);
+		setTimeout(function() {
+			var data = c.getImageData(0, 0, width, height).data;
+			var array = new Uint8Array(width * height);
+			var a = 0;
+			
+			for (var i = 0; i < data.length; i += 4) {
+				array[a] += (rgb(data[i + 0], data[i + 1], data[i + 2]));
+				a++;
+			}
+			
+			download("LOGO.BIN", array);
+		}, 3000);
+	}, 3000);
+}
+
+function rgb(red, green, blue) {
+	var bit8 = (Math.floor((red / 32)) << 5) + (Math.floor((green / 32)) << 2) + Math.floor((blue / 64));
+	// TODO: Amba Color correction
+	// https://petabyte.heb12.com/filedump/public/ambacol.jpg
+}
+
+function download(filename1, text) {
+    var blob = new Blob([text], {type: "application/pdf"});
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    var fileName = filename1;
+    link.download = fileName;
+    link.click();
+}
+</script>
+</html>
+

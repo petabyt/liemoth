@@ -1,0 +1,84 @@
+<html>
+<head>
+	<style>
+		canvas {
+			border: 1px solid black;
+		}
+	</style>
+</head>
+
+<body>
+	<p>
+		AHDK GoPro Image builder<br>
+		Convert typical black/white image to GoPro front panel bitmap
+	</p>
+	<canvas id="canvas"></canvas>
+	<br>
+</body>
+<script>
+var width = 56;
+var height = 80;
+
+var canvas = document.getElementById("canvas");
+canvas.width = width;
+canvas.height = height;
+var c = canvas.getContext("2d");
+
+var file = document.createElement("input");
+file.type = "file";
+document.body.appendChild(file);
+
+file.onchange = function() {
+	var content = URL.createObjectURL(file.files[0]);
+	var image = document.createElement("img");
+	image.src = content;
+
+	setTimeout(function() {
+		c.drawImage(image, 0, 0, width, height);
+
+		setTimeout(function() {
+			var data = c.getImageData(0, 0, width, height).data;
+			var array = new Uint8Array(width * height);
+			var a = 0;
+			for (var i = 0; i < data.length; i += 4) {
+				var col = rgb(data[i + 0], data[i + 1], data[i + 2]);
+				if (col == 255) {
+					array[a] = 0;
+				} else {
+					array[a] = 1;
+				}
+				
+				a++;
+			}
+			
+			// Convert array of 1/0 chars to actual bits
+			var i2 = 0;
+			var array2 = new Uint8Array(width * height);
+			for (var i = 0; i < array.length; i += 7) {
+				array2[i2] = array[i + 0] << 7 | array[i + 1] << 6 | array[i + 2] << 5 |
+				array[i + 3] << 4 | array[i + 4] << 3 | array[i + 5] << 2 | array[i + 6] << 1 | array[i + 7] << 0;
+				i2++;
+			}
+			
+			download("LOGO.BIN", array2);
+		}, 300);
+	}, 300);
+}
+
+function rgb(red, green, blue) {
+	// TODO: Amba Color correction?
+	// https://petabyte.heb12.com/filedump/public/ambacol.jpg
+	return (Math.floor((red / 32)) << 5) + (Math.floor((green / 32)) << 2) + Math.floor((blue / 64));
+}
+
+function download(filename1, text) {
+	var blob = new Blob([text], {type: "application/pdf"});
+	var link = document.createElement('a');
+	link.href = window.URL.createObjectURL(blob);
+	var fileName = filename1;
+	link.download = fileName;
+	link.click();
+}
+</script>
+</html>
+
