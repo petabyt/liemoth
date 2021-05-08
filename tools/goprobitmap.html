@@ -13,13 +13,17 @@
 		Convert typical black/white image to GoPro front panel bitmap
 	</p>
 	<canvas id="canvas"></canvas>
+	<canvas id="preview"></canvas>
 	<br>
 </body>
 <script>
+var pixelLimit = 80;
 var width = 56;
 var height = 80;
 
-var canvas = document.getElementById("canvas");
+preview.width = width;
+preview.height = height;
+
 canvas.width = width;
 canvas.height = height;
 var c = canvas.getContext("2d");
@@ -41,14 +45,23 @@ file.onchange = function() {
 			var array = new Uint8Array(width * height);
 			var a = 0;
 			for (var i = 0; i < data.length; i += 4) {
-				var col = rgb(data[i + 0], data[i + 1], data[i + 2]);
-				if (col == 255) {
+				if (data[i] > pixelLimit) {
 					array[a] = 0;
 				} else {
 					array[a] = 1;
 				}
 				
 				a++;
+			}
+
+			// Duplicate preview
+			preview.getContext("2d").clearRect(0, 0, width, height);
+			for (var x = 0; x < width; x++) {
+				for (var y = 0; y < height; y++) {
+					if (array[y * width + x] == 1) {
+						preview.getContext("2d").fillRect(x, y, 1, 1);
+					}
+				}
 			}
 			
 			// Convert array of 1/0 chars to actual bits
@@ -60,7 +73,7 @@ file.onchange = function() {
 				i2++;
 			}
 			
-			download("LOGO.BIN", array2);
+			download("FOO.BIN", array2);
 		}, 300);
 	}, 300);
 }

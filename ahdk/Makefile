@@ -1,5 +1,5 @@
 # These are default if not defined values
-# platform, directory, flag
+# platform, directory, ashp flag
 p ?= activeondx
 d ?= /media/dan/8765-4321/
 f ?= SUSPEND LOG
@@ -39,7 +39,7 @@ help:
 	@echo ' make setup p=activeondx d=/media/user/mycam	(Setup on new camera)'
 	@echo 'Send script flags:'
 	@echo ' make "f=LOG FANCY"'
-	@echo 'GoPro test: make f=LOG p=hero3p demo'
+	@echo 'GoPro test: make "f= SUSPEND LOG" p=hero3p demo'
 	@echo 'Also try HOSTCC=tcc for faster compilation'
 
 # Compile with test.c, not main gui
