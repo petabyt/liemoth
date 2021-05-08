@@ -18,6 +18,7 @@ Demonstration: https://www.youtube.com/watch?v=8iN3dRujXYc
 [platform](platform/) Contains model information and addresses/stubs.  
 [test](test/) Bare bones assembly injection test. Generates autoexec.ash.  
 [AMBSH.md](AMBSH.md) Contains extensive documentation on the Ambsh programming language.  
+[tools/](tools/) HTML/JS web tools for AHDK. (image related things)  
 
 # Building
 Dependencies:
