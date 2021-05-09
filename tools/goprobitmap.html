@@ -22,9 +22,15 @@ https://petabyt.github.io/ahdk/tools/goprobitmap.html
 	<br>
 </body>
 <script>
-var pixelLimit = 80;
+var pixelLimit = 85;
+
 var width = 56;
 var height = 80;
+var vSize = width * height / 7;
+
+var array = new Uint8Array(width * height / 7);
+var video;
+var frame;
 
 preview.width = width;
 preview.height = height;
@@ -35,52 +41,79 @@ var c = canvas.getContext("2d");
 
 var file = document.createElement("input");
 file.type = "file";
+file.multiple = "multiple";
 document.body.appendChild(file);
 
 file.onchange = function() {
-	var content = URL.createObjectURL(file.files[0]);
-	var image = document.createElement("img");
-	image.src = content;
+	video = new Uint8Array(vSize * file.files.length);
 
-	setTimeout(function() {
-		c.drawImage(image, 0, 0, width, height);
-
+	frame = 0;
+	var int = setInterval(function() {
+		if (frame != 0) {
+			if (frame >= file.files.length) {
+				clearInterval(int);
+				setInterval(function() {
+					download("IMG.BIN", video);
+				}, 1000);
+			}
+		}
+		
+		var content = URL.createObjectURL(file.files[frame]);
+		var image = document.createElement("img");
+		image.src = content;
+		
+		// Generate the frame, 
 		setTimeout(function() {
-			var data = c.getImageData(0, 0, width, height).data;
-			var array = new Uint8Array(width * height);
-			var a = 0;
-			for (var i = 0; i < data.length; i += 4) {
-				if (data[i] > pixelLimit) {
-					array[a] = 0;
-				} else {
-					array[a] = 1;
+			c.drawImage(image, 0, 0, width, height);
+			setTimeout(function() {
+				console.log("Rendering frame " + (frame + 1));
+				generateFrame();
+
+				// Yes, this is essentially a "memcpy"
+				var i = 0;
+				for (var c = frame * vSize; c < (frame + 1) * vSize; c++) {
+					video[c] = array[i];
+					i++;
 				}
 				
-				a++;
-			}
-
-			// Duplicate preview
-			preview.getContext("2d").clearRect(0, 0, width, height);
-			for (var x = 0; x < width; x++) {
-				for (var y = 0; y < height; y++) {
-					if (array[y * width + x] == 1) {
-						preview.getContext("2d").fillRect(x, y, 1, 1);
-					}
-				}
-			}
-			
-			// Convert array of 1/0 chars to actual bits
-			var i2 = 0;
-			var array2 = new Uint8Array(width * height);
-			for (var i = 0; i < array.length; i += 7) {
-				array2[i2] = array[i + 0] << 7 | array[i + 1] << 6 | array[i + 2] << 5 |
-				array[i + 3] << 4 | array[i + 4] << 3 | array[i + 5] << 2 | array[i + 6] << 1 | array[i + 7] << 0;
-				i2++;
-			}
-			
-			download("FOO.BIN", array2);
+				frame++;
+			}, 300);
 		}, 300);
-	}, 300);
+	}, 900);
+}
+
+function generateFrame() {
+	var buffer = new Uint8Array(width * height);
+	var data = c.getImageData(0, 0, width, height).data;
+
+	var a = 0;
+	for (var i = 0; i < data.length; i += 4) {
+		if (data[i] > pixelLimit) {
+			buffer[a] = 0;
+		} else {
+			buffer[a] = 1;
+		}
+		
+		a++;
+	}
+	
+	// Duplicate preview
+	preview.getContext("2d").clearRect(0, 0, width, height);
+	for (var x = 0; x < width; x++) {
+		for (var y = 0; y < height; y++) {
+			if (buffer[y * width + x] == 1) {
+				preview.getContext("2d").fillRect(x, y, 1, 1);
+			}
+		}
+	}
+	
+	// Convert array of 1/0 chars to actual bits
+	var i2 = 0;
+	for (var i = 0; i < buffer.length; i += 7) {
+		array[i2] = buffer[i + 0] << 7 | buffer[i + 1] << 6 | buffer[i + 2] << 5 |
+		buffer[i + 3] << 4 | buffer[i + 4] << 3 | buffer[i + 5] << 2 | buffer[i + 6] << 1 | buffer[i + 7] << 0;
+		i2++;
+	}
 }
 
 function rgb(red, green, blue) {
