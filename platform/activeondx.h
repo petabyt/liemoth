@@ -66,6 +66,9 @@ Display Info:
 
 #define MEM_BASEADDR 0xC0000000
 
+// Random unused spot in memory
+#define MEM_PARAM 0xc012d5ac
+
 // Top screen buffer (see notes.md)
 #define MEM_BUFFER 0xc2413880
 

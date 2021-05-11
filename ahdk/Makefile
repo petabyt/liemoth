@@ -69,10 +69,10 @@ loader:
 ahdk:
 	@${CC}gcc ${ASMFLAGS} ${INCLUDE} main.S -o mains.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} screen.c  -o screen.o
-	@${CC}gcc ${CFLAGS} ${INCLUDE} mainmenu.c  -o mainmenu.o
+	@${CC}gcc ${CFLAGS} ${INCLUDE} apps.c  -o apps.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} lib.c -o lib.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} main.c -o main.o
-	@${CC}ld -Bstatic mains.o main.o screen.o mainmenu.o lib.o -T link.ld -o main.elf
+	@${CC}ld -Bstatic mains.o main.o screen.o apps.o lib.o -T link.ld -o main.elf
 	@${CC}objcopy -O binary main.elf main.o
 
 # Dump some helpful info

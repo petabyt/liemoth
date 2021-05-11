@@ -65,7 +65,5 @@ ROUTE msleep AMB_MSLEEP
 // Platform specific
 #ifdef P_GOPRO
 	ROUTE fpstring GP_FPSTRING
+	ROUTE showBuffer GP_SHOWBUFFER
 #endif
-
-// Ghirda experiments here...
-ROUTE showBuffer GP_SHOWBUFFER

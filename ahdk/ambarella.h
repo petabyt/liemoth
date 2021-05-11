@@ -2,6 +2,10 @@
 #ifndef __AMBARELLA
 #define __AMBARELLA
 
+#ifndef P_NAME
+	#include "../platform/ambarella.h"
+#endif
+
 // This seems to be mostly empty space
 struct DirReader {
 	unsigned char unknown[3268];

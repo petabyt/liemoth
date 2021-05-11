@@ -6,6 +6,7 @@
 int *envg;
 int line;
 int sel;
+
 struct Font font[100];
 
 // General purpose buffer
@@ -214,6 +215,15 @@ struct MenuItem mainMenu[] = {
 };
 
 void start(int *env) {
+	// Ambsh scripts can set MEM_PARAM
+	// and call the trigger command to
+	// have a C interface with the camera.
+	char *param = (char*)MEM_PARAM;
+	switch (*param) {
+	case 0:
+		break;
+	}
+	
 	envg = env;
 	line = 0;
 	sel = 0;

@@ -9,7 +9,13 @@
 	[end]
 	
 	[writeBin "loader.o" MEM_LOADER]
+
+	[ifdef "MEM_PARAM"]
+		writeb {MEM_PARAM} 0
+	[end]
+	
 	cardmgr [ifdef "LOG"]> log[end] 
+
 	[ifdef "SUSPEND"]
 		resume {P_CTRLMAN}
 	[end]
