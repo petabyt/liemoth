@@ -4,6 +4,10 @@ p ?= activeondx
 d ?= /media/dan/8765-4321/
 f ?= SUSPEND LOG
 
+ifeq ($(wildcard $(d)),)
+$(error SD card not inserted)
+endif
+
 INCLUDE := -include "../platform/${p}.h"
 
 # Using a "Preprocessed Makefile" would be alternative, but this is spiffier
@@ -11,27 +15,45 @@ MEM_LOADER := $(shell awk '/MEM_LOADER/{print $$3}' <../platform/${p}.h)
 MEM_MAIN := $(shell awk '/MEM_MAIN/{print $$3}' <../platform/${p}.h)
 P_THUMB := $(shell awk '/P_THUMB/{print $$2}' <../platform/${p}.h)
 
-# Try to get font binary size for C (error is fine)
+# Try to get font binary size for C
 FONTSIZE := $(shell ls -l $(d)ahdk/font.bin | awk '{print $$5}')
 
 CFLAGS := -std=c99 -c -ffreestanding -DFONTSIZE=$(FONTSIZE)
+ifdef REMOVEUNUSED
+CFLAGS += -fdata-sections -ffunction-sections
+endif
+
+# ARM needs -O2 for proper ldr instructions
 ifeq ($(P_THUMB),)
-	# This needs -O2 for proper ldr instructions
-	CFLAGS += -marm -O2
+CFLAGS += -marm -O2
 else
-	CFLAGS += -mthumb -O2
+CFLAGS += -mthumb -O2
+endif
+
+LDFLAGS := -Bstatic
+ifdef REMOVEUNUSED
+LDFLAGS += --gc-sections
 endif
 
 ASMFLAGS := -c
 
-HOSTCC := cc
+# Try to use TCC, faster
+HOSTCC := tcc
+ifeq (, $(shell which $(HOSTCC)))
+CC = gcc
+endif
 
-# arm-none-linux-gnueabi- wil also work
+# Arm C compilers
 CC := arm-none-eabi-
+ifeq (, $(shell which $(CC)gcc))
+CC = arm-none-linux-gnueabi-
+endif
+
+MAIN ?= test.c
 
 default: loader ahdk write info clean
 setup: init font loader ahdk write clean
-demo: loader testC write info clean
+minimal: loader minimalC write info clean
 
 help:
 	@echo 'Examples:'
@@ -39,14 +61,13 @@ help:
 	@echo ' make setup p=activeondx d=/media/user/mycam	(Setup on new camera)'
 	@echo 'Send script flags:'
 	@echo ' make "f=LOG FANCY"'
-	@echo 'GoPro test: make "f= SUSPEND LOG" p=hero3p demo'
-	@echo 'Also try HOSTCC=tcc for faster compilation'
+	@echo 'GoPro test: make "f=SUSPEND LOG" p=hero3p MAIN=test.c minimal'
 
-# Compile with test.c, not main gui
-testC:
+# Compile with custom minimal file, not main gui
+minimalC:
 	@${CC}gcc ${ASMFLAGS} ${INCLUDE} main.S -o mains.o
-	@${CC}gcc ${CFLAGS} ${INCLUDE} test.c -o main.o
-	@${CC}ld -Bstatic mains.o main.o -T link.ld -o main.elf
+	@${CC}gcc ${CFLAGS} ${INCLUDE} $(MAIN) -o main.o
+	@${CC}ld $(LDFLAGS) mains.o main.o -T link.ld -o main.elf
 	@${CC}objcopy -O binary main.elf main.o
 
 # Write initial files
@@ -62,7 +83,7 @@ loader:
 	
 # Binary loader
 	@${CC}gcc ${ASMFLAGS} ${INCLUDE} -o loader.o loader.S
-	@${CC}ld -Bstatic loader.o -Ttext ${MEM_LOADER} -o loader.elf
+	@${CC}ld $(LDFLAGS) loader.o -Ttext ${MEM_LOADER} -o loader.elf
 	@${CC}objcopy -O binary loader.elf loader.o
 
 # Compile Main AHDK
@@ -72,7 +93,7 @@ ahdk:
 	@${CC}gcc ${CFLAGS} ${INCLUDE} apps.c  -o apps.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} lib.c -o lib.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} main.c -o main.o
-	@${CC}ld -Bstatic mains.o main.o screen.o apps.o lib.o -T link.ld -o main.elf
+	@${CC}ld $(LDFLAGS) mains.o main.o screen.o apps.o lib.o -T link.ld -o main.elf
 	@${CC}objcopy -O binary main.elf main.o
 
 # Dump some helpful info

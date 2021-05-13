@@ -45,6 +45,8 @@ struct Font {
     char code[7][5];
 };
 
+int gpioStat(int id);
+
 #ifndef NOGRAPHICS
 // Graphics/UI functions
 void drawPixel(int x, int y, unsigned char col);

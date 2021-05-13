@@ -1,4 +1,6 @@
 // Hand made math ARM functions
+// TODO: Use a real library
+
 int divmod(int a, int b, int o) {
 	int di = 0;
 	int re = 0;

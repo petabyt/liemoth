@@ -1,5 +1,5 @@
-#include "ahdk.h"
 #include "ambarella.h"
+#include "ahdk.h"
 #include "apps.h"
 
 // Global env
@@ -11,6 +11,20 @@ struct Font font[100];
 
 // General purpose buffer
 char buffer[100];
+
+// Return GPIO status
+// May be platform specific
+int gpioStat(int id) {
+	int b, c, d;
+	gpio(id, &b, &c, &d);
+	b = (c & 0xff);
+
+	// Rec btn is opposite? 1 for up, 0 for down
+	if (id == P_RECBTN) {
+		return b;
+	}
+	return !b;
+}
 
 void notify() {
 	drawBox(10, 10, 200, 40, MENU_COL);
@@ -49,7 +63,6 @@ void drawMenu(struct MenuItem menu[]) {
 		fillRect(20, 20 + y, SCREEN_WIDTH - 30, 40 + y, col);
 		drawString(26, 26 + y, menu[i].text, TEXT_COL);
 
-		// Print
 		if (menu[i].type == SELECT) {
 			drawString(SCREEN_WIDTH - 120, 26 + y, menu[i].info->elements[menu[i].info->s], TEXT_COL);
 		}
@@ -58,18 +71,7 @@ void drawMenu(struct MenuItem menu[]) {
 	}
 }
 
-// Return GPIO status
-int gpioStat(int id) {
-	int b, c, d;
-	gpio(id, &b, &c, &d);
-	b = (c & 0xff);
 
-	// Rec btn is opposite? 1 for up, 0 for down
-	if (id == P_RECBTN) {
-		return b;
-	}
-	return !b;
-}
 
 // Wait until a button is pressed
 int waitButton(int id) {
@@ -192,20 +194,11 @@ int expSetting() {
 	return 0;
 }
 
-int asd() {
-	while (1) {
-		drawGUI();
-		sprintf(buffer, "%d", gpioStat(P_SELBTN));
-		drawString(50, 50, buffer, COL_WHITE);
-		msleep(10);
-	}
-}
-
 struct MenuItem mainMenu[] = {
 	{"Exit", 0, RETURN, 0},
 	{"About AHDK", ahdkInfo, ACTION, 0},
 #ifdef AMB_EXP
-	{"Manual", asd, ACTION, 0},
+	{"Manual", expSetting, ACTION, 0},
 #endif
 	{"Run Script", showScripts, ACTION, 0},
 	{"BrainF", bfExec, ACTION, 0},

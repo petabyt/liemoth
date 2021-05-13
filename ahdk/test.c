@@ -1,10 +1,11 @@
-// Quick demonstration of custom boot stuff
-// `make demo`
+// Quick custom hello world test.
+// `make minimal`
 
 #include "ambarella.h"
 #include "ahdk.h"
-#include "gopro.h"
 
+// We'll ignore int *env
 void start() {
-	playVideo();
+	// This will be sent to log file
+	printf("Hello, World.");
 }

@@ -1,6 +1,6 @@
 // Screen/graphics related functions
-#include "ahdk.h"
 #include "ambarella.h"
+#include "ahdk.h"
 
 extern struct Font font[100];
 

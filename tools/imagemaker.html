@@ -41,7 +41,6 @@ file.onchange = function() {
 
 	setTimeout(function() {
 		c.drawImage(image, 0, 0, width, height);
-		//c.fillRect(10, 10, 20, 20);
 		setTimeout(function() {
 			var data = c.getImageData(0, 0, width, height).data;
 			var array = new Uint8Array(width * height);

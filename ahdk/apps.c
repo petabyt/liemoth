@@ -1,8 +1,8 @@
 // Main menu related functions
 // (don't clog up the main file)
 
-#include "ahdk.h"
 #include "ambarella.h"
+#include "ahdk.h"
 
 #define TETRIS
 
