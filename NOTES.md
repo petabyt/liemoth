@@ -41,6 +41,4 @@ done
 - Understand the screen buffer system and make a new  
 buffer, not writing to some random one
 - Real time code execution (no restart)
-- Disable/shutdown Linux side (?)
-- Interact with Linux side
 - Power saving options

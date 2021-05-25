@@ -161,37 +161,10 @@ int runMenu(struct MenuItem menu[]) {
 	}
 }
 
-#ifdef AMB_EXP
-	struct ItemInfo selectISO = {
-		0, {"200", "800", "1600", "3200", "6400", 0}
-	};
-
-	struct ItemInfo selectExp = {
-		0, {"8", "7", "6", "5", "4", "3", "2", "1", 0}
-	};
-
-	char *shutterCode[] = {"1", "24", "85", "126", "178", "252", "378"};
-	char *hijackExp[] = {"ia2", "-ae", "exp", 0, 0};
-
-	int expTake() {
-		hijackExp[3] = selectISO.elements[selectISO.s];
-		hijackExp[4] = shutterCode[selectExp.s];
-		setExp(envg, hijackExp);
-		return 0;
-	}
-
-	struct MenuItem expMenu[] = {
-		{"ISO", 0, SELECT, &selectISO},
-		{"Exp", 0, SELECT, &selectExp},
-		{"Apply", expTake, ACTION, 0},
-		{"Exit", 0, RETURN, 0},
-		{0}
-	};
-#endif
-
-int expSetting() {
-	runMenu(expMenu);
-	return 0;
+void runAmbsh(char code[]) {
+	FILE *file = fopen("d:/ahdk/b.ash", "w");
+	fwrite(code, 1, strlen(code), file);
+	fclose(file);
 }
 
 struct MenuItem mainMenu[] = {
@@ -207,7 +180,7 @@ struct MenuItem mainMenu[] = {
 	{0}
 };
 
-void start(int *env) {
+int start(int *env) {
 	// Ambsh scripts can set MEM_PARAM
 	// and call the trigger command to
 	// have a C interface with the camera.
@@ -223,7 +196,7 @@ void start(int *env) {
 
 	// Copy font into memory
 	FILE *file = fopen("d:/ahdk/font.bin", "r");
-	if (!file) {printf(env, "No font"); return;}
+	if (!file) {printf(env, "No font"); return 1;}
 	fread(font, FONTSIZE, FONTSIZE, file);
 	fclose(file);
 

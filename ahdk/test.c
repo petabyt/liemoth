@@ -4,8 +4,11 @@
 #include "ambarella.h"
 #include "ahdk.h"
 
-// We'll ignore int *env
-void start() {
-	// This will be sent to log file
-	printf("Hello, World.");
+void start(int *env) {
+	// Startup
+	msleep(20000);
+
+	// Hijack lu_util function, talk to kernel
+	char *hijack[] = {"lu_util", "exec", "mkdir /tmp/fuse_d/HELLO"};
+	lu(env, 3, hijack);
 }

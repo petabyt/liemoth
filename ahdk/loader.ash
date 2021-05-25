@@ -1,3 +1,6 @@
+# This script is preprocessed by ashp.
+# See ashp/ for more information.
+
 # Regular onboot loader
 [ifndef "FANCY"]
 	[ifdef "LOG"]touch log[end] 

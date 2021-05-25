@@ -1,4 +1,8 @@
-// This routes stubs, dont want to bother with blx.
+// Stub routers
+// Request to use blx by adding +1 to the function
+// address. The ROUTE macro will notice this and
+// use blx (and subtract 1)
+
 #ifdef P_THUMB
 	.thumb
 
@@ -14,7 +18,13 @@
 	.global \name
 	\name:
 		push {r7, lr}
-		bl \addr
+		// Check if stub was passed with
+		// blx request (+1).
+		.if (\addr % 2) != 0
+			blx \addr - 1
+		.else
+			bl \addr
+		.endif
 		pop {r7, pc}
 	.endm
 #endif
@@ -60,6 +70,9 @@ ROUTE msleep AMB_MSLEEP
 // This is experimental
 #ifdef AMB_MKDIR
 	ROUTE mkdir AMB_MKDIR
+#endif
+#ifdef AMB_LU
+	ROUTE lu AMB_LU
 #endif
 
 // Platform specific

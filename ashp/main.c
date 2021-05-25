@@ -1,8 +1,8 @@
 // Ambashell preprocessor. It can be used to generate
 // ASH scripts.
-// You could use a general purpose preprocessor, but this
+// I could use a general purpose preprocessor, but this
 // is spiffier.
-// `cc main.c cli.c`
+// `cc *.c; ./a.out test.ash`
 
 #include <stdio.h>
 #include <stdlib.h>

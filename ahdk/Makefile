@@ -10,7 +10,6 @@ endif
 
 INCLUDE := -include "../platform/${p}.h"
 
-# Using a "Preprocessed Makefile" would be alternative, but this is spiffier
 MEM_LOADER := $(shell awk '/MEM_LOADER/{print $$3}' <../platform/${p}.h)
 MEM_MAIN := $(shell awk '/MEM_MAIN/{print $$3}' <../platform/${p}.h)
 P_THUMB := $(shell awk '/P_THUMB/{print $$2}' <../platform/${p}.h)
@@ -43,7 +42,7 @@ ifeq (, $(shell which $(HOSTCC)))
 CC = gcc
 endif
 
-# Arm C compilers
+# Try arm C compilers
 CC := arm-none-eabi-
 ifeq (, $(shell which $(CC)gcc))
 CC = arm-none-linux-gnueabi-
@@ -106,6 +105,7 @@ info:
 
 # Write AHDK
 write:
+	@echo Script flags: $(f)
 	-@cp main.o ${d}ahdk/ahdk.bin
 	@${HOSTCC} ../ashp/main.c script.c ${INCLUDE} -o gen.o
 	@./gen.o $(f) > ${d}autoexec.ash

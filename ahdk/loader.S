@@ -3,6 +3,8 @@
 	#include "../platform/activeondx.h"
 #endif
 
+// TODO: Safe memory copying
+
 .global _start
 
 #ifdef P_THUMB

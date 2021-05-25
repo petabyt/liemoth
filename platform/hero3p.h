@@ -24,7 +24,7 @@ Gopro Hero 3+
 #define AMB_PRINTF 0xc0244f9c
 #define AMB_MSLEEP 0xc010b950
 #define AMB_FOPEN 0xc013f3ac
-#define AMB_FREAD 0xc013f768
+#define AMB_FREAD 0xc013f768 + 1
 #define AMB_FCLOSE 0xc013f4f8
 #define AMB_ATOI 0
 #define AMB_GPIO 0

@@ -3,7 +3,7 @@
 #define __AMBARELLA
 
 #ifndef P_NAME
-	#include "../platform/ambarella.h"
+	#include "../platform/activeondx.h"
 #endif
 
 // This seems to be mostly empty space
@@ -37,6 +37,7 @@ int fclose(FILE *file);
 int fwrite(char *buffer, int size, int count, FILE *file);
 int gpio(int id, int *b, int *c, int *d);
 int mkdir(char *folder);
+void lu(int *env, int count, char *hijack[]);
 
 // Note: "*.*" wildcard works
 int openDir(char *asd, char attr, struct DirReader *data);
@@ -47,6 +48,6 @@ int malloc();
 void free();
 
 // Camera API
-void setExp();
+void setExp(int *env, char *hijack[]);
 
 #endif
