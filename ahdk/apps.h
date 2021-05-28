@@ -1,13 +1,12 @@
 #ifndef __APPS
 #define __APPS
 
-int expSetting();
-int tetris();
-int bfExec();
-int runCins();
-int ahdkInfo();
-int showScripts();
-int graphicTest();
-int allocTest();
+int app_exposure();
+int app_tetris();
+int app_bf();
+int app_cins();
+int app_info();
+int app_scripts();
+int app_linux();
 
 #endif

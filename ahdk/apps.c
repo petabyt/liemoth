@@ -4,7 +4,27 @@
 #include "ambarella.h"
 #include "ahdk.h"
 
-#ifdef AMB_EXP
+#define APP_TETRIS
+
+#ifdef APP_LINUX
+	char *hijackLu[] = {"lu_util", "exec", buffer};
+#endif
+
+int app_linux() {
+	#ifdef APP_LINUX
+	msleep(20000);
+	
+	// Hijack lu_util command, talk to Busybox/linux
+	sprintf(buffer, "touch /tmp/fuse_d/asd; date > /tmp/fuse_d/asd");
+	lu(envg, 3, hijackLu);
+
+	// command might need some time
+	msleep(1000);
+	#endif
+	return 1;
+}
+
+#ifdef APP_EXPOSURE
 struct ItemInfo selectISO = {
 	0, {"200", "800", "1600", "3200", "6400", 0}
 };
@@ -31,19 +51,20 @@ struct MenuItem expMenu[] = {
 	{0}
 };
 
-int expSetting() {
-	runMenu(expMenu);
-	return 0;
-}
 #endif
 
-#define TETRIS
+int app_exposure() {
+	#ifdef APP_EXPOSURE
+		runMenu(expMenu);
+	#endif
+	return 0;
+}
 
 // Graphical BrainF*ck Interpreter, Test it with mandelbrot.bf
 // Stolen from: https://github.com/kgabis/business-card-brainfuck
 // MIT License
-int bfExec() {
-	#ifdef BF
+int app_bf() {
+	#ifdef APP_BF
 	int x = 0;
 	int y = 0;
 	int r = 0;
@@ -116,8 +137,8 @@ int bfExec() {
 	return 0;
 }
 
-int runCins() {
-	#ifdef RUNCINS
+int app_cins() {
+	#ifdef APP_CINS
 	line = 0;
 		
 	// Allocate 1 megabyte of memory
@@ -213,7 +234,7 @@ int runCins() {
 	return 0;
 }
 
-int ahdkInfo() {
+int app_info() {
 	line = 0;
 	sprintf(buffer, "AHDK: Model: %s", P_NAME);
 	print(buffer);
@@ -225,8 +246,8 @@ int ahdkInfo() {
 	return 0;
 }
 
-int showScripts() {
-	#ifdef SHOWSCRIPTS
+int app_scripts() {
+	#ifdef APP_SCRIPTS
 	drawGUI();
 
 	struct MenuItem scriptMenu[10];
@@ -265,7 +286,7 @@ int showScripts() {
 	return 0;
 }
 
-#ifdef TETRIS
+#ifdef APP_TETRIS
 
 /*
 *The following tetris code is licensed under GPL3 and not the AHDK License.
@@ -535,8 +556,8 @@ int rand() {
 #endif
 
 //Main routine
-int tetris() {
-	#ifdef TETRIS
+int app_tetris() {
+	#ifdef APP_TETRIS
 	a = 0;
 	score = 0;
 	
