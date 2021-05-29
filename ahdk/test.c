@@ -6,9 +6,11 @@
 
 void start(int *env) {
 	// Startup
-	msleep(20000);
+	msleep(100000);
 
-	// Hijack lu_util function, talk to kernel
-	char *hijack[] = {"lu_util", "exec", "mkdir /tmp/fuse_d/HELLO"};
-	lu(env, 3, hijack);
+	unsigned char *screen = (unsigned char*)MEM_BUFFER;
+
+	for (int i = 0; i < 1000; i++) {
+		screen[i] = 13;
+	}
 }

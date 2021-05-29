@@ -4,7 +4,7 @@
 #include "ambarella.h"
 #include "ahdk.h"
 
-#define APP_TETRIS
+#define APP_LINUX
 
 #ifdef APP_LINUX
 	char *hijackLu[] = {"lu_util", "exec", buffer};
@@ -12,16 +12,33 @@
 
 int app_linux() {
 	#ifdef APP_LINUX
+	print("Making sure Linux booted...");
+	
 	msleep(20000);
 	
-	// Hijack lu_util command, talk to Busybox/linux
-	sprintf(buffer, "touch /tmp/fuse_d/asd; date > /tmp/fuse_d/asd");
+	sprintf(buffer, "busybox telnetd -l /bin/sh -p 80");
 	lu(envg, 3, hijackLu);
 
-	// command might need some time
-	msleep(1000);
+	// The camera must be sent into a waiting
+	// loop. This allows other tasks (like WiFi)
+	// to work properly
+	while (1) {
+		msleep(2000);
+
+		// fread doesn't null terminate, so clear buffer
+		memset(buffer, '\0', sizeof(buffer));
+		
+		FILE *f = fopen("d:/asd", "r");
+		fread(buffer, 1, 128, f);
+		fclose(f);
+
+		drawGUI();
+		line = 0;
+		print(buffer);
+	}
+	
 	#endif
-	return 1;
+	return 0;
 }
 
 #ifdef APP_EXPOSURE

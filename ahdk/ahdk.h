@@ -85,6 +85,7 @@ extern struct MenuItem mainMenu[];
 // Standard functions
 int strlen(char *buffer);
 void memcpy(void* dest, const void* src, int count);
+void *memset(void *dest, int val, int len);
 
 // Custom math library functions
 int divmod(int a, int b, int o);

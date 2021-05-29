@@ -32,6 +32,7 @@ void sprintf(char *string, const char *fmt, ...);
 
 // I/O
 FILE *fopen(char *filename, char *mode);
+// Note: fread doesn't add a null terminator.
 int fread(void *buffer, unsigned long size, unsigned long count, FILE *file);
 int fclose(FILE *file);
 int fwrite(char *buffer, int size, int count, FILE *file);

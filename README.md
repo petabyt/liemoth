@@ -36,8 +36,8 @@ Personally, I use `gcc-arm-none-eabi-5_4-2016q3`, since it's the same compiler t
 
 # Help Needed
 - Porting to other models
-- Stabilizing the hack
-- Build system fixes
+- Devising some kind of apps/modules system (?)
+- Redo build system (?)
 
 # Thanks to
 - http://spritesmods.com/?art=zx3hack&page=4 for the work done back in 2010

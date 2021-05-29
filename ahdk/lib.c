@@ -1,6 +1,5 @@
-// Hand made math ARM functions
-// TODO: Use a real library
-
+// Boring standard library crap, 
+// should use a library
 int divmod(int a, int b, int o) {
 	int di = 0;
 	int re = 0;
@@ -61,6 +60,15 @@ void *memcpy(void* dest, const void* src, int count) {
 	char* src8 = (char*)src;
 	while (count--) {
 		*dst8++ = *src8++;
+	}
+	
+	return dest;
+}
+
+void *memset(void *dest, int val, int len) {
+	unsigned char *ptr = dest;
+	while (len-- > 0) {
+		*ptr++ = val;
 	}
 	
 	return dest;
