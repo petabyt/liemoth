@@ -3,10 +3,10 @@
 #include "ahdk.h"
 
 extern struct Font font[100];
+unsigned char *screen = (unsigned char*)MEM_BUFFER;
 
 // Needs magic numbers...
 void drawPixel(int x, int y, unsigned char col) {
-	unsigned char *screen = (unsigned char*)MEM_BUFFER;
 	x += 5; // 1?
 	y += 20; // 17?
 	screen[x * SCREEN_HEIGHT - y] = col;

@@ -9,3 +9,4 @@ link.ld
 test2/
 ahdk/font.c
 font.c
+tools/gfx.h
