@@ -17,8 +17,7 @@ struct DirReader {
 #define NORMALDIR 0x7f
 
 typedef struct Ambarella_FILE {
-	int a;
-	int b;
+	// Unknown
 }FILE;
 
 typedef struct Env {
@@ -27,8 +26,8 @@ typedef struct Env {
 
 // System
 void msleep(int ms);
-void printf(int *env, const char *fmt, ...);
-void sprintf(char *string, const char *fmt, ...);
+void printf(int *env, char *fmt, ...);
+void sprintf(char *string, char *fmt, ...);
 
 // I/O
 FILE *fopen(char *filename, char *mode);
@@ -38,6 +37,8 @@ int fclose(FILE *file);
 int fwrite(char *buffer, int size, int count, FILE *file);
 int gpio(int id, int *b, int *c, int *d);
 int mkdir(char *folder);
+
+// Hijack lu_util command
 void lu(int *env, int count, char *hijack[]);
 
 // Note: "*.*" wildcard works
@@ -48,7 +49,9 @@ int nextFile(struct DirReader *data);
 int malloc();
 void free();
 
-// Camera API
+// This can be used to hijack all the "t *"
+// commands, not just set exposure.
+// TODO: Better name
 void setExp(int *env, char *hijack[]);
 
 #endif
