@@ -19,22 +19,4 @@ void setPixel(int x, int y) {
 #define FRAMES 1079
 #define DELAY 30
 
-void playVideo() {
-	int i = 0;
-	FILE *f = fopen("d:/video.bin", "r");
-	while (1) {
-		if (i == FRAMES) {
-			fclose(f);
-			f = fopen("d:/video.bin", "r");
-			i = 0;
-		} else {
-			fread(&screenBuf, (SCREEN_WIDTH * 8) * SCREEN_HEIGHT / 7, 1, f);
-			showBuffer(screenBuf);
-			i++;
-		}
-
-		msleep(DELAY);
-	}
-}
-
 #endif

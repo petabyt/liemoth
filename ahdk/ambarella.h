@@ -45,13 +45,14 @@ void lu(int *env, int count, char *hijack[]);
 int openDir(char *asd, char attr, struct DirReader *data);
 int nextFile(struct DirReader *data);
 
-// Memory (TODO: parameters)
-int malloc();
-void free();
+void *malloc(int a, int size, void *addrBuffer);
+void free(int *addr);
 
 // This can be used to hijack all the "t *"
 // commands, not just set exposure.
 // TODO: Better name
 void setExp(int *env, char *hijack[]);
+
+int UndefinedFunction_c036db50();
 
 #endif

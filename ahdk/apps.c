@@ -4,7 +4,7 @@
 #include "ambarella.h"
 #include "ahdk.h"
 
-#define APP_LINUX
+//#define APP_LINUX
 
 #ifdef APP_LINUX
 	char *hijackLu[] = {"lu_util", "exec", buffer};

@@ -2,6 +2,10 @@
 #include "ahdk.h"
 #include "apps.h"
 
+// Copy the screen before writing, and copy
+// it back after. Needs 80k memory.
+#define COPYSCREEN
+
 // Global env
 int *envg;
 int line;
@@ -188,6 +192,13 @@ int start(int *env) {
 	case 0:
 		break;
 	}
+
+	#ifdef COPYSCREEN
+		int *oldScreen;
+		malloc(1, SCREEN_WIDTH * SCREEN_HEIGHT, &oldScreen);
+		char *screen = (char*)MEM_BUFFER;
+		memcpy(oldScreen, screen, SCREEN_WIDTH * SCREEN_HEIGHT);
+	#endif
 	
 	envg = env;
 	line = 0;
@@ -199,7 +210,12 @@ int start(int *env) {
 	fread(font, FONTSIZE, FONTSIZE, file);
 	fclose(file);
 
-	printf(env, "Loaded font, %d bytes\n", FONTSIZE);
+	//printf(env, "Loaded font, %d bytes\n", FONTSIZE);
 
 	runMenu(mainMenu);
+
+	#ifdef COPYSCREEN
+		memcpy(screen, oldScreen, SCREEN_WIDTH * SCREEN_HEIGHT);
+		free(oldScreen);
+	#endif
 }

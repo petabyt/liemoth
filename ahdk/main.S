@@ -67,6 +67,8 @@ ROUTE openDir AMB_OPENDIR
 ROUTE nextFile AMB_NEXTFILE
 ROUTE msleep AMB_MSLEEP
 
+// ROUTE UndefinedFunction_c036db50 0xc036db50
+
 // This is experimental
 #ifdef AMB_MKDIR
 	ROUTE mkdir AMB_MKDIR

@@ -36,7 +36,7 @@ _start:
 	// TODO: fclose
 
 	// Now jump to code and hope its there
-	bl MEM_MAIN
+	//bl MEM_MAIN
 				
 	// Hack an early return.
 	pop {r4, pc}
