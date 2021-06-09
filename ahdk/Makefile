@@ -8,14 +8,15 @@ ifeq ($(wildcard $(d)),)
 $(error SD card not inserted)
 endif
 
-INCLUDE := -include "../platform/${p}.h"
-
+MEM_TRIGGER := $(shell awk '/MEM_TRIGGER/{print $$3}' <../platform/${p}.h)
 MEM_LOADER := $(shell awk '/MEM_LOADER/{print $$3}' <../platform/${p}.h)
 MEM_MAIN := $(shell awk '/MEM_MAIN/{print $$3}' <../platform/${p}.h)
 P_THUMB := $(shell awk '/P_THUMB/{print $$2}' <../platform/${p}.h)
 
 # Try to get font binary size for C
 FONTSIZE := $(shell ls -l $(d)ahdk/font.bin | awk '{print $$5}')
+
+INCLUDE := -include "../platform/${p}.h"
 
 CFLAGS := -std=c99 -c -ffreestanding -DFONTSIZE=$(FONTSIZE)
 ifdef REMOVEUNUSED
@@ -34,13 +35,10 @@ ifdef REMOVEUNUSED
 LDFLAGS += --gc-sections
 endif
 
-ASMFLAGS := -c
+ASMFLAGS := -c ${INCLUDE}
 
-# Try to use TCC, faster
-HOSTCC := tcc
-ifeq (, $(shell which $(HOSTCC)))
-CC = gcc
-endif
+
+HOSTCC := cc
 
 # Try arm C compilers
 CC := arm-none-eabi-
@@ -48,9 +46,10 @@ ifeq (, $(shell which $(CC)gcc))
 CC = arm-none-linux-gnueabi-
 endif
 
+# File to compile with `make minimal`
 MAIN ?= test.c
 
-default: loader ahdk write info clean
+default: loader ahdk buttonLoader write info clean
 setup: init font loader ahdk write clean
 minimal: loader minimalC write info clean
 
@@ -60,13 +59,13 @@ help:
 	@echo ' make setup p=activeondx d=/media/user/mycam	(Setup on new camera)'
 	@echo 'Send script flags:'
 	@echo ' make "f=LOG FANCY"'
-	@echo 'GoPro test: make "f=SUSPEND LOG" p=hero3p MAIN=test.c minimal'
+	@echo 'GoPro test: make "f=SUSPEND LOG" p=hero3p MAIN=gopro.c minimal'
 
 # Compile with custom minimal file, not main gui
 minimalC:
-	@${CC}gcc ${ASMFLAGS} ${INCLUDE} main.S -o mains.o
-	@${CC}gcc ${CFLAGS} ${INCLUDE} $(MAIN) -o main.o
-	@${CC}ld $(LDFLAGS) mains.o main.o -T link.ld -o main.elf
+	@${CC}gcc ${ASMFLAGS} main.S -o mains.o
+	@${CC}gcc ${CFLAGS} ${INCLUDE} ${MAIN} -o main.o
+	@${CC}ld ${LDFLAGS} mains.o main.o -T link.ld -o main.elf
 	@${CC}objcopy -O binary main.elf main.o
 
 # Write initial files
@@ -81,13 +80,18 @@ loader:
 	@${HOSTCC} -include "../platform/${p}.h" -P -E link.c -o link.ld
 	
 # Binary loader
-	@${CC}gcc ${ASMFLAGS} ${INCLUDE} -o loader.o loader.S
+	@${CC}gcc ${ASMFLAGS} -o loader.o loader.S
 	@${CC}ld $(LDFLAGS) loader.o -Ttext ${MEM_LOADER} -o loader.elf
 	@${CC}objcopy -O binary loader.elf loader.o
 
+buttonLoader:
+	@${CC}gcc ${ASMFLAGS} -o button.o button.S
+	@${CC}ld -Bstatic button.o -Ttext ${MEM_TRIGGER} -o button.elf
+	@${CC}objcopy -O binary button.elf button.o
+
 # Compile Main AHDK
 ahdk:
-	@${CC}gcc ${ASMFLAGS} ${INCLUDE} main.S -o mains.o
+	@${CC}gcc ${ASMFLAGS} main.S -o mains.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} screen.c  -o screen.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} apps.c  -o apps.o
 	@${CC}gcc ${CFLAGS} ${INCLUDE} lib.c -o lib.o

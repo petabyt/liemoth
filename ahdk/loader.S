@@ -35,8 +35,11 @@ _start:
 
 	// TODO: fclose
 
-	// Now jump to code and hope its there
-	//bl MEM_MAIN
+	// Now jump to code and hope its there,
+	// unless a button trigger is specified
+	#ifndef MEM_TRIGGER
+		bl MEM_MAIN
+	#endif
 				
 	// Hack an early return.
 	pop {r4, pc}

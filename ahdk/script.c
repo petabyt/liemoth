@@ -16,7 +16,11 @@ int main(int argc, char *argv[]) {
 	#ifdef MEM_PARAM
 		defineInt("MEM_PARAM", MEM_PARAM);
 	#endif
-	
+
+	#ifdef MEM_TRIGGER
+		defineInt("MEM_TRIGGER", MEM_TRIGGER);
+	#endif
+
 	defineInt("MEM_LOADER", MEM_LOADER);
 	defineInt("P_CTRLMAN", P_CTRLMAN);
 	

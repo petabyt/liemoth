@@ -12,6 +12,7 @@
 	[end]
 	
 	[writeBin "loader.o" MEM_LOADER]
+	[writeBin "button.o" MEM_TRIGGER]
 
 	[ifdef "MEM_PARAM"]
 		writeb {MEM_PARAM} 0
