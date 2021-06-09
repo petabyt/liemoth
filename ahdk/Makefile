@@ -70,10 +70,11 @@ minimalC:
 
 # Write initial files
 init:
-	@touch ${d}ahdk/ahdk.bin
-	@touch ${d}ahdk/a.ash
-	@touch ${d}ahdk/font.bin
-	@touch ${d}autoexec.ash
+	-@mkdir ${d}/ahdk
+	-@touch ${d}ahdk/ahdk.bin
+	-@touch ${d}ahdk/a.ash
+	-@touch ${d}ahdk/font.bin
+	-@touch ${d}autoexec.ash
 
 loader:
 # Preprocess linker script

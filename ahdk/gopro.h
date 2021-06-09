@@ -16,7 +16,4 @@ void setPixel(int x, int y) {
 	screenBuf[y * SCREEN_WIDTH + (x >> 3)] |= 1 << (x % 8);
 }
 
-#define FRAMES 1079
-#define DELAY 30
-
 #endif

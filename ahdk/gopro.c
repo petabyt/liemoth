@@ -3,6 +3,9 @@
 #include "ahdk.h"
 #include "gopro.h"
 
+#define FRAMES 6335
+#define DELAY 40
+
 void playVideo() {
 	int i = 0;
 	FILE *f = fopen("d:/video.bin", "r");
@@ -21,6 +24,7 @@ void playVideo() {
 	}
 }
 
-void start() {
+void start(int *env) {
+	printf(env, "He");
 	playVideo();
 }

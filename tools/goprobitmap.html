@@ -22,7 +22,7 @@ https://petabyt.github.io/ahdk/tools/goprobitmap.html
 	<br>
 </body>
 <script>
-var pixelLimit = 85;
+var pixelLimit = 115;
 
 var width = 56;
 var height = 80;
@@ -52,9 +52,9 @@ file.onchange = function() {
 		if (frame != 0) {
 			if (frame >= file.files.length) {
 				clearInterval(int);
-				setInterval(function() {
+				setTimeout(function() {
 					download("IMG.BIN", video);
-				}, 1000);
+				}, 500);
 			}
 		}
 		
@@ -77,9 +77,9 @@ file.onchange = function() {
 				}
 				
 				frame++;
-			}, 300);
+			}, 150 );
 		}, 300);
-	}, 900);
+	}, 300);
 }
 
 function generateFrame() {
