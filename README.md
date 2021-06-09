@@ -41,7 +41,8 @@ Personally, I use `gcc-arm-none-eabi-5_4-2016q3`, since it's the same compiler t
 
 # Thanks to
 - http://spritesmods.com/?art=zx3hack&page=4 for the work done back in 2010
-- The entire Autoexec.ash/Ambarella hacking community
+- The entire camera hacking/reverse engineering community
+- The GoPrawn community https://www.goprawn.com/
 
 ## Other
 - Currently my only camera (with a screen) is the Activeon DX, but I also have a Gopro Hero 3+  
