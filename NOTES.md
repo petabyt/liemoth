@@ -1,7 +1,8 @@
 # Porting guide and notes:
 Strings are often stored under functions.  
 I personally used Ghirda (free open-source)  
-To get a RAM dump: `savebin d:\memdump.bin 0xC0000000 l 134217728`
+To get a RAM dump: `savebin d:\memdump.bin 0xC0000000 l 134217728`  
+In Ghirda, remember to set base address to `0xC0000000`.  
 - msleep: Search "Usage: %s [sec]\n"
 - fread, fopen, fclose: Search "%s: '%s' %s!\n" and "Usage: %s [file]\n"
 - sprintf: Search "cannot load file '%s'!"
