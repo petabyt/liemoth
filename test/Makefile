@@ -22,4 +22,4 @@ all:
 	@rm gen *.o *.elf
 
 help:
-	@echo ""
+	@echo "make l=ADDRESS d=LOCATION p=PLATFORM"
