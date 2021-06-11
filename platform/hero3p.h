@@ -15,7 +15,7 @@ Gopro Hero 3+
 #define P_BUTTONTASKA 17
 #define P_BUTTONTASKB 16
 
-#define MEM_BASEADDR 0xC0000000
+#define MEM_BASEADDR 0xc0000000
 
 // Like Activeon DX, Also cardmgr command
 #define MEM_LOADER 0xc02d16e0

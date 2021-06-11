@@ -1,9 +1,9 @@
+# Default flags, if not set.
 p ?= activeondx
 d ?= /media/dan/8765-4321/
 l ?= $(shell awk '/MEM_LOADER/{print $$3}' <../platform/${p}.h)
 
-INCLUDE := -include "../platform/${p}.h"
-ASMFLAGS := -mthumb-interwork -c -Wa,-mthumb
+ASMFLAGS := -c -include "../platform/${p}.h"
 CC := arm-none-linux-gnueabi-
 
 all:
@@ -16,7 +16,10 @@ all:
 	@hexdump -C main.o
 	@ls -l main.o
 
-# Write AHDK
-	@gcc ../ashp/main.c script.c ${INCLUDE} -o gen
+# Write the binary
+	@gcc ../ashp/ashp.c script.c ${INCLUDE} -o gen
 	@./gen ${l} > ${d}autoexec.ash
 	@rm gen *.o *.elf
+
+help:
+	@echo ""

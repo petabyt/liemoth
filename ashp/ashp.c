@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "main.h"
+#include "ashp.h"
 
 struct Memory *mem;
 struct Token tokens[6];

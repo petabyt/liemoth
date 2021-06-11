@@ -35,7 +35,7 @@ CPU INFO:
 #define SCREEN_HEIGHT 256
 #define SCREEN_WIDTH 320
 
-#define MEM_BASEADDR 0xC0000000
+#define MEM_BASEADDR 0xc0000000
 
 // Random unused spot in memory
 #define MEM_PARAM 0xc012d5ac
@@ -71,7 +71,7 @@ CPU INFO:
 #define AMB_NEXTFILE 0xc0274cbe
 #define AMB_GPIO 0xc0276bea
 #define AMB_EXP 0xc02d0204
-#define AMB_LU 0xc04b852c + 1
+#define AMB_LU 0xc04b852c + 1 // Arm branch (blx)
 
 // Experimental
 #define AMB_MKDIR 0xc0275804

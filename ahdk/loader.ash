@@ -1,8 +1,13 @@
-# This script is preprocessed by ashp.
+# This script is preprocessed by ashp
+# at compile time.
+
 # See ashp/ for more information.
 
 # Regular onboot loader
 [ifndef "FANCY"]
+	# clear script
+	echo a > d:/ahdk/a.ash
+	
 	[ifdef "LOG"]touch log[end] 
 
 	[ifdef "SUSPEND"]
@@ -13,6 +18,7 @@
 	
 	[writeBin "loader.o" MEM_LOADER]
 
+	# Write the GUI hijack code (if it exists)
 	[ifdef "MEM_TRIGGER"]
 		[writeBin "button.o" MEM_TRIGGER]
 	[end]
@@ -25,6 +31,10 @@
 
 	[ifdef "SUSPEND"]
 		resume {P_CTRLMAN}
+	[end]
+
+	[ifndef "MEM_TRIGGER"]
+		cardmgr > log
 	[end]
 
 	# This runs copied reference to script

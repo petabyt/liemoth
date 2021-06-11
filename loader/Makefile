@@ -2,7 +2,7 @@ p ?= hero3p
 f ?= gopro2.ash
 
 all:
-	@${CC} ../ashp/main.c loader.c -include "../platform/${p}.h" -o loader.o
+	@${CC} ../ashp/ashp.c loader.c -include "../platform/${p}.h" -o loader.o
 	@./loader.o ${f}
 	@rm *.o
 

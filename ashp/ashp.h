@@ -1,5 +1,5 @@
-#ifndef __MAIN
-#define __MAIN
+#ifndef MAIN_H
+#define MAIN_H
 
 #define MAX_LINE 1024
 

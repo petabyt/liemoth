@@ -1,10 +1,3 @@
-// Default platform
-#ifndef P_NAME
-	#include "../platform/activeondx.h"
-#endif
-
-// TODO: Safe memory copying
-
 .global _start
 
 #ifdef P_THUMB
@@ -35,11 +28,8 @@ _start:
 
 	// TODO: fclose
 
-	// Now jump to code and hope its there,
-	// unless a button trigger is specified
-	#ifndef MEM_TRIGGER
-		bl MEM_MAIN
-	#endif
+	// Now jump to code and hope its there
+	bl MEM_MAIN
 				
 	// Hack an early return.
 	pop {r4, pc}

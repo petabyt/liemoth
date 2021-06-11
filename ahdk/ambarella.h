@@ -53,6 +53,4 @@ void free(int *addr);
 // TODO: Better name
 void setExp(int *env, char *hijack[]);
 
-int UndefinedFunction_c036db50();
-
 #endif

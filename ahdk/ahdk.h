@@ -1,10 +1,6 @@
 #ifndef __HEADER
 #define __HEADER
 
-#ifndef FONTSIZE
-	#define FONTSIZE 2737
-#endif
-
 // Color chart: https://petabyte.heb12.com/filedump/public/ambacol.jpg
 #define COL_BLACK 71
 #define COL_WHITE 0

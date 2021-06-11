@@ -3,7 +3,7 @@
 	#include "../platform/activeondx.h"
 #endif
 
-#include "../ashp/main.h"
+#include "../ashp/ashp.h"
 
 int main(int argc, char *argv[]) {
 	init();

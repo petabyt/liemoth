@@ -8,6 +8,9 @@
 
 // Global env
 int *envg;
+
+// For some reason, global ints aren't working.
+// I don't care, so these are set to zero in main().
 int line;
 int sel;
 
@@ -17,16 +20,18 @@ struct Font font[100];
 char buffer[100];
 
 // Return GPIO status
-// May be platform specific
+// May be platform specific.
 int gpioStat(int id) {
 	int b, c, d;
 	gpio(id, &b, &c, &d);
 	b = (c & 0xff);
 
-	// Rec btn is opposite? 1 for up, 0 for down
+	// On Activeon DX, Rec btn is opposite?
+	// 1 for up, 0 for down
 	if (id == P_RECBTN) {
 		return b;
 	}
+	
 	return !b;
 }
 
@@ -74,8 +79,6 @@ void drawMenu(struct MenuItem menu[]) {
 		y += 22;
 	}
 }
-
-
 
 // Wait until a button is pressed
 int waitButton(int id) {
@@ -165,6 +168,7 @@ int runMenu(struct MenuItem menu[]) {
 	}
 }
 
+// Write a 
 void runAmbsh(char code[]) {
 	FILE *file = fopen("d:/ahdk/b.ash", "w");
 	fwrite(code, 1, strlen(code), file);
@@ -206,11 +210,13 @@ int start(int *env) {
 
 	// Copy font into memory
 	FILE *file = fopen("d:/ahdk/font.bin", "r");
-	if (!file) {printf(env, "No font"); return 1;}
-	fread(font, FONTSIZE, FONTSIZE, file);
+	if (!file) {
+		printf(env, "No font.");
+		return 1;
+	}
+	
+	fread(font, 1, 5000, file);
 	fclose(file);
-
-	//printf(env, "Loaded font, %d bytes\n", FONTSIZE);
 
 	runMenu(mainMenu);
 

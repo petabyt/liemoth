@@ -1,6 +1,4 @@
-// Thumb inst test
+// Test assembly injections here
 .global _start
 _start:
-	mov r0, #0
-	bl MEM_MAIN
-	b 0xc0419d1a
+	b .

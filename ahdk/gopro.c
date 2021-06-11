@@ -3,6 +3,12 @@
 #include "ahdk.h"
 #include "gopro.h"
 
+unsigned char screenBuf[1000];
+
+void setPixel(int x, int y) {
+	screenBuf[y * SCREEN_WIDTH + (x >> 3)] |= 1 << (x % 8);
+}
+
 #define FRAMES 6335
 #define DELAY 40
 
@@ -25,6 +31,6 @@ void playVideo() {
 }
 
 void start(int *env) {
-	printf(env, "He");
+	printf(env, "Playing...");
 	playVideo();
 }

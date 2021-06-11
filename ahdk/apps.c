@@ -4,7 +4,10 @@
 #include "ambarella.h"
 #include "ahdk.h"
 
+// Some apps will be left blank.
+
 //#define APP_LINUX
+#define APP_TETRIS
 
 #ifdef APP_LINUX
 	char *hijackLu[] = {"lu_util", "exec", buffer};
@@ -258,6 +261,9 @@ int app_info() {
 	sprintf(buffer, "Built on: %s", __DATE__);
 	print(buffer);
 	print("Press select button to exit.");
+
+	// Note: logo.bin isn't actually required.
+	// drawImage will quit if it isn't found.
 	drawImage(140, 70, 150, 150, "d:/ahdk/logo.bin");
 	waitButton(P_SELBTN);
 	return 0;
