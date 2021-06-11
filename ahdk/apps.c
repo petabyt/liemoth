@@ -4,10 +4,14 @@
 #include "ambarella.h"
 #include "ahdk.h"
 
-// Some apps will be left blank.
+// AHDK can be compiled without
+// some apps.
 
 //#define APP_LINUX
 #define APP_TETRIS
+//#define APP_CINS
+//#define APP_BF
+//#define APP_EXPOSURE
 
 #ifdef APP_LINUX
 	char *hijackLu[] = {"lu_util", "exec", buffer};
@@ -54,9 +58,12 @@ struct ItemInfo selectExp = {
 };
 
 char *shutterCode[] = {"1", "24", "85", "126", "178", "252", "378"};
-char *hijackExp[] = {"ia2", "-ae", "exp", 0, 0};
 
 int expTake() {
+	// FIXME: linker messes this up when inserted beside shutterCode.
+	// I haven't done any investigation to figure out why.
+	char *hijackExp[5] = {"ia2", "-ae", "exp"};
+	
 	hijackExp[3] = selectISO.elements[selectISO.s];
 	hijackExp[4] = shutterCode[selectExp.s];
 	setExp(envg, hijackExp);
@@ -161,14 +168,12 @@ int app_cins() {
 	#ifdef APP_CINS
 	line = 0;
 		
-	// Allocate 1 megabyte of memory
-	char *input;
-	int r = malloc(1, 102400, &input);
+	char input[1024];
 
 	// Read file into memory
 	FILE *file = fopen("d:/ahdk/autoexec.cins", "r");
 	char c;
-	r = 0;
+	int r = 0;
 	while (fread(&c, 1, 1, file)) {
 		input[r] = c;
 		r++;

@@ -11,9 +11,7 @@
 	[ifdef "LOG"]touch log[end] 
 
 	[ifdef "SUSPEND"]
-		sleep 1
 		suspend {P_CTRLMAN}
-		sleep 1
 	[end]
 	
 	[writeBin "loader.o" MEM_LOADER]

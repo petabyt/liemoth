@@ -5,6 +5,7 @@
 
 unsigned char screenBuf[1000];
 
+// Not working, I think
 void setPixel(int x, int y) {
 	screenBuf[y * SCREEN_WIDTH + (x >> 3)] |= 1 << (x % 8);
 }
@@ -31,6 +32,6 @@ void playVideo() {
 }
 
 void start(int *env) {
-	printf(env, "Playing...");
+	printf(env, "Playing video on front panel...");
 	playVideo();
 }

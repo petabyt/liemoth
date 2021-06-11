@@ -51,6 +51,6 @@ void free(int *addr);
 // This can be used to hijack all the "t *"
 // commands, not just set exposure.
 // TODO: Better name
-void setExp(int *env, char *hijack[]);
+void setExp();
 
 #endif

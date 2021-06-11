@@ -41,7 +41,9 @@ CPU INFO:
 #define MEM_PARAM 0xc012d5ac
 
 // Top screen buffer (see notes.md)
-#define MEM_BUFFER 0xc2413880
+// This one seems to work better (?)
+#define MEM_BUFFER 0xc2413880 + (SCREEN_HEIGHT * SCREEN_WIDTH)
+#define MEM_BUFFER2 0xc2413880
 
 // Run on command "cardmgr", a bunch of prints
 // including the strings, about 1.3k is free to use.

@@ -60,7 +60,6 @@ ROUTE fread AMB_FREAD
 ROUTE fwrite AMB_FWRITE
 ROUTE fclose AMB_FCLOSE
 ROUTE gpio AMB_GPIO
-ROUTE setExp AMB_EXP
 ROUTE malloc AMB_ALLOC
 ROUTE free AMB_FREE
 ROUTE openDir AMB_OPENDIR
@@ -73,6 +72,9 @@ ROUTE msleep AMB_MSLEEP
 #endif
 #ifdef AMB_LU
 	ROUTE lu AMB_LU
+#endif
+#ifdef AMB_EXP
+	ROUTE setExp AMB_EXP
 #endif
 
 // Platform specific
