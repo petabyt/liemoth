@@ -28,7 +28,7 @@ Dependencies:
 Head into a directory and type `make help`.  
 It should be pretty straightforward.  
 
-This is the compiler used by Ambarella (I think). You should be able to  
+This is the compiler used by Ambarella (I think). You can also    
 use it to compile apps that run on the camera's Linux system.  
 [arm-none-linux-gnueabi](https://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2)  
 It's older (2009), so it will generate assembly around 2x the size of newer GCCs.  
