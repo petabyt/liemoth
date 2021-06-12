@@ -6,6 +6,11 @@
 
 void start(int *env) {
 	printf(env, "Hello");
-	char *hijackExp[5] = {"ia2", "-ae", "exp", "200", "85"};
-	setExp(5, hijackExp);
+	
+	char *f = (char*)(0xc3f180eb + 100000);
+	while (1) {
+		for (int i = 0; i < 10000; i++) {
+			f[i] = 1;
+		} 
+	}
 }

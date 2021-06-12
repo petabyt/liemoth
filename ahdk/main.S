@@ -62,9 +62,9 @@ ROUTE fclose AMB_FCLOSE
 ROUTE gpio AMB_GPIO
 ROUTE malloc AMB_ALLOC
 ROUTE free AMB_FREE
+ROUTE msleep AMB_MSLEEP
 ROUTE openDir AMB_OPENDIR
 ROUTE nextFile AMB_NEXTFILE
-ROUTE msleep AMB_MSLEEP
 
 // This is experimental
 #ifdef AMB_MKDIR

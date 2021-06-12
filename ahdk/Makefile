@@ -13,7 +13,7 @@ MEM_LOADER := ${shell awk '/MEM_LOADER/{print $$3}' <../platform/${p}.h}
 MEM_MAIN := ${shell awk '/MEM_MAIN/{print $$3}' <../platform/${p}.h}
 P_THUMB := ${shell awk '/P_THUMB/{print $$2}' <../platform/${p}.h}
 
-# Insert the platform header info file
+# Insert the platform header file
 # in all the C and Assembly files that
 # are compiled.
 INCLUDE := -include "../platform/${p}.h"
@@ -55,13 +55,16 @@ minimal: loader minimalC write info clean
 help:
 	@echo 'Examples:'
 	@echo ' make p=activeondx d=/media/user/mycam		(Assumes files are set up)'
-	@echo ' make setup p=activeondx d=/media/user/mycam	(Setup on new camera)'
-	@echo 'Send script flags:'
+	@echo ' make setup p=activeondx d=/media/user/mycam	(Setup and compile on new camera)'
+	@echo ' make initial								(Set up file structure)'
+	@echo ' make font									(Set up the font on the camera)'
+	@echo 'Send ashp script flags:'
 	@echo ' make "f=LOG FANCY"'
 	@echo 'GoPro test: make "f=SUSPEND LOG" p=hero3p MAIN=gopro.c minimal'
 
 # Compile with custom minimal file, not main gui
 minimalC:
+	@echo "Minimal file to compile: ${MAIN}"
 	@${CC}gcc ${ASMFLAGS} main.S -o mains.o
 	@${CC}gcc ${CFLAGS} ${MAIN} -o main.o
 	@${CC}ld ${LDFLAGS} mains.o main.o -T link.ld -o main.elf

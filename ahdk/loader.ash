@@ -5,9 +5,6 @@
 
 # Regular onboot loader
 [ifndef "FANCY"]
-	# clear script
-	echo a > d:/ahdk/a.ash
-	
 	[ifdef "LOG"]touch log[end] 
 
 	[ifdef "SUSPEND"]
