@@ -11,6 +11,7 @@ Gopro Hero 3+
 #define P_CTRLMAN 37
 #define P_MODEBTN 139
 #define P_SELBTN 140
+
 #define P_AUTOEXECTASK 59
 #define P_BUTTONTASKA 17
 #define P_BUTTONTASKB 16
@@ -18,7 +19,7 @@ Gopro Hero 3+
 #define MEM_BASEADDR 0xc0000000
 
 // Like Activeon DX, Also cardmgr command
-#define MEM_LOADER 0xc02d16e0
+#define MEM_LOADER 0xc02d16dc
 
 // Regular Stubs
 #define AMB_PRINTF 0xc0244f9c
