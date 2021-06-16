@@ -45,7 +45,7 @@ void lu(int *env, int count, char *hijack[]);
 int openDir(char *asd, char attr, struct DirReader *data);
 int nextFile(struct DirReader *data);
 
-void *malloc(int a, int size, void *addrBuffer);
+int malloc(int a, int size, void *addrBuffer);
 void free(int *addr);
 
 // This can be used to hijack all the "t *"

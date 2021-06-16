@@ -3,7 +3,7 @@
 #ifdef P_THUMB
 _start:
 	.thumb
-	push {r4, pc}
+	push {r4, lr}
 	
 	// Preserve r0, which holds env
 	push {r0}
@@ -40,7 +40,7 @@ _start:
 #ifdef P_ARM
 _start:
 	.arm
-	stmia sp!, {r4, pc}
+	stmia sp!, {r4, lr}
 	mov r6, r0
 	
 	ldr r0, =file

@@ -5,6 +5,7 @@
 
 # Regular onboot loader
 [ifndef "FANCY"]
+	sleep 1
 	[ifdef "LOG"]touch log[end] 
 
 	[ifdef "SUSPEND"]

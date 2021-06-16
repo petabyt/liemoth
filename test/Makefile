@@ -4,7 +4,7 @@ d ?= /media/dan/8765-4321/
 l ?= $(shell awk '/MEM_LOADER/{print $$3}' <../platform/${p}.h)
 
 ASMFLAGS := -c -include "../platform/${p}.h"
-CC := arm-none-linux-gnueabi-
+CC := arm-none-eabi-
 
 all:
 # Loader

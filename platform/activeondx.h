@@ -47,7 +47,7 @@ CPU INFO:
 
 // Run on command "cardmgr", a bunch of prints
 // including the strings, about 1.3k is free to use.
-#define MEM_LOADER 0xc012d5d2
+#define MEM_LOADER 0xc012d5cc
 
 // Attempt payload location
 // This is where the ntfl commmand is.
