@@ -3,7 +3,7 @@ loop 5; do
 	if (cd d:\); then
 		echo a
 	else
-		[genUnicode "AHDK HACK" MEM_NOCARD]
+		[genunicode "AHDK HACK" MEM_NOCARD]
 		
 		# Max shutter speed (8 sec), ISO 6400
 		t ia2 -warp 0

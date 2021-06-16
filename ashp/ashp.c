@@ -1,9 +1,3 @@
-// Ambashell preprocessor. It can be used to generate
-// ASH scripts.
-// I could use a general purpose preprocessor, but this
-// is spiffier.
-// `cc *.c; ./a.out test.ash`
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -202,11 +196,11 @@ void parseStatement(char *buffer) {
 		mem->t[mem->len].integer = tokens[2].value;
 		mem->t[mem->len].type = tokens[2].type;
 		mem->len++;
-	} else if (!strcmp(tokens[0].text, "genUnicode")) {
+	} else if (!strcmp(tokens[0].text, "genunicode")) {
 		genUnicode(tokens[1].text, tokens[2].value);
-	} else if (!strcmp(tokens[0].text, "writeBin")) {
+	} else if (!strcmp(tokens[0].text, "writebin")) {
 		writeBin(tokens[1].text, tokens[2].value);
-	} else if (!strcmp(tokens[0].text, "writeFile")) {
+	} else if (!strcmp(tokens[0].text, "writefile")) {
 		writeFile(tokens[1].text);
 	} else if (!strcmp(tokens[0].text, "ifdef")) {
 		inStatement++;

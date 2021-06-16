@@ -14,7 +14,7 @@
 [define HALT "while true; do\nsleep 100\ndone"]
 
 # Now write the preassembled 8 byte binary
-[writeBin "gpioasm.bin" MEM_GPIOHACK]
+[writebin "gpioasm.bin" MEM_GPIOHACK]
 
 # Predefined script names. Max 5 chars
 [define firstName "HELLO"]

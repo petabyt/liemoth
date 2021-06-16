@@ -5,18 +5,22 @@
 
 # Regular onboot loader
 [ifndef "FANCY"]
+	# Allow other processes to load in
 	sleep 1
+
+	# Setup
 	[ifdef "LOG"]touch log[end] 
+	echo a > d:/ahdk/a.ash
 
 	[ifdef "SUSPEND"]
 		suspend {P_CTRLMAN}
 	[end]
 	
-	[writeBin "loader.o" MEM_LOADER]
+	[writebin "loader.o" MEM_LOADER]
 
 	# Write the GUI hijack code (if it exists)
 	[ifdef "MEM_TRIGGER"]
-		[writeBin "button.o" MEM_TRIGGER]
+		[writebin "button.o" MEM_TRIGGER]
 	[end]
 	
 	[ifdef "MEM_PARAM"]
@@ -41,7 +45,7 @@
 [ifdef "FANCY"]
 	# This is experimental
 	# Pull out SD, put in to run AHDK.
-	[writeBin "loader.o" MEM_LOADER]
+	[writebin "loader.o" MEM_LOADER]
 	while true; do
 		# Wait until card out
 		sleep 1
