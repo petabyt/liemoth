@@ -1,7 +1,7 @@
 # These are default if not defined values
 # platform, directory, ashp flag
 p ?= activeondx
-d ?= /media/dan/8765-4321/
+d ?= /media/dan/8765-4321
 f ?= SUSPEND LOG
 
 ifeq (${wildcard ${d}},)
@@ -72,11 +72,11 @@ minimalC:
 
 # Write initial files
 init:
-	-@mkdir ${d}/ahdk
-	-@touch ${d}ahdk/ahdk.bin
-	-@touch ${d}ahdk/a.ash
-	-@touch ${d}ahdk/font.bin
-	-@touch ${d}autoexec.ash
+	-@mkdir ${d}ahdk
+	-@touch ${d}/ahdk/ahdk.bin
+	-@touch ${d}/ahdk/a.ash
+	-@touch ${d}/ahdk/font.bin
+	-@touch ${d}/autoexec.ash
 
 loader:
 # Preprocess linker script
@@ -109,21 +109,21 @@ info:
 	-@echo "Loader:"
 	-@hexdump -C loader.o
 	-@echo "Main:"
-	-@hexdump -C main.o | head
+	-@hexdump -C main.o | tail
 	-@ls -l main.o
 
 # Write AHDK
 write:
 	@echo Ashp Script flags: ${f}
-	-@cp main.o ${d}ahdk/ahdk.bin
+	-@cp main.o ${d}/ahdk/ahdk.bin
 	@${HOSTCC} ../ashp/ashp.c script.c -o gen.o
-	@./gen.o ${f} > ${d}autoexec.ash
+	@./gen.o ${f} > ${d}/autoexec.ash
 
 # Build font from Github
 font:
 	@curl https://raw.githubusercontent.com/petabyt/font/master/font.h > font.c
 	@${CC}gcc ${CFLAGS} font.c -o font.o
-	@${CC}objcopy -O binary font.o ${d}ahdk/font.bin
+	@${CC}objcopy -O binary font.o ${d}/ahdk/font.bin
 	@rm font.o font.c
 
 clean:

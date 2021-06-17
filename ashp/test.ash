@@ -4,6 +4,9 @@
 [define HACK_LOC 0xc156bea6]
 [genunicode "Hello World" HACK_LOC]
 
+[define testMacro "sleep 1"]
+{testMacro}
+
 # Logic Test
 # Should produce a, d, e
 [ifeq "HACK_LOC" 0xc156bea6]

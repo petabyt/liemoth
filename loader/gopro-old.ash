@@ -1,5 +1,5 @@
 # Early Gopro models script chooser
-# Needs 7x7 front panel and sd card slot.
+# Needs 7x7 front panel and SD card slot.
 # If files aren't found, it's okay,
 # comments will be left in the output.
 

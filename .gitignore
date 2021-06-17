@@ -10,3 +10,6 @@ test2/
 ahdk/font.c
 font.c
 tools/gfx.h
+
+test2/*
+test2

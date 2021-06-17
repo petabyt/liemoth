@@ -1,29 +1,25 @@
-# ashp
-Ambashell preprocessor. It can be used to generate  
-ASH scripts.  
+# Main AHDK Source Code
+This contains the main source code for AHDK - the program  
+that is loaded onto the camera.
 
-I could use a general purpose preprocessor, but this    
-is spiffier.  
+Note: The `.S` file extension means the file is first preprocessed
+by the C preprocessor, then the ARM preprocessor.
 
-# Compilation:
-`cc *.c; ./a.out test.ash`
-
-# Syntax
-- ashp commands are enclosed in `[]`.
-- To insert a preprocessor definition in regular text, use `{TOKEN_NAME}`
-- Use `[end]` to terminate any statement
-- Tokens in preprocessor statements are checked to find preprocessor definitions.  
-Therefore, use strings in `ifdef` statements.
-
-# Commands
+## Building
 ```
-define
-ifeq
-genunicode
-writebin
-writefile
-ifdef
-ifndef
+make help
+make d=/media/user/mycamera
+make minimal FILE=test.c
 ```
 
-A full syntax demonstration can be found in test.ash
+## loader.S
+Initial program written into memory by an `autoexec.ash` file made by `ashp`.  
+It loads the code into code where a useless command resides, and calls that  
+command to trigger the loader.
+
+## main.S
+The main assembly file to help with the C code.  
+
+## ambarella.h
+Contains function headers and information for Ambarella code, as well  
+as how to use it.  

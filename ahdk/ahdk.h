@@ -1,5 +1,5 @@
-#ifndef __HEADER
-#define __HEADER
+#ifndef AHDK_H
+#define AHDK_H
 
 // Color chart: https://petabyte.heb12.com/filedump/public/ambacol.jpg
 #define COL_BLACK 71
