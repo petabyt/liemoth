@@ -50,7 +50,7 @@ MAIN ?= test.c
 
 default: loader ahdk write info clean
 setup: init font loader ahdk write clean
-minimal: loader minimalC write info clean
+minimal: loader minimalC write info
 
 help:
 	@echo 'Examples:'

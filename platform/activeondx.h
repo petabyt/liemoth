@@ -69,11 +69,11 @@ CPU INFO:
 #define AMB_ALLOC 0xc0181a08
 #define AMB_HEAP 0xc03ac89c
 #define AMB_FREE 0xc026e4b8
-#define AMB_OPENDIR 0xc0274dd8
-#define AMB_NEXTFILE 0xc0274cbe
 #define AMB_GPIO 0xc0276bea
-#define AMB_EXP 0xc02d0204
-#define AMB_LU 0xc04b852c + 1 // Arm branch (blx)
 
 // Experimental
 #define AMB_MKDIR 0xc0275804
+#define AMB_OPENDIR 0xc0274dd8
+#define AMB_NEXTFILE 0xc0274cbe
+#define AMB_EXP 0xc02d0204
+#define AMB_LU 0xc04b852c + 1 // Arm branch (blx)
