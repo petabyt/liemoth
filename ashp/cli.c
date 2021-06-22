@@ -7,7 +7,8 @@ int main(int argc, char *argv[]) {
 		puts("No file.");
 		return -1;
 	}
-	
+
+	init();
 	int r = parseAmbsh(argv[1]);
 	if (r < 0) {
 		puts("Error parsing.");

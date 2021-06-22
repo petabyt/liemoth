@@ -28,6 +28,10 @@ struct Memory {
 
 extern struct Memory *mem;
 
+#define ashp_parse parseAmbsh
+#define ashp_defint defineInt
+#define ashp_defstr defineStr
+
 int parseAmbsh(char *file);
 void init();
 

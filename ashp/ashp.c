@@ -228,7 +228,9 @@ void parseStatement(char *buffer) {
 }
 
 void init() {
-	mem = malloc(sizeof(struct Memory));
+	// Calloc to zero so that default values (mem.len)
+	// are set to zero.
+	mem = calloc(sizeof(struct Memory), 1);
 }
 
 int parseAmbsh(char *file) {

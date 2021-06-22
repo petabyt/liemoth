@@ -128,3 +128,7 @@ font:
 
 clean:
 	@rm -f *.o *.elf link.ld
+
+buildc:
+	@tcc ${INCLUDE} build.c -o build.o
+	@./build.o "minimal"

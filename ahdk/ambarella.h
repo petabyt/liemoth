@@ -37,7 +37,7 @@ void sprintf(char *string, char *fmt, ...);
 // mybuf contains the address to allocted memory
 // Not sure what "id" is, just put 1
 int malloc(int id, int size, void *address);
-void free(int id, int addr);
+void free(int id, int *addr);
 
 // # I/O
 FILE *fopen(char *filename, char *mode);

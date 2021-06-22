@@ -222,6 +222,6 @@ int start(int *env) {
 
 	#ifdef COPYSCREEN
 		memcpy(screen, oldScreen, SCREEN_WIDTH * SCREEN_HEIGHT);
-		free(oldScreen);
+		free(1, oldScreen);
 	#endif
 }
