@@ -6,16 +6,33 @@ _start:
 	push {r4, lr}
 	
 	// Preserve r0, which holds env
-	push {r0}
+	mov r6, r0
 	
 	// Open the file
 	ldr r0, =file
 	ldr r1, =read
 	bl AMB_FOPEN
 
-	// Load the binary into memory
-	movs r5,r0
-	ldr r4, =MEM_MAIN
+	movs r5, r0
+
+	#ifdef ARM_ALLOC
+		// Allocate 10k and get address into r4
+		sub sp, #8 // Push stack
+		mov r0, #1
+		ldr r1, =10000 // size
+		add r2, sp, #4
+		bl AMB_ALLOC
+		add sp, #8 // Pop stack
+
+		// Load it into r7 for later
+		add r7, sp, #4
+		ldr r7, [r7]
+
+		mov r4, r7
+	#else
+		ldr r4, =MEM_MAIN
+	#endif
+	
 	top:
 		mov r0, r4
 		mov r1, #1
@@ -26,12 +43,17 @@ _start:
 		cmp r0, #1
 	bgt top
 
-	pop {r0}
+	// Move env pointer back
+	mov r0, r6
 
 	// TODO: fclose
 
 	// Now jump to code and hope its there
-	bl MEM_MAIN
+	#ifdef ARM_ALLOC
+		blx r7
+	#else
+		bl MEM_MAIN
+	#endif
 				
 	// Hack an early return.
 	pop {r4, pc}

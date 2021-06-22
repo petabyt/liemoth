@@ -10,6 +10,18 @@ address. The ROUTE macro will notice this and
 use `blx` instead of `bl` (and subtract 1)
 */
 
+/*
+fpic stub router:
+
+ldr r3, [asd]
+str r3, [r11, #-0x8] (?)
+ldr r3, [r11, #-0x8] (?)
+mov lr, pc
+bx r3
+...
+asd: .word AMB_MKDIR
+*/
+
 #ifdef P_THUMB
 	.thumb
 
