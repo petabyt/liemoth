@@ -1,7 +1,7 @@
 # These are default if not defined values
 # platform, directory, ashp flag
 p ?= activeondx
-d ?= /media/dan/8765-4321
+d ?= /media/daniel/8765-4321
 f ?= SUSPEND LOG
 
 ifeq (${wildcard ${d}},)

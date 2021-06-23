@@ -4,7 +4,7 @@ d ?= /media/daniel/8765-4321/
 l ?= $(shell awk '/MEM_LOADER/{print $$3}' <../platform/${p}.h)
 
 ASMFLAGS := -c -include "../platform/${p}.h"
-CFLAGS := -mthumb-interwork -fpic -marm $(ASMFLAGS)
+CFLAGS := -mthumb-interwork -fpic -marm $(ASMFLAGS) -O2
 CC := arm-none-eabi-
 
 all:
@@ -13,9 +13,9 @@ all:
 	@${CC}ld -Bstatic main.o -Ttext ${l} -o main.elf
 	@${CC}objcopy -O binary main.elf main.o
 
-	@${CC}gcc $(CFLAGS) -o ahdk.o ahdk.c
-	@${CC}gcc $(CFLAGS) -o ahdk2.o ahdk2.c
-	@${CC}ld -Bstatic ahdk.o ahdk2.o -o ahdk.elf
+	@${CC}gcc $(CFLAGS) -o ahdk.o ahdk.S
+	@${CC}gcc $(CFLAGS) -o ahdk2.o ahdk.c
+	@${CC}ld -Bstatic ahdk2.o ahdk.o -o ahdk.elf
 	@${CC}objcopy -O binary ahdk.elf /media/daniel/8765-4321/ahdk/ahdk.bin
 
 # Dump some things

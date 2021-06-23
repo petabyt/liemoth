@@ -1,15 +1,6 @@
-/*
-ldr r3, [asd]
-str r3, [r11, #-0x8] (?)
-ldr r3, [r11, #-0x8] (?)
-mov lr, pc
-bx r3
-...
-asd: .word AMB_MKDIR
-*/
-
-int farts();
+int malloc(int id, int size, void *address);
 
 void _start() {
-	farts();
+	int *a;
+	malloc(1, 1000, &a);
 }

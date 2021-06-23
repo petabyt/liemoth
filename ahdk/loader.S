@@ -1,61 +1,61 @@
 .global _start
 
+#define SIZE 467
+
 #ifdef P_THUMB
 _start:
 	.thumb
 	push {r4, lr}
-	
-	// Preserve r0, which holds env
-	mov r6, r0
-	
-	// Open the file
+	sub sp, #8
+
+	// Preserve env
+	push {r0}
+
+	#ifdef STANDALONE
+		// Alloc size
+		mov r0, #1
+		ldr r1, size
+		add r2, sp, #4
+		bl AMB_ALLOC
+	#endif
+
+	// Fopen into r3
 	ldr r0, =file
 	ldr r1, =read
 	bl AMB_FOPEN
+	mov r3, r0
 
-	movs r5, r0
-
-	#ifdef ARM_ALLOC
-		// Allocate 10k and get address into r4
-		sub sp, #8 // Push stack
-		mov r0, #1
-		ldr r1, =10000 // size
-		add r2, sp, #4
-		bl AMB_ALLOC
-		add sp, #8 // Pop stack
-
-		// Load it into r7 for later
-		add r7, sp, #4
-		ldr r7, [r7]
-
-		mov r4, r7
+	// Fread
+	#ifdef STANDALONE
+		// fread binary into allocated
+		// address
+		add r0, sp, #4
+		ldr r0, [r0]
 	#else
-		ldr r4, =MEM_MAIN
+		// load into empty address
+		ldr r0, =MEM_MAIN
 	#endif
+	mov r1, #1
+	ldr r2, size
+	bl AMB_FREAD
+
+	#ifdef STANDALONE
+		// Load code address into r1
+		add r1, sp, #4
+		ldr r1, [r1]
 	
-	top:
-		mov r0, r4
-		mov r1, #1
-		ldr r2, =255
-		mov r3, r5
-		bl AMB_FREAD
-		add r4, #255
-		cmp r0, #1
-	bgt top
-
-	// Move env pointer back
-	mov r0, r6
-
-	// TODO: fclose
-
-	// Now jump to code and hope its there
-	#ifdef ARM_ALLOC
-		blx r7
+		// Pop back env
+		pop {r0}
+	
+		// Jump to code, hope
+		// nothing bad happens
+		blx r1
 	#else
+		pop {r0}
 		bl MEM_MAIN
 	#endif
-				
-	// Hack an early return.
+
+	add sp, #8
 	pop {r4, pc}
 #endif
 
@@ -89,3 +89,5 @@ _start:
 
 file: .string "d:/ahdk/ahdk.bin"
 read: .string "r"
+.byte 0, 0, 0 // alignment byte
+size: .long 1000

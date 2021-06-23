@@ -4,14 +4,31 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define PLATFORM "activeondx"
-#define DIRECTORY "/media/daniel/8765-4321"
-#define FLAGS "SUSPEND LOG"
+#ifndef PLATFORM
+	#define PLATFORM "activeondx"
+#endif
+#ifndef DIRECTORY
+	#define DIRECTORY "/media/daniel/8765-4321"
+#endif
+#ifndef FLAGS
+	#define FLAGS "SUSPEND LOG"
+#endif
 
-#define CC "arm-none-eabi"
-#define HOSTCC "tcc"
+char *cc = "arm-none-eabi";
+char *hostcc = "cc";
 
 #define MINIMALFILE "test.c"
+
+// Tell assembler, compiler, linker, to generate
+// address independent code, and load the code into
+// an allocated position in memory.
+#define STANDALONE
+
+// Default platform for text editor warnings
+// or something
+#ifndef P_NAME
+	#include "../platform/activeondx.h"
+#endif
 
 char include[512];
 char cflags[4096];
@@ -23,26 +40,26 @@ void loader() {
 	sprintf(
 		buffer,
 		"%s-gcc %s loader.S -o loader.o",
-		CC, asmflags
+		cc, asmflags
 	); system(buffer);
 
 	sprintf(
 		buffer,
 		"%s-ld %s loader.o -Ttext 0x%x -o loader.elf",
-		CC, ldflags, MEM_LOADER
+		cc, ldflags, MEM_LOADER
 	); system(buffer);
 
 	sprintf(
 		buffer,
 		"%s-objcopy -O binary loader.elf loader.o",
-		CC
+		cc
 	); system(buffer);
 
 	// Preprocess linker file from link.c
 	sprintf(
 		buffer,
 		"%s-gcc %s -P -E link.c -o link.ld",
-		CC,
+		cc,
 		include
 	); system(buffer);
 }
@@ -54,32 +71,77 @@ void minimal() {
 	sprintf(
 		buffer,
 		"%s-gcc %s main.S -o mains.o",
-		CC, asmflags
+		cc, asmflags
 	); system(buffer);
 
 	// Compile C file
 	sprintf(
 		buffer,
 		"%s-gcc %s %s -o main.o",
-		CC, cflags, MINIMALFILE
+		cc, cflags, MINIMALFILE
 	); system(buffer);
 
 	sprintf(
 		buffer,
 		"%s-ld %s mains.o main.o -T link.ld -o main.elf",
-		CC, ldflags
+		cc, ldflags
 	); system(buffer);
 
 	sprintf(
 		buffer,
 		"%s-objcopy -O binary main.elf main.o",
-		CC
+		cc
 	); system(buffer);
 }
 
 // Compile main AHDK
 void ahdk() {
-	
+	// Assemble main file
+	sprintf(
+		buffer,
+		"%s-gcc %s main.S -o mains.o",
+		cc, asmflags
+	); system(buffer);
+
+	char *cfiles[] = {
+		"apps",
+		"screen",
+		"lib",
+		"main"
+	};
+
+	#define cfileslen (int)(sizeof(cfiles) / sizeof(cfiles[0]))
+
+	// Compile each file
+	for (int i = 0; i < cfileslen; i++) {
+		sprintf(
+			buffer,
+			"%s-gcc %s %s.c -o %s.o",
+			cc, cflags, cfiles[i], cfiles[i]
+		); system(buffer);
+	}
+
+	// Link all files together
+	sprintf(
+		buffer,
+		"%s-ld %s",
+		cc, ldflags
+	);
+
+	// Copy in each object file
+	for (int i = 0; i < cfileslen; i++) {
+		strcat(buffer, " ");
+		strcat(buffer, cfiles[i]);
+		strcat(buffer, ".o");
+	}
+
+	strcat(buffer, "-T link.ld -o main.elf");
+
+	sprintf(
+		buffer,
+		"%s-objcopy -O binary main.elf main.o",
+		cc
+	); system(buffer);
 }
 
 void clean() {
@@ -100,7 +162,7 @@ void write() {
 	sprintf(
 		buffer,
 		"%s ../ashp/ashp.c script.c -o gen.o",
-		HOSTCC
+		hostcc
 	); system(buffer);
 
 	sprintf(
@@ -108,6 +170,10 @@ void write() {
 		"./gen.o %s > %s/autoexec.ash",
 		FLAGS, DIRECTORY
 	); system(buffer);
+
+	puts("Wrote files to output directory.");
+	system("ls -l main.o");
+	system("ls -l loader.o");
 }
 
 int main(int argc, char *argv[]) {
@@ -115,7 +181,19 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	// INCLUDE
+	// Select usable ARM GCC
+	if (!system("which arm-none-eabi-gcc > nul")) {
+		cc = "arm-none-eabi";
+	} else if (!system("which arm-none-linux-gnueabi-gcc > nul")) {
+		cc = "arm-none-linux-gnueabi";
+	}
+
+	system("rm nul");
+
+	printf("ARM Compiler: %s\n", cc);
+
+	// In assembly and C files, include the model header file
+	// so it knows the camera's values and settings.
 	sprintf(
 		include,
 		"-include \"../platform/%s.h\"",
@@ -129,8 +207,9 @@ int main(int argc, char *argv[]) {
 		include
 	);
 
-	// Set up bytecode for C
-	#ifdef P_THUMB
+	// Set up bytecode for C (asm does it in file)
+	// And switch to ARM if standalone requested
+	#if !defined(STANDALONE) && defined(P_THUMB)
 		strcat(cflags, " -mthumb");
 	#else
 		strcat(cflags, " -marm");
@@ -150,8 +229,15 @@ int main(int argc, char *argv[]) {
 		include
 	);
 
-	loader();
-	minimal();
-	write();
-	clean();
+	#ifdef STANDALONE
+		strcat(cflags, " -D STANDALONE -fpic -mthumb-interwork");
+		strcat(asmflags, " -D STANDALONE -fpic");
+	#endif
+
+	if (!strcmp(argv[1], "minimal")) {
+		loader();
+		minimal();
+		write();
+		clean();
+	}
 }

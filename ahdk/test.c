@@ -5,8 +5,5 @@
 #include "ahdk.h"
 
 void start(int *env) {
-	printf(env, "fartsnstuff");
-	int *a;
-	malloc(1, 400, &a);
-	printf(env, "%d", &a);
+	printf(env, "Hello, World");
 }
