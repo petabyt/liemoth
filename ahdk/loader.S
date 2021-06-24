@@ -36,7 +36,7 @@ _start:
 		ldr r0, =MEM_MAIN
 	#endif
 	mov r1, #1
-	ldr r2, size
+	ldr r2, =5000
 	bl AMB_FREAD
 
 	#ifdef STANDALONE
@@ -89,5 +89,5 @@ _start:
 
 file: .string "d:/ahdk/ahdk.bin"
 read: .string "r"
-.byte 0, 0, 0 // alignment byte
+.byte 0, 0, 0, 0, 0 // alignment byte
 size: .long 1000

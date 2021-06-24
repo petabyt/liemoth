@@ -187,7 +187,7 @@ struct MenuItem mainMenu[] = {
 	{0}
 };
 
-int start(int *env) {
+void start(int *env) {
 	// Ambsh scripts can set MEM_PARAM
 	// and call the trigger command to
 	// have a C interface with the camera.
@@ -197,9 +197,11 @@ int start(int *env) {
 		break;
 	}
 
+	#undef COPYSCREEN
+
 	#ifdef COPYSCREEN
 		int *oldScreen;
-		malloc(1, SCREEN_WIDTH * SCREEN_HEIGHT, &oldScreen);
+		int r = malloc(1, SCREEN_WIDTH * SCREEN_HEIGHT, &oldScreen);
 		char *screen = (char*)MEM_BUFFER;
 		memcpy(oldScreen, screen, SCREEN_WIDTH * SCREEN_HEIGHT);
 	#endif
@@ -212,7 +214,7 @@ int start(int *env) {
 	FILE *file = fopen("d:/ahdk/font.bin", "r");
 	if (!file) {
 		printf(env, "No font.");
-		return 1;
+		return;
 	}
 	
 	fread(font, 1, 5000, file);

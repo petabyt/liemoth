@@ -3,6 +3,7 @@
 // - Exposure app issue, see apps.c
 // In other words, I have no idea how to write linker scripts. :)
 
+ENTRY(_start)
 SECTIONS {
 	// GCC will preprocess MEM_MAIN into an address
 	.text MEM_MAIN: {

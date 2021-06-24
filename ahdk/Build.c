@@ -1,5 +1,4 @@
-// Alternative build system
-
+// C "script" to compile AHDK and minimal tests
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,11 +16,11 @@
 char *cc = "arm-none-eabi";
 char *hostcc = "cc";
 
-#define MINIMALFILE "test.c"
+char *file = "test.c";
 
 // Tell assembler, compiler, linker, to generate
 // address independent code, and load the code into
-// an allocated position in memory.
+// an allocated position in memory. (-fpic)
 #define STANDALONE
 
 // Default platform for text editor warnings
@@ -55,17 +54,17 @@ void loader() {
 		cc
 	); system(buffer);
 
-	// Preprocess linker file from link.c
+	// Preprocess linker file from Link.c
 	sprintf(
 		buffer,
-		"%s-gcc %s -P -E link.c -o link.ld",
+		"%s-gcc %s -P -E Link.c -o link.ld",
 		cc,
 		include
 	); system(buffer);
 }
 
 void minimal() {
-	printf("Minimal file to compile: %s\n", MINIMALFILE);
+	printf("Minimal file to compile: %s\n", file);
 
 	// Assemble main.S
 	sprintf(
@@ -78,7 +77,7 @@ void minimal() {
 	sprintf(
 		buffer,
 		"%s-gcc %s %s -o main.o",
-		cc, cflags, MINIMALFILE
+		cc, cflags, file
 	); system(buffer);
 
 	sprintf(
@@ -104,10 +103,10 @@ void ahdk() {
 	); system(buffer);
 
 	char *cfiles[] = {
-		"apps",
+		"main",
 		"screen",
-		"lib",
-		"main"
+		"apps",
+		"lib"
 	};
 
 	#define cfileslen (int)(sizeof(cfiles) / sizeof(cfiles[0]))
@@ -122,9 +121,10 @@ void ahdk() {
 	}
 
 	// Link all files together
+	// Make sure mains.o is first
 	sprintf(
 		buffer,
-		"%s-ld %s",
+		"%s-ld %s mains.o",
 		cc, ldflags
 	);
 
@@ -135,7 +135,8 @@ void ahdk() {
 		strcat(buffer, ".o");
 	}
 
-	strcat(buffer, "-T link.ld -o main.elf");
+	strcat(buffer, " -T link.ld -o main.elf");
+	system(buffer);
 
 	sprintf(
 		buffer,
@@ -161,8 +162,8 @@ void write() {
 	// Compile ashp script generator
 	sprintf(
 		buffer,
-		"%s ../ashp/ashp.c script.c -o gen.o",
-		hostcc
+		"%s %s ../ashp/ashp.c Script.c -o gen.o",
+		hostcc, include
 	); system(buffer);
 
 	sprintf(
@@ -179,6 +180,11 @@ void write() {
 int main(int argc, char *argv[]) {
 	if (argc == 1) {
 		return 1;
+	}
+
+	sprintf(buffer, "ls %s > nul", DIRECTORY);
+	if (system(buffer)) {
+		puts("Output directory does not exist.");
 	}
 
 	// Select usable ARM GCC
@@ -235,8 +241,14 @@ int main(int argc, char *argv[]) {
 	#endif
 
 	if (!strcmp(argv[1], "minimal")) {
+		file = argv[2];		
 		loader();
 		minimal();
+		write();
+		clean();
+	} else if (!strcmp(argv[1], "ahdk")) {
+		loader();
+		ahdk();
 		write();
 		clean();
 	}

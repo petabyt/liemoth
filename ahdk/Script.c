@@ -1,14 +1,13 @@
-// Default platform
-#ifndef P_NAME
-	#include "../platform/activeondx.h"
-#endif
+// This file compiles the ashp loader
+// script and sends it into stdout, which
+// is routed into the final autoexec.ash.
 
 #include "../ashp/ashp.h"
 
 int main(int argc, char *argv[]) {
 	init();
 
-	// Send flags into preprocessor
+	// Send argv flags into preprocessor
 	for (int i = 1; i < argc; i++) {
 		defineInt(argv[i], 1);
 	}
@@ -24,5 +23,5 @@ int main(int argc, char *argv[]) {
 	defineInt("MEM_LOADER", MEM_LOADER);
 	defineInt("P_CTRLMAN", P_CTRLMAN);
 	
-	parseAmbsh("loader.ash");
+	parseAmbsh("Loader.ash");
 }

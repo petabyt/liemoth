@@ -239,6 +239,10 @@ int parseAmbsh(char *file) {
 	char statement[MAX_LINE];
 	
 	FILE *reader = fopen(file, "r");
+	if (reader == NULL) {
+		return 1;
+	}
+	
 	while (fgets(buffer, MAX_LINE, reader) != NULL) {
 		int c = 0;
 		while (buffer[c] == '\t' || buffer[c] == '\n' || buffer[c] == ' ') {
