@@ -1,7 +1,5 @@
 .global _start
 
-#define SIZE 467
-
 #ifdef P_THUMB
 _start:
 	.thumb
@@ -36,7 +34,7 @@ _start:
 		ldr r0, =MEM_MAIN
 	#endif
 	mov r1, #1
-	ldr r2, =5000
+	ldr r2, size
 	bl AMB_FREAD
 
 	#ifdef STANDALONE
@@ -87,7 +85,11 @@ _start:
 	ldmia sp!, {r4, pc}
 #endif
 
+#ifdef STANDALONE
+	.byte 0, 0
+#else
+	
+#endif
+size: .long 20000
 file: .string "d:/ahdk/ahdk.bin"
 read: .string "r"
-.byte 0, 0, 0, 0, 0 // alignment byte
-size: .long 1000

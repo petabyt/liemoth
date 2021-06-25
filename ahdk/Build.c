@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Defaults
 #ifndef PLATFORM
 	#define PLATFORM "activeondx"
 #endif
@@ -16,12 +17,13 @@
 char *cc = "arm-none-eabi";
 char *hostcc = "cc";
 
+// `make minimal` test file
 char *file = "test.c";
 
 // Tell assembler, compiler, linker, to generate
 // address independent code, and load the code into
 // an allocated position in memory. (-fpic)
-#define STANDALONE
+//#define STANDALONE
 
 // Default platform for text editor warnings
 // or something
@@ -57,9 +59,8 @@ void loader() {
 	// Preprocess linker file from Link.c
 	sprintf(
 		buffer,
-		"%s-gcc %s -P -E Link.c -o link.ld",
-		cc,
-		include
+		"%s-gcc %s %s -P -E Link.c -o link.ld",
+		cc, cflags, include
 	); system(buffer);
 }
 
@@ -81,7 +82,7 @@ void minimal() {
 	); system(buffer);
 
 	sprintf(
-		buffer,
+		buffer, // -	-T link.ld
 		"%s-ld %s mains.o main.o -T link.ld -o main.elf",
 		cc, ldflags
 	); system(buffer);
@@ -109,10 +110,10 @@ void ahdk() {
 		"lib"
 	};
 
-	#define cfileslen (int)(sizeof(cfiles) / sizeof(cfiles[0]))
+	#define CFILESLEN (int)(sizeof(cfiles) / sizeof(cfiles[0]))
 
 	// Compile each file
-	for (int i = 0; i < cfileslen; i++) {
+	for (int i = 0; i < CFILESLEN; i++) {
 		sprintf(
 			buffer,
 			"%s-gcc %s %s.c -o %s.o",
@@ -129,7 +130,7 @@ void ahdk() {
 	);
 
 	// Copy in each object file
-	for (int i = 0; i < cfileslen; i++) {
+	for (int i = 0; i < CFILESLEN; i++) {
 		strcat(buffer, " ");
 		strcat(buffer, cfiles[i]);
 		strcat(buffer, ".o");
@@ -175,16 +176,25 @@ void write() {
 	puts("Wrote files to output directory.");
 	system("ls -l main.o");
 	system("ls -l loader.o");
+
+	sprintf(
+		buffer,
+		"%s-size --target=binary main.o",
+		cc
+	); system(buffer);
 }
 
 int main(int argc, char *argv[]) {
 	if (argc == 1) {
+		puts("No target");
 		return 1;
 	}
 
-	sprintf(buffer, "ls %s > nul", DIRECTORY);
+	// Test output directory
+	sprintf(buffer, "ls %s >nul 2>&1", DIRECTORY);
 	if (system(buffer)) {
-		puts("Output directory does not exist.");
+		puts("ERROR: Output directory doesn't exist.");
+		return 1;
 	}
 
 	// Select usable ARM GCC
@@ -194,9 +204,22 @@ int main(int argc, char *argv[]) {
 		cc = "arm-none-linux-gnueabi";
 	}
 
+	// test newer cc (works fine)
+	// cc = "/home/daniel/gcc-arm-none-eabi-10-2020-q4-major/bin/arm-none-eabi";
+
 	system("rm nul");
 
-	printf("ARM Compiler: %s\n", cc);
+	printf("Using ARM Compiler: %s\n", cc);
+	printf("Compiling target: %s\n", argv[1]);
+
+	#ifdef STANDALONE
+		puts(
+			"Telling GCC to generate address independent code\n" \
+			"Don't expect it to work..."
+		);
+	#endif
+
+	puts("---------------");
 
 	// In assembly and C files, include the model header file
 	// so it knows the camera's values and settings.
@@ -209,7 +232,7 @@ int main(int argc, char *argv[]) {
 	// CFLAGS
 	sprintf(
 		cflags,
-		"-std=c99 -c -O2 -ffreestanding %s",
+		"-std=c99 -c -O0 -ffreestanding %s",
 		include
 	);
 
@@ -235,9 +258,41 @@ int main(int argc, char *argv[]) {
 		include
 	);
 
+	// FIXME: pointer initialization issues
+	// with linker script. Stack variables are
+	// put at MEM_MAIN, any they probably shouldn't.
+	// Also, pointers are very broken or something.
+
+	// https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
+	// https://community.arm.com/developer/tools-software/tools/f/arm-compilers-forum/7195/global-variable-not-initialized-by-__main-function
+	// https://stackoverflow.com/questions/53263275/arm-none-eabi-global-initialized-variable-incorrect-value
+	// https://developer.arm.com/documentation/dui0493/g/linker-command-line-options/--fpic
+
+	// &mainMenu[0].text	0xc0139b84
+	// Actual				0xc0139b24
+
+	/*
+	# Generate position independent code.
+	-fPIC
+
+	# Access bss via the GOT.
+	-mno-pic-data-is-text-relative
+
+	# GOT is not PC-relative; store GOT location in a register.
+	-msingle-pic-base
+
+	# Store GOT location in r9.
+	-mpic-register=r9
+	*/
+
+	// Flags common to Asm and C
+	char allflags[512] = " -march=armv6 -c -mthumb-interwork";
+	strcat(asmflags, allflags);
+	strcat(cflags, allflags);
+
 	#ifdef STANDALONE
 		strcat(cflags, " -D STANDALONE -fpic -mthumb-interwork");
-		strcat(asmflags, " -D STANDALONE -fpic");
+		strcat(asmflags, " -D STANDALONE -fpic ");
 	#endif
 
 	if (!strcmp(argv[1], "minimal")) {

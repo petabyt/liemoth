@@ -52,7 +52,7 @@ CPU INFO:
 // Attempt payload location
 // This is where the ntfl commmand is.
 // I think around 18kb is free to use.
-#define MEM_MAIN 0xc0138870
+#define MEM_MAIN 0xc0138880
 
 // From UI routine 0xc04199b6
 #define MEM_TRIGGER 0xc0419a40

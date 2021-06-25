@@ -39,6 +39,7 @@
 
 	# This runs copied reference to script
 	d:/ahdk/a.ash
+	#savebin d:\memdump.bin 0xC0000000 l 134217728
 [end]
 
 # Fancy SD card controlled loader

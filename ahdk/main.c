@@ -197,11 +197,9 @@ void start(int *env) {
 		break;
 	}
 
-	#undef COPYSCREEN
-
 	#ifdef COPYSCREEN
 		int *oldScreen;
-		int r = malloc(1, SCREEN_WIDTH * SCREEN_HEIGHT, &oldScreen);
+		malloc(1, SCREEN_WIDTH * SCREEN_HEIGHT, &oldScreen);
 		char *screen = (char*)MEM_BUFFER;
 		memcpy(oldScreen, screen, SCREEN_WIDTH * SCREEN_HEIGHT);
 	#endif
