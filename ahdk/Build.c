@@ -190,7 +190,7 @@ void ahdk() {
 
 void clean() {
 	#ifndef NOCLEAN
-		system("rm -f *.o *.elf link.ld");
+		system("rm -f *.o *.elf link.ld nul");
 	#endif
 }
 
@@ -217,11 +217,11 @@ void write() {
 			"cp main.o %s/ahdk/ahdk.bin",
 			DIRECTORY
 		); system(buffer);
-	#endif
 
-	GREEN
-	puts("Wrote files to output directory.");
-	WHITE
+		GREEN
+		puts("Wrote files to output directory.");
+		WHITE
+	#endif
 
 	sprintf(
 		buffer,
@@ -236,15 +236,40 @@ void write() {
 	); system(buffer);
 }
 
+void font() {
+	system("curl https://raw.githubusercontent.com/petabyt/font/master/font.h > font.c");
+	sprintf(
+		buffer, 
+		"%s-gcc -c font.c -o font.o",
+		cc
+	); system(buffer);
+
+	sprintf(buffer,
+		"%s-objcopy -O binary font.o %s/ahdk/font.bin",
+		cc,
+		DIRECTORY
+	); system(buffer);
+
+	system("rm font.o font.c");
+}
+
 int main(int argc, char *argv[]) {
 	if (argc == 1) {
 		puts("No target");
 		return 1;
 	}
 
+	if (!strcmp(argv[1], "clean")) {
+		clean();
+		GREEN
+		puts("Cleaned files");
+		WHITE
+		return 0;
+	}
+
 	// Test output directory, probably only works on Linux
-	#ifdef __linux__
-		sprintf(buffer, "ls %s >nul 2>&1", DIRECTORY);
+	#ifndef NOWRITE
+		sprintf(buffer, "test -d %s", DIRECTORY);
 		if (system(buffer)) {
 			RED
 			puts("ERROR: Output directory doesn't exist.");
@@ -252,6 +277,14 @@ int main(int argc, char *argv[]) {
 			return 1;
 		}
 	#endif
+
+	if (!strcmp(argv[1], "font")) {
+		font();
+		GREEN
+		puts("Installed font.");
+		WHITE
+		return 0;
+	}
 
 	// Select usable ARM GCC
 	if (!system("which arm-none-eabi-gcc > nul")) {
@@ -293,8 +326,6 @@ int main(int argc, char *argv[]) {
 		"-std=c99 -c -O0 -ffreestanding -march=armv6 -mthumb-interwork %s",
 		include
 	);
-
-	enableapp("tetris");
 	
 	// Set up bytecode for C (asm does it in file)
 	// And switch to ARM if standalone requested
@@ -351,12 +382,16 @@ int main(int argc, char *argv[]) {
 	#endif
 
 	if (!strcmp(argv[1], "minimal")) {
-		file = argv[2];		
+		file = argv[2];
+
 		loader();
 		minimal();
 		write();
 		clean();
 	} else if (!strcmp(argv[1], "ahdk")) {
+		enableapp("tetris");
+		enableapp("linux");
+
 		loader();
 		ahdk();
 		write();

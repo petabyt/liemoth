@@ -8,9 +8,18 @@ that is loaded onto the camera.
 by the C preprocessor, then the ARM preprocessor.
 
 ## Building
+Make parameters:  
+- file: file to compile in `make minimal`
+- d: output directory (where camera is mounted)
+- p: platform (see ../platform)
+- f: Ashp flags (see Loader.ash)
+
 ```
-make help
-make minimal file=test.c d=/media/user/mycameradir
+# Initialize files on camera
+make init d=/media/user/mycameradir
+
+# Compile test.c for your camera model
+make minimal file=test.c p=activeondx d=/media/user/mycameradir
 ```
 
 It may work on Windows but Ambsh needs unix file endings,  

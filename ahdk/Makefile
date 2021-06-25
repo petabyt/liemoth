@@ -16,6 +16,10 @@ ifdef NOCLEAN
 CFLAGS += -DNOCLEAN
 endif
 
+ifdef NOWRITE
+CFLAGS += -DNOWRITE
+endif
+
 COMP := ${CC} ${CFLAGS} Build.c -o build.o
 
 ahdk:
@@ -25,6 +29,23 @@ ahdk:
 minimal:
 	@${COMP}
 	@./build.o minimal ${file}
+
+clean:
+	@${COMP}
+	@./build.o clean
+
+font:
+	@${COMP}
+	@./build.o font
+
+
+# Write initial files
+init:
+	@mkdir ${d}/ahdk
+	@touch ${d}/ahdk/ahdk.bin
+	@touch ${d}/ahdk/a.ash
+	@touch ${d}/ahdk/font.bin
+	@touch ${d}/autoexec.ash
 
 help:
 	@echo 'Examples:'

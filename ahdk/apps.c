@@ -18,7 +18,6 @@ char *hijackLu[] = {"lu_util", "exec", buffer};
 
 int app_linux() {
 	print("Making sure Linux booted...");
-	
 	msleep(20000);
 	
 	sprintf(buffer, "busybox telnetd -l /bin/sh -p 80");
@@ -39,6 +38,7 @@ int app_linux() {
 
 		drawGUI();
 		line = 0;
+		print("Telnet IP: 192.168.42.1");
 		print(buffer);
 	}
 
