@@ -8,17 +8,15 @@
 // some apps.
 
 //#define APP_LINUX
-#define APP_TETRIS
+//#define APP_TETRIS
 //#define APP_CINS
 //#define APP_BF
 //#define APP_EXPOSURE
 
 #ifdef APP_LINUX
-	char *hijackLu[] = {"lu_util", "exec", buffer};
-#endif
+char *hijackLu[] = {"lu_util", "exec", buffer};
 
 int app_linux() {
-	#ifdef APP_LINUX
 	print("Making sure Linux booted...");
 	
 	msleep(20000);
@@ -43,10 +41,12 @@ int app_linux() {
 		line = 0;
 		print(buffer);
 	}
-	
-	#endif
+
 	return 0;
 }
+#else
+int app_linux() {return 0;}
+#endif
 
 #ifdef APP_EXPOSURE
 struct ItemInfo selectISO = {
@@ -78,20 +78,20 @@ struct MenuItem expMenu[] = {
 	{0}
 };
 
-#endif
 
 int app_exposure() {
-	#ifdef APP_EXPOSURE
-		runMenu(expMenu);
-	#endif
+	runMenu(expMenu);
 	return 0;
 }
+#else
+int app_exposure() {return 0;}
+#endif
 
+#ifdef APP_BF
 // Graphical BrainF*ck Interpreter, Test it with mandelbrot.bf
 // Stolen from: https://github.com/kgabis/business-card-brainfuck
 // MIT License
 int app_bf() {
-	#ifdef APP_BF
 	int x = 0;
 	int y = 0;
 	int r = 0;
@@ -160,12 +160,14 @@ int app_bf() {
 	}
 
 	waitButton(P_SELBTN);
-	#endif
 	return 0;
 }
+#else
+int app_bf() {return 0;}
+#endif
 
+#ifdef APP_CINS
 int app_cins() {
-	#ifdef APP_CINS
 	line = 0;
 		
 	char input[1024];
@@ -255,9 +257,11 @@ int app_cins() {
 	}
 
 	waitButton(P_SELBTN);
-	#endif
 	return 0;
 }
+#else
+int app_cins() {return 0;}
+#endif
 
 int app_info() {
 	line = 0;
@@ -274,8 +278,8 @@ int app_info() {
 	return 0;
 }
 
+#ifdef APP_SCRIPTS
 int app_scripts() {
-	#ifdef APP_SCRIPTS
 	drawGUI();
 
 	struct MenuItem scriptMenu[10];
@@ -310,9 +314,11 @@ int app_scripts() {
 	FILE *file = fopen("d:/ahdk/a.ash", "w");
 	fwrite(buffer2, 1, strlen(buffer2), file);
 	fclose(file);
-	#endif
 	return 0;
 }
+#else
+int app_scripts() {return 0;}
+#endif
 
 #ifdef APP_TETRIS
 
@@ -581,11 +587,9 @@ int rand() {
 	
 	return randInts[a];
 }
-#endif
 
-//Main routine
+// Main routine
 int app_tetris() {
-	#ifdef APP_TETRIS
 	a = 0;
 	score = 0;
 	
@@ -651,6 +655,8 @@ int app_tetris() {
 		display(&field);
 	}
 
-	#endif
 	return 0;
 }
+#else
+int app_tetris() {return 0;}
+#endif

@@ -11,6 +11,11 @@ f ?= SUSPEND LOG
 file := test.c
 
 CFLAGS := -include "../platform/${p}.h" '-DFLAGS="${f}"' '-DPLATFORM="${p}"' '-DDIRECTORY="${d}"'
+
+ifdef NOCLEAN
+CFLAGS += -DNOCLEAN
+endif
+
 COMP := ${CC} ${CFLAGS} Build.c -o build.o
 
 ahdk:

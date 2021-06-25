@@ -2,15 +2,19 @@
 This contains the main source code for AHDK - the program  
 that is loaded onto the camera.
 
-Note: The `.S` file extension means the file is first preprocessed
+- Files related to the build process have the first letter capitalized.
+
+- The `.S` file extension means the file is first preprocessed
 by the C preprocessor, then the ARM preprocessor.
 
 ## Building
 ```
 make help
-make d=/media/user/mycamera
-make minimal FILE=test.c
+make minimal file=test.c d=/media/user/mycameradir
 ```
+
+It may work on Windows but Ambsh needs unix file endings,  
+so good luck.
 
 ## loader.S
 Initial program written into memory by an `autoexec.ash` file made by `ashp`.  

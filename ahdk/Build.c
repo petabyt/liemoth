@@ -1,7 +1,10 @@
-// C "script" to compile AHDK and minimal tests
+// Main AHDK Build system
+// Like a makefile, but done through
+// sprintf() and system() calls
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 // Defaults
 #ifndef PLATFORM
@@ -22,8 +25,14 @@ char *file = "test.c";
 
 // Tell assembler, compiler, linker, to generate
 // address independent code, and load the code into
-// an allocated position in memory. (-fpic)
+// an allocated position in memory. (-fpie)
 //#define STANDALONE
+
+// Don't clean the output files
+//#define NOCLEAN
+
+// Don't write AHDK to any device/folder
+//#define NOWRITE
 
 // Default platform for text editor warnings
 // or something
@@ -31,11 +40,44 @@ char *file = "test.c";
 	#include "../platform/activeondx.h"
 #endif
 
+// Flag buffers
 char include[512];
 char cflags[4096];
 char asmflags[1024];
-char buffer[10240];
 char ldflags[1024];
+
+// For sprintf-ing into
+char buffer[10240];
+
+// Make build proccess a little bit
+// more colorful
+#ifdef __linux__
+	#define RED printf("\033[31m");
+	#define GREEN printf("\033[32m");
+	#define WHITE printf("\x1B[0m");
+	#define YELLOW printf("\033[33m");
+#else
+	#define RED
+	#define GREEN
+	#define WHITE
+	#define YELLOW
+#endif
+
+void enableapp(char app[]) {
+	GREEN
+	printf("Compiling app: %s\n", app);
+	WHITE
+
+	char buffer[64] = {" -D APP_"};
+	int i;
+	
+	for (i = 0; app[i] != 0; i++) {
+		buffer[i + 8] = toupper(app[i]);
+	}
+	
+	buffer[i + 8] = '\0';
+	strcat(cflags, buffer);
+}
 
 void loader() {
 	sprintf(
@@ -82,7 +124,7 @@ void minimal() {
 	); system(buffer);
 
 	sprintf(
-		buffer, // -	-T link.ld
+		buffer,
 		"%s-ld %s mains.o main.o -T link.ld -o main.elf",
 		cc, ldflags
 	); system(buffer);
@@ -147,18 +189,14 @@ void ahdk() {
 }
 
 void clean() {
-	system("rm -f *.o *.elf link.ld");
+	#ifndef NOCLEAN
+		system("rm -f *.o *.elf link.ld");
+	#endif
 }
 
 // Write files into the device SD card
 void write() {
 	printf("Ashp script flags: %s\n", FLAGS);
-
-	sprintf(
-		buffer,
-		"cp main.o %s/ahdk/ahdk.bin",
-		DIRECTORY
-	); system(buffer);
 
 	// Compile ashp script generator
 	sprintf(
@@ -167,19 +205,33 @@ void write() {
 		hostcc, include
 	); system(buffer);
 
+	#ifndef NOWRITE
+		sprintf(
+			buffer,
+			"./gen.o %s > %s/autoexec.ash",
+			FLAGS, DIRECTORY
+		); system(buffer);
+
+		sprintf(
+			buffer,
+			"cp main.o %s/ahdk/ahdk.bin",
+			DIRECTORY
+		); system(buffer);
+	#endif
+
+	GREEN
+	puts("Wrote files to output directory.");
+	WHITE
+
 	sprintf(
 		buffer,
-		"./gen.o %s > %s/autoexec.ash",
-		FLAGS, DIRECTORY
+		"%s-size --format=berkeley --target=binary loader.o",
+		cc
 	); system(buffer);
 
-	puts("Wrote files to output directory.");
-	system("ls -l main.o");
-	system("ls -l loader.o");
-
 	sprintf(
 		buffer,
-		"%s-size --target=binary main.o",
+		"%s-size --format=berkeley --target=binary main.o",
 		cc
 	); system(buffer);
 }
@@ -190,12 +242,16 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	// Test output directory
-	sprintf(buffer, "ls %s >nul 2>&1", DIRECTORY);
-	if (system(buffer)) {
-		puts("ERROR: Output directory doesn't exist.");
-		return 1;
-	}
+	// Test output directory, probably only works on Linux
+	#ifdef __linux__
+		sprintf(buffer, "ls %s >nul 2>&1", DIRECTORY);
+		if (system(buffer)) {
+			RED
+			puts("ERROR: Output directory doesn't exist.");
+			WHITE
+			return 1;
+		}
+	#endif
 
 	// Select usable ARM GCC
 	if (!system("which arm-none-eabi-gcc > nul")) {
@@ -213,10 +269,12 @@ int main(int argc, char *argv[]) {
 	printf("Compiling target: %s\n", argv[1]);
 
 	#ifdef STANDALONE
+		YELLOW
 		puts(
 			"Telling GCC to generate address independent code\n" \
 			"Don't expect it to work..."
 		);
+		WHITE
 	#endif
 
 	puts("---------------");
@@ -232,10 +290,12 @@ int main(int argc, char *argv[]) {
 	// CFLAGS
 	sprintf(
 		cflags,
-		"-std=c99 -c -O0 -ffreestanding %s",
+		"-std=c99 -c -O0 -ffreestanding -march=armv6 -mthumb-interwork %s",
 		include
 	);
 
+	enableapp("tetris");
+	
 	// Set up bytecode for C (asm does it in file)
 	// And switch to ARM if standalone requested
 	#if !defined(STANDALONE) && defined(P_THUMB)
@@ -254,7 +314,7 @@ int main(int argc, char *argv[]) {
 	// ASMFLAGS
 	sprintf(
 		asmflags,
-		"-c %s",
+		"-c %s -march=armv6 -mthumb-interwork",
 		include
 	);
 
@@ -285,14 +345,9 @@ int main(int argc, char *argv[]) {
 	-mpic-register=r9
 	*/
 
-	// Flags common to Asm and C
-	char allflags[512] = " -march=armv6 -c -mthumb-interwork";
-	strcat(asmflags, allflags);
-	strcat(cflags, allflags);
-
 	#ifdef STANDALONE
-		strcat(cflags, " -D STANDALONE -fpic -mthumb-interwork");
-		strcat(asmflags, " -D STANDALONE -fpic ");
+		strcat(cflags, " -D STANDALONE -fpie");
+		strcat(asmflags, " -D STANDALONE -fpie");
 	#endif
 
 	if (!strcmp(argv[1], "minimal")) {

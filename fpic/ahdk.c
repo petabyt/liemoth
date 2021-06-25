@@ -1,6 +1,10 @@
-int malloc(int id, int size, void *address);
+void printf(int *env, char *fmt, ...);
 
-void _start() {
-	int *a;
-	malloc(1, 1000, &a);
+char *name = "John Doe";
+
+void _start(int *env, long addr) {
+	char a;
+	printf(env, "Allocated: 0x%x\n", addr);
+	printf(env, "Stack 0x%x\n", &a);
+	printf(env, "Global ?? %s\n", name);
 }

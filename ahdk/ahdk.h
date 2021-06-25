@@ -43,7 +43,7 @@ struct Font {
 
 int gpioStat(int id);
 
-#ifndef NOGRAPHICS
+
 // Graphics/UI functions
 void drawPixel(int x, int y, unsigned char col);
 void clearScreen();
@@ -62,7 +62,6 @@ void drawGUI();
 void print(char *string);
 void countdown(int sec);
 void notify();
-#endif
 
 // Global environment var
 extern int *envg;
