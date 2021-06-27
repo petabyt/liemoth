@@ -1,5 +1,3 @@
-// Boring standard library crap, 
-// should use a library
 int divmod(int a, int b, int o) {
 	int di = 0;
 	int re = 0;

@@ -38,6 +38,9 @@ font:
 	@${COMP}
 	@./build.o font
 
+# Spit out log file
+log:
+	@cat ${d}/log
 
 # Write initial files
 init:

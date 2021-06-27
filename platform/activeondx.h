@@ -37,23 +37,30 @@ CPU INFO:
 
 #define MEM_BASEADDR 0xc0000000
 
-// Random unused spot in memory
+// Byte in memory dedicated to serving
+// as a parameter for AHDK
 #define MEM_PARAM 0xc012d5ac
 
-// Top screen buffer (see notes.md)
-// This one seems to work better (?)
+// Main display buffer shown on camera preview
 #define MEM_BUFFER 0xc2413880 + (SCREEN_HEIGHT * SCREEN_WIDTH)
+
+// Secondary buffer shown in view photo/video menu
 #define MEM_BUFFER2 0xc2413880
 
 // Run on command "cardmgr", a bunch of prints
 // including the strings, about 1.3k is free to use.
 #define MEM_LOADER 0xc012d5cc
 
+// Location of string "cardmgr"
+// Can change to "ahdk"
+#define MEM_CARDMGR 0xc064b700
+
 // Attempt payload location
 // This is where the ntfl commmand is.
 // I think around 18kb is free to use.
 #define MEM_MAIN 0xc0138880
 
+// Attempt to hijack menu buttons
 // From UI routine 0xc04199b6
 #define MEM_TRIGGER 0xc0419a40
 

@@ -3,7 +3,7 @@
 #include "apps.h"
 
 // Copy the screen before writing, and copy
-// it back after. Needs 80k memory.
+// it back after. Allocs 80k memory.
 #define COPYSCREEN
 
 // Global env
@@ -168,13 +168,6 @@ int runMenu(struct MenuItem menu[]) {
 	}
 }
 
-// Write a 
-void runAmbsh(char code[]) {
-	FILE *file = fopen("d:/ahdk/b.ash", "w");
-	fwrite(code, 1, strlen(code), file);
-	fclose(file);
-}
-
 struct MenuItem mainMenu[] = {
 	{"Exit", 0, RETURN, 0},
 	{"About AHDK", app_info, ACTION, 0},
@@ -188,14 +181,16 @@ struct MenuItem mainMenu[] = {
 };
 
 void start(int *env) {
-	// Ambsh scripts can set MEM_PARAM
-	// and call the trigger command to
-	// have a C interface with the camera.
-	char *param = (char*)MEM_PARAM;
-	switch (*param) {
-	case 0:
-		break;
-	}
+	#ifdef MEM_PARAM
+		// Ambsh scripts can set MEM_PARAM
+		// and call the trigger command to
+		// have a C interface with the camera.
+		char *param = (char*)MEM_PARAM;
+		switch (*param) {
+		case 0:
+			break;
+		}
+	#endif
 
 	#ifdef COPYSCREEN
 		int *oldScreen;

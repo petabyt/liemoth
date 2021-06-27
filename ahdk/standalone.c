@@ -6,7 +6,7 @@
 
 char *name = "Bob";
 void start(int *env, long addr) {
-	// Get absolute address of name
+	// Linker troubles
 	char *name2 = (char*)(addr + (long)name);
 	printf(env, "%s\n", name2);
 }

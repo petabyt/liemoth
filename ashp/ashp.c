@@ -22,6 +22,15 @@ void genUnicode(char string[], long location) {
 	printf("writeb 0x%lx 0x0\n", location + 1);
 }
 
+void genASCII(char string[], long location) {
+	for (int c = 0; string[c] != '\0'; c++) {
+		printf("writeb 0x%lx 0x%x\n", location, string[c]);
+		location++;
+	}
+
+	printf("writeb 0x%lx 0x0\n", location);
+}
+
 void writeBin(char file[], long location) {
 	FILE *reader = fopen(file, "r");
 	if (reader == NULL) {
@@ -198,6 +207,8 @@ void parseStatement(char *buffer) {
 		mem->len++;
 	} else if (!strcmp(tokens[0].text, "genunicode")) {
 		genUnicode(tokens[1].text, tokens[2].value);
+	} else if (!strcmp(tokens[0].text, "genascii")) {
+		genASCII(tokens[1].text, tokens[2].value);
 	} else if (!strcmp(tokens[0].text, "writebin")) {
 		writeBin(tokens[1].text, tokens[2].value);
 	} else if (!strcmp(tokens[0].text, "writefile")) {

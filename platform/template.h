@@ -7,49 +7,55 @@ Info goes here
 
 #define P_NAME "Camera"
 
-// Preferred Code
+// Preferred code
+// (Bytecode of MEM_LOADER)
 #define P_THUMB
 
-// Main control manager process ID (should stay the same)
-#define P_CTRLMAN x
+// Main control manager process ID
+// (should stay the same)
+#define P_CTRLMAN 0x0
 
 // Button GPIO codes
-#define P_RECBTN x
-#define P_MODEBTN x
-#define P_SELBTN x
+#define P_RECBTN 0x0
+#define P_MODEBTN 0x0
+#define P_SELBTN 0x0
 
-#define SCREEN_HEIGHT x
-#define SCREEN_WIDTH x
+#define SCREEN_HEIGHT 0x0
+#define SCREEN_WIDTH 0x0
 
-#define MEM_BASEADDR x
+// Base memory address
+#define MEM_BASEADDR 0x0
 
-// Top screen buffer (see notes.md)
-#define MEM_BUFFER x
+// Main screen buffer (see notes.md)
+#define MEM_BUFFER 0x0
 
-// Run on command "cardmgr", a bunch of prints
-// including the strings, about 1.3k is free to use.
-#define MEM_LOADER x
+// Run on command "cardmgr", a bunch of printfs
+#define MEM_LOADER 0x0
 
 // Attempt payload location
 // (Somewhere in memory that isn't
 // important)
-#define MEM_MAIN x
+#define MEM_MAIN 0x0
+
+// A byte reserved to pass info to ahdk,
+// when called via "cardmgr" (optional)
+#define MEM_PARAM 0x0
 
 // Main required stubs
-#define AMB_PRINTF x
-#define AMB_MSLEEP x
-#define AMB_SPRINTF x
-#define AMB_FOPEN x
-#define AMB_FCLOSE x
-#define AMB_FREAD x
-#define AMB_GPIO x
-#define AMB_FWRITE x
-#define AMB_ALLOC x
-#define AMB_HEAP x
-#define AMB_FREE x
+#define AMB_PRINTF 0x0
+#define AMB_MSLEEP 0x0
+#define AMB_SPRINTF 0x0
+#define AMB_FOPEN 0x0
+#define AMB_FCLOSE 0x0
+#define AMB_FREAD 0x0
+#define AMB_GPIO 0x0
+#define AMB_FWRITE 0x0
+#define AMB_ALLOC 0x0
+#define AMB_HEAP 0x0
+#define AMB_FREE 0x0
 
 // Optional
-#define AMB_OPENDIR x
-#define AMB_NEXTFILE x
-#define AMB_ATOI x
-#define AMB_EXP x
+#define AMB_OPENDIR 0x0
+#define AMB_NEXTFILE 0x0
+#define AMB_ATOI 0x0
+#define AMB_EXP 0x0

@@ -34,6 +34,10 @@ char *file = "test.c";
 // Don't write AHDK to any device/folder
 //#define NOWRITE
 
+// Removed unused sections and functions. Can
+// scrape off a few kilobytes. (currently broken)
+//#define REMOVEUNUSED
+
 // Default platform for text editor warnings
 // or something
 #ifndef P_NAME

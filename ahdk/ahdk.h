@@ -43,7 +43,6 @@ struct Font {
 
 int gpioStat(int id);
 
-
 // Graphics/UI functions
 void drawPixel(int x, int y, unsigned char col);
 void clearScreen();
