@@ -5,7 +5,10 @@
 
 # Regular onboot loader
 [ifndef "FANCY"]
-	# Allow other processes to load in
+	# Test memory code hijack
+	#[writebin "hijack.o" HIJACK]
+		
+	# Be nice, allow other processes to load in
 	sleep 1
 
 	# Setup
@@ -22,30 +25,29 @@
 	[ifdef "MEM_TRIGGER"]
 		[writebin "button.o" MEM_TRIGGER]
 	[end]
-	
+
+	# Default parameter
 	[ifdef "MEM_PARAM"]
-		writeb {MEM_PARAM} 0
+		writel {MEM_PARAM} 0
 	[end]
-	
-	cardmgr [ifdef "LOG"]> log[end] 
+
+	[ifndef "NOSTARTUP"]
+		cardmgr myParam [ifdef "LOG"]> log[end] 
+	[end]
 
 	[ifdef "SUSPEND"]
 		resume {P_CTRLMAN}
 	[end]
 
-	[ifndef "MEM_TRIGGER"]
-		cardmgr > log
-	[end]
-
 	# This runs copied reference to script
 	d:/ahdk/a.ash
-	#savebin d:\memdump.bin 0xC0000000 l 134217728
+	#savebin d:\memdump.bin 0xC0000000 l 0x8000000
 [end]
 
 # Fancy SD card controlled loader
+# This is experimental
+# Pull out SD, put in to run AHDK.
 [ifdef "FANCY"]
-	# This is experimental
-	# Pull out SD, put in to run AHDK.
 	[writebin "loader.o" MEM_LOADER]
 	while true; do
 		# Wait until card out

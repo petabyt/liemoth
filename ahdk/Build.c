@@ -1,5 +1,5 @@
 // Main AHDK Build system
-// Like a makefile, but done through
+// Like a Makefile, but done through
 // sprintf() and system() calls
 #include <stdio.h>
 #include <stdlib.h>
@@ -110,6 +110,30 @@ void loader() {
 	); system(buffer);
 }
 
+int hijackLocation = 0;
+void hijack(char name[], int hijack) {
+	// Set for Script.c
+	hijackLocation = hijack;
+
+	sprintf(
+		buffer,
+		"%s-gcc %s -D%s hijack.S -o hijack.o",
+		cc, asmflags, name
+	); system(buffer);
+
+	sprintf(
+		buffer,
+		"%s-ld %s hijack.o -Ttext 0x%x -o hijack.elf",
+		cc, ldflags, hijack
+	); system(buffer);
+
+	sprintf(
+		buffer,
+		"%s-objcopy -O binary hijack.elf hijack.o",
+		cc
+	); system(buffer);
+}
+
 void minimal() {
 	printf("Minimal file to compile: %s\n", file);
 
@@ -205,8 +229,8 @@ void write() {
 	// Compile ashp script generator
 	sprintf(
 		buffer,
-		"%s %s ../ashp/ashp.c Script.c -o gen.o",
-		hostcc, include
+		"%s %s ../ashp/ashp.c Script.c -D HIJACK=0x%x -o gen.o",
+		hostcc, include, hijackLocation
 	); system(buffer);
 
 	#ifndef NOWRITE
@@ -353,20 +377,16 @@ int main(int argc, char *argv[]) {
 		include
 	);
 
-	// FIXME: pointer initialization issues
-	// with linker script. Stack variables are
-	// put at MEM_MAIN, any they probably shouldn't.
-	// Also, pointers are very broken or something.
-
-	// https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
-	// https://community.arm.com/developer/tools-software/tools/f/arm-compilers-forum/7195/global-variable-not-initialized-by-__main-function
-	// https://stackoverflow.com/questions/53263275/arm-none-eabi-global-initialized-variable-incorrect-value
-	// https://developer.arm.com/documentation/dui0493/g/linker-command-line-options/--fpic
-
-	// &mainMenu[0].text	0xc0139b84
-	// Actual				0xc0139b24
-
 	/*
+	# FIXME: pointer initialization issues
+	with linker script. Stack variables are
+	put at MEM_MAIN, any they probably shouldn't.
+	Also, pointers are very broken or something.
+
+	https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
+	https://community.arm.com/developer/tools-software/tools/f/arm-compilers-forum/7195/global-variable-not-initialized-by-__main-function
+	https://stackoverflow.com/questions/53263275/arm-none-eabi-global-initialized-variable-incorrect-value
+	https://developer.arm.com/documentation/dui0493/g/linker-command-line-options/--fpic
 	# Generate position independent code.
 	-fPIC
 
@@ -384,6 +404,9 @@ int main(int argc, char *argv[]) {
 		strcat(cflags, " -D STANDALONE -fpie");
 		strcat(asmflags, " -D STANDALONE -fpie");
 	#endif
+
+	// Use memory hijack from hijack.S
+	//hijack("LOGGER", 0xc026cf60);
 
 	if (!strcmp(argv[1], "minimal")) {
 		file = argv[2];

@@ -20,6 +20,10 @@ int main(int argc, char *argv[]) {
 		defineInt("MEM_TRIGGER", MEM_TRIGGER);
 	#endif
 
+	#ifdef HIJACK
+		defineInt("HIJACK", HIJACK);
+	#endif
+
 	defineInt("MEM_LOADER", MEM_LOADER);
 	defineInt("P_CTRLMAN", P_CTRLMAN);
 	

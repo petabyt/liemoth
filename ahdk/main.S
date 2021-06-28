@@ -118,6 +118,11 @@ ROUTE free AMB_FREE
 ROUTE msleep AMB_MSLEEP
 ROUTE openDir AMB_OPENDIR
 ROUTE nextFile AMB_NEXTFILE
+//ROUTE raw 0xc024e39e
+//ROUTE raw 0xc024e3a0
+//ROUTE raw 0xc0360648 + 1
+
+ROUTE syslog 0xc026cf60
 
 // Experimental optional functions
 #ifdef AMB_MKDIR

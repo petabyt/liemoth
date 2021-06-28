@@ -64,4 +64,7 @@ int nextFile(struct DirReader *data);
 // TODO: Better name - what does "t" stand for?
 void setExp();
 
+// Paramters are passed via the ambsh parser.
+// Usage is exactly what you would expect.
+void start(int *env, int argc, char *argv[]);
 #endif

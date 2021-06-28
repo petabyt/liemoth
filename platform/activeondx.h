@@ -78,7 +78,7 @@ CPU INFO:
 #define AMB_FREE 0xc026e4b8
 #define AMB_GPIO 0xc0276bea
 
-// Experimental
+// Experimental/porting notes
 #define AMB_MKDIR 0xc0275804
 #define AMB_OPENDIR 0xc0274dd8
 #define AMB_NEXTFILE 0xc0274cbe

@@ -52,10 +52,10 @@ init:
 
 help:
 	@echo 'Examples:'
-	@echo ' make p=activeondx d=/media/user/mycam		(Assumes files are set up)'
-	@echo ' make setup p=activeondx d=/media/user/mycam	(Setup and compile on new camera)'
-	@echo ' make initial								(Set up file structure)'
-	@echo ' make font									(Set up the font on the camera)'
+	@echo ' make p=activeondx d=/media/user/mycam       (Assumes files are set up)'
+	@echo ' make setup p=activeondx d=/media/user/mycam (Setup and compile on new camera)'
+	@echo ' make initial                                (Set up file structure)'
+	@echo ' make font                                   (Set up the font on the camera)'
 	@echo 'Send ashp script flags:'
 	@echo ' make "f=LOG FANCY"'
 	@echo 'GoPro test: make "f=SUSPEND LOG" p=hero3p file=gopro.c minimal'

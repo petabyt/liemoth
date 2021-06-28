@@ -6,8 +6,8 @@ _start:
 	push {r4, lr}
 	sub sp, #8
 
-	// Preserve env
-	push {r0}
+	// Preserve parameters
+	push {r0, r1, r2}
 
 	// TODO: Can we read r1, r2 and "cardmgr" params?
 
@@ -45,13 +45,13 @@ _start:
 		ldr r1, [r1]
 	
 		// Pop back env
-		pop {r0}
+		pop {r0, r1, r2}
 	
 		// Jump to code, hope
 		// nothing bad happens
 		blx r1
 	#else
-		pop {r0}
+		pop {r0, r1, r2}
 		bl MEM_MAIN
 	#endif
 

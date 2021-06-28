@@ -4,16 +4,12 @@
 #include "ambarella.h"
 #include "ahdk.h"
 
-// 10 meg
-#define BUFSIZE 10000000
+int raw();
+
+// logger
+// 0xc026cf60
 
 void start(int *env) {
-	printf(env, "Hello");
-	
-	unsigned char *f = (unsigned char*)(0xc45f0472);
-									//  0xc4592782
-
-	FILE *file = fopen("d:/raw", "w");
-	fwrite(f, 1, BUFSIZE, file);
-	fclose(file);
+	char *a = (char*)MEM_PARAM;
+	printf(env, "%d\n", *a);
 }
