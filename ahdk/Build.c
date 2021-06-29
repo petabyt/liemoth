@@ -405,8 +405,12 @@ int main(int argc, char *argv[]) {
 		strcat(asmflags, " -D STANDALONE -fpie");
 	#endif
 
-	// Use memory hijack from hijack.S
-	//hijack("LOGGER", 0xc026cf60);
+
+	// Hijack syslog() to AMB_PRINTF
+	//hijack("SYSLOG", 0xc026e0d4);
+
+	// Hijack syslog2 to AMB_PRINTF
+	hijack("SYSLOG2", 0xc026cf60);
 
 	if (!strcmp(argv[1], "minimal")) {
 		file = argv[2];

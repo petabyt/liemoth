@@ -6,7 +6,7 @@
 # platform, directory, ashp flag
 p ?= activeondx
 d ?= /media/daniel/8765-4321
-f ?= SUSPEND LOG
+f ?= LOG
 
 file := test.c
 

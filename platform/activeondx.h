@@ -38,8 +38,8 @@ CPU INFO:
 #define MEM_BASEADDR 0xc0000000
 
 // Byte in memory dedicated to serving
-// as a parameter for AHDK
-#define MEM_PARAM 0xc012d5ac
+// as a parameter for AHDK (preset to zero)
+#define MEM_PARAM 0xc1745db0
 
 // Main display buffer shown on camera preview
 #define MEM_BUFFER 0xc2413880 + (SCREEN_HEIGHT * SCREEN_WIDTH)
@@ -84,3 +84,8 @@ CPU INFO:
 #define AMB_NEXTFILE 0xc0274cbe
 #define AMB_EXP 0xc02d0204
 #define AMB_LU 0xc04b852c + 1 // Arm branch (blx)
+
+/*
+hls file test, interesting..  c0224500
+
+*/

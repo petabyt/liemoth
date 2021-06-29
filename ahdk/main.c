@@ -180,17 +180,12 @@ struct MenuItem mainMenu[] = {
 	{0}
 };
 
-void start(int *env) {
-	#ifdef MEM_PARAM
-		// Ambsh scripts can set MEM_PARAM
-		// and call the trigger command to
-		// have a C interface with the camera.
-		char *param = (char*)MEM_PARAM;
-		switch (*param) {
-		case 0:
-			break;
+void start(int *env, int argc, char *argv[]) {
+	if (argc != 1) {
+		for (int i = 0; i < argc; i++) {
+			printf(env, "%s\n", argv[i]);
 		}
-	#endif
+	}
 
 	#ifdef COPYSCREEN
 		int *oldScreen;

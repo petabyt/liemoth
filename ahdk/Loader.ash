@@ -6,7 +6,7 @@
 # Regular onboot loader
 [ifndef "FANCY"]
 	# Test memory code hijack
-	#[writebin "hijack.o" HIJACK]
+	[writebin "hijack.o" HIJACK]
 		
 	# Be nice, allow other processes to load in
 	sleep 1
@@ -29,10 +29,11 @@
 	# Default parameter
 	[ifdef "MEM_PARAM"]
 		writel {MEM_PARAM} 0
+		writeb {MEM_PARAM} 0
 	[end]
 
 	[ifndef "NOSTARTUP"]
-		cardmgr myParam [ifdef "LOG"]> log[end] 
+		cardmgr [ifdef "LOG"]> log[end] 
 	[end]
 
 	[ifdef "SUSPEND"]

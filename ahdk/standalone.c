@@ -5,7 +5,7 @@
 #include "ahdk.h"
 
 char *name = "Bob";
-void start(int *env, long addr) {
+void start(int *env, int argc, char *argv[]) {
 	// Linker troubles
 	char *name2 = (char*)(addr + (long)name);
 	printf(env, "%s\n", name2);

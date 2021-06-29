@@ -12,13 +12,59 @@ _start:
 
 #endif
 
-// How many logs have been created?
+#ifdef SYSLOG
+// Hijack syslog and send output into
+// env stdout. env is pulled from MEM_PARAM,
+// if not zero.
+// log(int mode, char fmt[], ...)
 .thumb
 .global _start
 _start:
 	push {r7, lr}
-	ldr r1, =MEM_PARAM
-	ldr r2, [r1]
-	add r2, #1
-	str r2, [r1]
+	ldr r0, =MEM_PARAM
+	ldr r0, [r0]
+	cmp r0, #0
+	beq q
+	push {r0}
+	bl AMB_PRINTF
+	pop {r0}
+	ldr r1, =newline
+	bl AMB_PRINTF
+	q:
 	pop {r7, pc}
+newline: .string "\n"
+#endif
+
+#ifdef SYSLOG2
+// syslog2 hijacker
+// Params are incompatible with AMB_PRINTF,
+// So expect it to not work
+// log(char fmt[], ...)
+.thumb
+.global _start
+_start:
+	push {r0, r1, r2, r3, r4, lr}
+	// Shift regs
+	mov r4, r3
+	mov r3, r2
+	mov r2, r1
+	mov r1, r0
+	
+	ldr r0, =MEM_PARAM
+	ldr r0, [r0]
+
+	cmp r0, #0
+	beq q
+
+	push {r0}
+	bl AMB_PRINTF
+	pop {r0}
+
+	// Hack in random {10, 0} for clean
+	// printing (Activeon dx)
+	ldr r1, =0xc013a5e8+7
+	bl AMB_PRINTF
+
+	q:
+	pop {r0, r1, r2, r3, r4, pc}
+#endif

@@ -122,7 +122,13 @@ ROUTE nextFile AMB_NEXTFILE
 //ROUTE raw 0xc024e3a0
 //ROUTE raw 0xc0360648 + 1
 
-ROUTE syslog 0xc026cf60
+ROUTE syslog 0xc026e0d4
+ROUTE syslog2 0xc026cf60
+
+ROUTE sensor 0xc04edd6c + 1
+
+// void FUN_c01b7668(int param_1,undefined4 param_2)
+ROUTE preview 0xc01b7668
 
 // Experimental optional functions
 #ifdef AMB_MKDIR
