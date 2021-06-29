@@ -49,7 +49,7 @@ _start:
 	
 		// Jump to code, hope
 		// nothing bad happens
-		blx r1
+		blx r1 // start(int *env, long addr)
 	#else
 		pop {r0, r1, r2}
 		bl MEM_MAIN

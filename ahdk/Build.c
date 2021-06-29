@@ -26,7 +26,7 @@ char *file = "test.c";
 // Tell assembler, compiler, linker, to generate
 // address independent code, and load the code into
 // an allocated position in memory. (-fpie)
-//#define STANDALONE
+#define STANDALONE
 
 // Don't clean the output files
 //#define NOCLEAN
@@ -404,7 +404,6 @@ int main(int argc, char *argv[]) {
 		strcat(cflags, " -D STANDALONE -fpie");
 		strcat(asmflags, " -D STANDALONE -fpie");
 	#endif
-
 
 	// Hijack syslog() to AMB_PRINTF
 	//hijack("SYSLOG", 0xc026e0d4);

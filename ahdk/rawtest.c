@@ -17,7 +17,7 @@ void memcpy(void* dest, const void* src, int count) {
 	}
 }
 
-int sensor(int id, int *mode, int etc);
+int sensor(int command, int *mode, int etc);
 
 // Low level system logging commands
 void syslog();
@@ -25,11 +25,11 @@ void syslog2();
 
 void preview(); // ??
 
-// sensor() modes, or IDs, or something
+// sensor() commands
 #define SENSOR1 0xB8001009
 #define SENSOR2 0xB800100B
 #define SENSOR3 0xB6001010
-#define SENSOR4 0xB6001011 // Disables preview
+#define SENSOR4 0xB6001011 // Disables preview, gives info in syslog2
 #define SENSOR5 0xB6001064
 #define SENSOR6 0xB6001066
 #define SENSOR7 0xB6001090

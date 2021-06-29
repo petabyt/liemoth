@@ -1,14 +1,15 @@
+OUTPUT_FORMAT("elf32-littlearm", "elf32-littlearm", "elf32-littlearm")
+OUTPUT_ARCH(arm)
+ENTRY(start)
+
 #ifdef STANDALONE
-	// Attempt to run AHDK on address independent code (pie)
-	OUTPUT_FORMAT("elf32-littlearm", "elf32-littlearm", "elf32-littlearm")
-	OUTPUT_ARCH(arm)
-	ENTRY(start)
+	// Attempt to run AHDK on 
+	// address independent code (pie)
 	SECTIONS {
-		//. = MEM_MAIN;
-
 		. = ALIGN(4);
-
-		.rel.dyn : { *(.rel.dyn) }
+		.rel.dyn : {
+			*(.rel.dyn)
+		}
 
 		. = ALIGN(4);
 		.rodata : {
@@ -17,7 +18,9 @@
 
 		. = ALIGN(4);
 		.data : {
-			*(.data)
+			DATA_START = .;
+			*(.data*)
+			DATA_END = .;
 		}
 	}
 #else
