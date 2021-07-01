@@ -4,6 +4,30 @@
 #include "ambarella.h"
 #include "ahdk.h"
 
+#include "ambarella.h"
+#include "ahdk.h"
+
+void start(int *env, int argc, char *argv[]) {
+	#define SIZE (1920) * (1080)
+
+	FILE *f = fopen("d:/myvideo.raw", "w");
+
+	unsigned char *frame;
+	int r = _malloc(1, SIZE, &frame);
+
+	// Compressed live buffer
+	unsigned char *b = (unsigned char*)0xc45a2a80;
+	for (int i = 0; i < SIZE; i++) {
+		frame[i] = b[i];
+	}
+
+	fwrite(frame, 1, 1080 * 1920, f);
+	fclose(f);
+
+	//_free(1, addr);
+}
+
+#if 0
 // logger
 // 0xc026cf60
 // c03c3748				raw function?
@@ -73,6 +97,7 @@ void start(int *env, int argc, char *argv[]) {
 	memcpy((void*)MEM_PARAM, &zero, sizeof(env));
 }
 
+#endif
 
 /*
 Sensor modes, not sure what it does.
