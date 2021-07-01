@@ -38,6 +38,7 @@ done
 ```
 - GPIO function: "gpio%d:\t %s %d %s\n" (it should accept 4 parameters?)
 - Dir Openers: "start time = %d ms\n"
+- delete: Search "Usage: %s [file]\n". Good luck.
 
 # Gopro
 - fpstring: Search "fp_string"

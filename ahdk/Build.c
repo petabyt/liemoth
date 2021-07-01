@@ -337,10 +337,7 @@ int main(int argc, char *argv[]) {
 
 	#ifdef STANDALONE
 		YELLOW
-		puts(
-			"Telling GCC to generate address independent code\n" \
-			"Don't expect it to work..."
-		);
+		puts("Telling GCC to generate address independent code...\n");
 		WHITE
 	#endif
 

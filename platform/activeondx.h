@@ -84,8 +84,12 @@ CPU INFO:
 #define AMB_NEXTFILE 0xc0274cbe
 #define AMB_EXP 0xc02d0204
 #define AMB_LU 0xc04b852c + 1 // Arm branch (blx)
+#define AMB_REMOVE 0xc0274b0a
 
 /*
+
 hls file test, interesting..  c0224500
+
+1920x720 buffer 0x045a2a80
 
 */

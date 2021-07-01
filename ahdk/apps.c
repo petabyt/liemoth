@@ -25,13 +25,15 @@ char *hijackLu[] = {"lu_util", "exec", buffer};
 int app_linux() {
 	print("Making sure Linux booted...");
 	msleep(20000);
-	
+
+	// Start FTP server on 192.168.42.1:21
 	sprintf(buffer, "(tcpsvd -vE 0.0.0.0 21 ftpd -w /tmp/fuse_d/ahdk) &");
 	lu(envg, 3, hijackLu);
 
 	// The camera must be sent into a waiting
 	// loop. This allows other tasks (like WiFi)
 	// to work properly
+	int indicator = 1;
 	while (1) {
 		msleep(2000);
 
@@ -45,6 +47,16 @@ int app_linux() {
 		drawGUI();
 		line = 0;
 		print("Telnet IP: 192.168.42.1");
+
+		// Make an indicator to tell that
+		// it's still running
+		indicator = !indicator;
+		if (indicator) {
+			print("/");
+		} else {
+			print("-");
+		}
+		
 		if (buffer[0] == '!') {
 			print("Running test.bin...");
 			FILE *f = fopen("d:/ahdk/temp", "w");
