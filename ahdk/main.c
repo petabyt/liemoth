@@ -4,7 +4,7 @@
 
 // Copy the screen before writing, and copy
 // it back after. Allocs 80k memory.
-#define COPYSCREEN
+//#define COPYSCREEN
 
 // Global env
 int *envg;
@@ -201,8 +201,10 @@ void start(int *env, int argc, char *argv[]) {
 	// Copy font into memory
 	FILE *file = fopen("d:/ahdk/font.bin", "r");
 	if (!file) {
-		printf(env, "No font.");
+		printf(env, "No font.\n");
 		return;
+	} else {
+		printf(env, "Loaded font\n");
 	}
 	
 	fread(font, 1, 5000, file);

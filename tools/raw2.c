@@ -7,8 +7,8 @@
 
 #include "gfx.h"
 
-int WIDTH = 500;
-int HEIGHT = 500;
+#define WIDTH 4000
+#define HEIGHT 1000
 
 struct Col {
 	int r;
@@ -28,25 +28,25 @@ int main() {
 	// Open a new window for drawing.
 	struct gfx_window window = gfx_open(WIDTH, HEIGHT, "ahdk");
 
-	for (WIDTH = 0; WIDTH < 400; WIDTH++) {
-		FILE *f = fopen("/media/daniel/8765-4321/asd", "r");
-		// Ambarella display buffer is bottom left to top right
-		for (int y = 0; y < HEIGHT; y++) {
-			for (int x = 0; x < WIDTH; x++) {
-				int a = fgetc(f);
-				//struct Col col = rgb((char)a);
-				gfx_setColor(&window, a, a, a);
-				gfx_pixel(&window, x, y);
-				//struct gfx_interaction ia = gfx_event();
-				//printf("%d\n", x);
-			}
-		}
+	FILE *f = fopen("/home/daniel/raw", "r");
 
-		fclose(f);
+	// Ambarella display buffer is bottom left to top right
+	for (int y = 0; y < HEIGHT; y++) {
+		for (int x = 0; x < WIDTH; x++) {
+			int a = fgetc(f);
+			int b = fgetc(f);
+			//struct Col col = rgb((char)a);
+			gfx_setColor(&window, a, b, 0);
+			gfx_pixel(&window, x, y);
+			//struct gfx_interaction ia = gfx_event();
+			//printf("%d\n", x);
+		}
 	}
 
 	struct gfx_interaction ia = gfx_event();
 	gfx_close(&window);
+
+	fclose(f);
 
 	return 0;
 }

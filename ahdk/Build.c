@@ -26,7 +26,7 @@ char *file = "test.c";
 // Tell assembler, compiler, linker, to generate
 // address independent code, and load the code into
 // an allocated position in memory. (-fpie)
-#define STANDALONE
+//#define STANDALONE
 
 // Don't clean the output files
 //#define NOCLEAN
@@ -83,6 +83,16 @@ void enableapp(char app[]) {
 	strcat(cflags, buffer);
 }
 
+// Preprocess symbols in linker file from Link.c
+// ino link.ld
+void linker() {
+	sprintf(
+		buffer,
+		"%s-gcc %s %s -P -E Link.c -o link.ld",
+		cc, cflags, include
+	); system(buffer);
+}
+
 void loader() {
 	sprintf(
 		buffer,
@@ -102,14 +112,10 @@ void loader() {
 		cc
 	); system(buffer);
 
-	// Preprocess linker file from Link.c
-	sprintf(
-		buffer,
-		"%s-gcc %s %s -P -E Link.c -o link.ld",
-		cc, cflags, include
-	); system(buffer);
+	linker();
 }
 
+// Hijack a place in memory with assembly
 int hijackLocation = 0;
 void hijack(char name[], int hijack) {
 	// Set for Script.c
@@ -218,7 +224,7 @@ void ahdk() {
 
 void clean() {
 	#ifndef NOCLEAN
-		system("rm -f *.o *.elf link.ld nul");
+		system("rm -f *.o *.elf link.ld nul *.bin");
 	#endif
 }
 
@@ -406,10 +412,10 @@ int main(int argc, char *argv[]) {
 	#endif
 
 	// Hijack syslog() to AMB_PRINTF
-	//hijack("SYSLOG", 0xc026e0d4);
+	hijack("SYSLOG", 0xc026e0d4);
 
 	// Hijack syslog2 to AMB_PRINTF
-	hijack("SYSLOG2", 0xc026cf60);
+	//hijack("SYSLOG2", 0xc026cf60);
 
 	if (!strcmp(argv[1], "minimal")) {
 		file = argv[2];
@@ -425,6 +431,23 @@ int main(int argc, char *argv[]) {
 		loader();
 		ahdk();
 		write();
+		clean();
+	} if (!strcmp(argv[1], "minimalonly")) {
+		file = argv[2];
+
+		linker();
+		minimal();
+
+		system("cp main.o test.bin");
+
+		#ifndef NOWRITE
+			sprintf(
+				buffer,
+				"cp main.o %s/ahdk/test.bin",
+				DIRECTORY
+			); system(buffer);
+		#endif
+
 		clean();
 	}
 }

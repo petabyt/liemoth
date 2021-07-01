@@ -14,7 +14,13 @@
 //#define APP_EXPOSURE
 
 #ifdef APP_LINUX
+void jumptest();
+
 char *hijackLu[] = {"lu_util", "exec", buffer};
+
+// echo "!test" > /tmp/fuse_d/ahdk/temp
+// tcpsvd -vE 0.0.0.0 21 ftpd -w /tmp/
+// ftp://root@192.168.42.1:21
 
 int app_linux() {
 	print("Making sure Linux booted...");
@@ -32,13 +38,34 @@ int app_linux() {
 		// fread doesn't null terminate, so clear buffer
 		memset(buffer, '\0', sizeof(buffer));
 		
-		FILE *f = fopen("d:/asd", "r");
+		FILE *f = fopen("d:/ahdk/temp", "r");
 		fread(buffer, 1, 128, f);
 		fclose(f);
 
 		drawGUI();
 		line = 0;
 		print("Telnet IP: 192.168.42.1");
+		if (buffer[0] == '!') {
+			print("Running test.bin...");
+			FILE *f = fopen("d:/ahdk/temp", "w");
+			fwrite("none", 1, 4, f);
+			fclose(f);
+
+			long addr = 0;
+			int r = _malloc(1, 10000, &addr);
+
+			FILE *t = fopen("d:/ahdk/test.bin", "r");
+			fread(addr, 1, 10000, t);
+			fclose(t);
+
+			jumptest(envg, addr);
+			_free(1, addr);
+		}
+
+		// Print log file
+		FILE *l = fopen("d:/log", "r");
+		fread(buffer, 1, 128, l);
+		fclose(l);
 		print(buffer);
 	}
 

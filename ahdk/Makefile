@@ -6,7 +6,7 @@
 # platform, directory, ashp flag
 p ?= activeondx
 d ?= /media/daniel/8765-4321
-f ?= LOG
+f ?= SUSPEND LOG
 
 file := test.c
 
@@ -29,6 +29,10 @@ ahdk:
 minimal:
 	@${COMP}
 	@./build.o minimal ${file}
+
+minimalonly:
+	@${COMP} -D STANDALONE
+	@./build.o minimalonly ${file}
 
 clean:
 	@${COMP}

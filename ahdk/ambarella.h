@@ -32,12 +32,12 @@ void msleep(int ms);
 void printf(int *env, char *fmt, ...);
 void sprintf(char *string, char *fmt, ...);
 
-// int mybuf;
-// malloc(1, 100, &mybuf);
-// mybuf contains the address to allocted memory
+// addr contains the address to allocted memory
 // Not sure what "id" is, just put 1
-int malloc(int id, int size, void *address);
-void free(int id, int *addr);
+// These functions aren't POSIX so an underscore
+// is used.
+int _malloc(int id, int size, void *addr);
+void _free(int id, int *addr);
 
 // # I/O
 FILE *fopen(char *filename, char *mode);

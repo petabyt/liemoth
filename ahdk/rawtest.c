@@ -17,7 +17,7 @@ void memcpy(void* dest, const void* src, int count) {
 	}
 }
 
-int sensor(int command, int *mode, int etc);
+int sensor(int commandID, int *param1, int *param2);
 
 // Low level system logging commands
 void syslog();
@@ -26,13 +26,27 @@ void syslog2();
 void preview(); // ??
 
 // sensor() commands
-#define SENSOR1 0xB8001009
-#define SENSOR2 0xB800100B
-#define SENSOR3 0xB6001010
-#define SENSOR4 0xB6001011 // Disables preview, gives info in syslog2
-#define SENSOR5 0xB6001064
+#define SENSOR3 0xB6001010 // sensor preview info
+
+// param1: &ret = 0-20
+// param2: 0
+#define SENSOR_MODE 0xB6001011 // Disables preview, gives info in syslog2
+
+#define SENSOR5 0xB6001064 // doesn't do anything
 #define SENSOR6 0xB6001066
 #define SENSOR7 0xB6001090
+
+// Something with RAW, get raw info???
+// long a = sensor(SENSOR8, "d:\\asd", &ret2);
+// idsp dump address is 0x17309c0, sec_id:0
+// save sec 0 dump:d:\asd size = -1054550048
+#define SENSOR8 0xB6001027
+
+#define MAX_COMMAND_ID 0xB6001130
+
+// param1: 0-10
+// param2: 
+#define SENSOR_SPATIAL_FILTER 0xB6001130
 
 // Does not do anything in view photo/video mode
 // void preview(0xc, 0);
@@ -41,11 +55,20 @@ void start(int *env, int argc, char *argv[]) {
 	long zero = 0;
 	memcpy((void*)MEM_PARAM, &env, sizeof(env));
 
+	int r = 10;
+	int r2 = set_sharpness(8, &r);
+	printf(env, "%d %d\n", r, r2);
+
+#if 0
 	// Sensor test
-	int ret = 1;
-	long a = sensor(SENSOR4, &ret, 0);
+	int ret = 2;
+	int ret2 = 1;
+
+	long a = sensor(SENSOR8, "d:\\asd", &ret2);
 	printf(env, "Return: %d\n", a);
 	printf(env, "Ret1: %x\n", ret);
+	printf(env, "Ret2: %x\n", ret2);
+#endif
 
 	memcpy((void*)MEM_PARAM, &zero, sizeof(env));
 }

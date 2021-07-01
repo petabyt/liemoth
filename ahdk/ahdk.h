@@ -71,7 +71,8 @@ extern int line;
 // Current menu selector
 extern int sel;
 
-// General purpose buffer
+// General purpose buffer, to conserve
+// stack memory just in case
 extern char buffer[100];
 
 extern struct MenuItem mainMenu[];
@@ -80,6 +81,7 @@ extern struct MenuItem mainMenu[];
 int strlen(char *buffer);
 void memcpy(void* dest, const void* src, int count);
 void *memset(void *dest, int val, int len);
+int strcmp(char *s1, char *s2);
 
 // Custom math library functions
 int divmod(int a, int b, int o);

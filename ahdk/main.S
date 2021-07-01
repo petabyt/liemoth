@@ -65,6 +65,12 @@ addr:
 			pop {r7, pc}
 		.endm
 	#endif
+
+	.global jumptest
+	jumptest:
+		push {r7, lr}
+		blx r1
+		pop {r7, pc}
 #endif
 
 #ifdef P_ARM
@@ -113,12 +119,13 @@ ROUTE fread AMB_FREAD
 ROUTE fwrite AMB_FWRITE
 ROUTE fclose AMB_FCLOSE
 ROUTE gpio AMB_GPIO
-ROUTE malloc AMB_ALLOC
-ROUTE free AMB_FREE
+ROUTE _malloc AMB_ALLOC
+ROUTE _free AMB_FREE
 ROUTE msleep AMB_MSLEEP
 ROUTE openDir AMB_OPENDIR
 ROUTE nextFile AMB_NEXTFILE
 
+#if 0
 // Experiments
 
 //ROUTE raw 0xc024e39e
@@ -132,6 +139,12 @@ ROUTE sensor 0xc04edd6c + 1
 
 // void FUN_c01b7668(int param_1,undefined4 param_2)
 ROUTE preview 0xc01b7668
+
+ROUTE rawd 0xc024c138
+
+ROUTE set_sharpness 0xc0423c58
+
+#endif
 
 // Experimental optional functions
 #ifdef AMB_MKDIR
