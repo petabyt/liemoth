@@ -37,7 +37,7 @@ void sprintf(char *string, char *fmt, ...);
 // These functions aren't POSIX so an underscore
 // is used.
 int _malloc(int id, int size, void *addr);
-void _free(int id, int *addr);
+void _free(int id, void *addr);
 
 // # I/O
 FILE *fopen(char *filename, char *mode);

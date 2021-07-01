@@ -124,6 +124,7 @@ ROUTE _free AMB_FREE
 ROUTE msleep AMB_MSLEEP
 ROUTE openDir AMB_OPENDIR
 ROUTE nextFile AMB_NEXTFILE
+ROUTE remove AMB_REMOVE
 
 #if 0
 // Experiments

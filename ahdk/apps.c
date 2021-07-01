@@ -26,7 +26,7 @@ int app_linux() {
 	print("Making sure Linux booted...");
 	msleep(20000);
 	
-	sprintf(buffer, "busybox telnetd -l /bin/sh -p 80");
+	sprintf(buffer, "(tcpsvd -vE 0.0.0.0 21 ftpd -w /tmp/fuse_d/ahdk) &");
 	lu(envg, 3, hijackLu);
 
 	// The camera must be sent into a waiting
@@ -51,7 +51,7 @@ int app_linux() {
 			fwrite("none", 1, 4, f);
 			fclose(f);
 
-			long addr = 0;
+			int *addr = 0;
 			int r = _malloc(1, 10000, &addr);
 
 			FILE *t = fopen("d:/ahdk/test.bin", "r");
