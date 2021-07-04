@@ -10,7 +10,7 @@ f ?= SUSPEND LOG
 
 file := test.c
 
-CFLAGS := -include "../platform/${p}.h" '-DFLAGS="${f}"' '-DPLATFORM="${p}"' '-DDIRECTORY="${d}"'
+CFLAGS := -O0 -include "../platform/${p}.h" '-DFLAGS="${f}"' '-DPLATFORM="${p}"' '-DDIRECTORY="${d}"'
 
 ifdef NOCLEAN
 CFLAGS += -DNOCLEAN

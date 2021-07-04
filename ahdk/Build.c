@@ -18,7 +18,11 @@
 #endif
 
 char *cc = "arm-none-eabi";
-char *hostcc = "cc";
+#ifndef HOSTCC
+	char *hostcc = "cc";
+#else
+	char *hostcc = HOSTCC
+#endif
 
 // `make minimal` test file
 char *file = "test.c";
@@ -332,8 +336,10 @@ int main(int argc, char *argv[]) {
 
 	system("rm nul");
 
+	GREEN
 	printf("Using ARM Compiler: %s\n", cc);
 	printf("Compiling target: %s\n", argv[1]);
+	WHITE
 
 	#ifdef STANDALONE
 		YELLOW
@@ -409,7 +415,7 @@ int main(int argc, char *argv[]) {
 	#endif
 
 	// Hijack syslog() to AMB_PRINTF
-	hijack("SYSLOG", 0xc026e0d4);
+	//hijack("SYSLOG", 0xc026e0d4);
 
 	// Hijack syslog2 to AMB_PRINTF
 	//hijack("SYSLOG2", 0xc026cf60);

@@ -75,9 +75,19 @@ int drawString(int x, int y, char *string, char color) {
 	int cx = x;
 	int cy = y;
 	for (int c = 0; string[c] != '\0'; c++) {
-		int length = printChar(cx, cy, string[c], color);
+		// Line break (by any char)
+		if (cx > SCREEN_WIDTH - 50) {
+			cx = x;
+			y += 10;
+			line++;
+		}
+
+		// Don't print spaces
+		int length;
 		if (string[c] == ' ') {
 			length = 5;
+		} else {
+			length = printChar(cx, cy, string[c], color);
 		}
 
 		cx += length + 3;

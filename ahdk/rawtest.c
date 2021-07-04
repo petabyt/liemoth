@@ -1,5 +1,5 @@
-// Buffer rip test, unfinished
-// `make minimal FILE=rawtest.c`
+// Sensor research: a huge, unfinished mess
+// `make minimal file=rawtest.c d=... m=...`
 
 #include "ambarella.h"
 #include "ahdk.h"
@@ -7,56 +7,54 @@
 #include "ambarella.h"
 #include "ahdk.h"
 
-void start(int *env, int argc, char *argv[]) {
-	#define SIZE (1920) * (1080)
+// Save a live (compressed, small) buffer from memory.
+void savebuf() {
+	#define BSIZE 1920 * 1080
 
 	FILE *f = fopen("d:/myvideo.raw", "w");
 
 	unsigned char *frame;
-	int r = _malloc(1, SIZE, &frame);
+	int r = _malloc(1, BSIZE, &frame);
 
-	// Compressed live buffer
+	// Compressed live buffer (Activeon DX)
 	unsigned char *b = (unsigned char*)0xc45a2a80;
-	for (int i = 0; i < SIZE; i++) {
+	for (int i = 0; i < BSIZE; i++) {
 		frame[i] = b[i];
 	}
 
-	fwrite(frame, 1, 1080 * 1920, f);
+	fwrite(frame, 1, BSIZE, f);
 	fclose(f);
 
 	//_free(1, addr);
 }
 
-#if 0
 // logger
 // 0xc026cf60
 // c03c3748				raw function?
 // int c04efde4()		sensor function
 
-void memcpy(void* dest, const void* src, int count) {
-	char* dst8 = (char*)dest;
-	char* src8 = (char*)src;
-	while (count--) {
-		*dst8++ = *src8++;
-	}
-}
-
-int sensor(int commandID, int *param1, int *param2);
-
-// Low level system logging commands
+int sensor();
+int sensortramp();
 void syslog();
 void syslog2();
-
 void preview(); // ??
+
+int rawinfo();
+int raw();
+
+// Does not do anything in view photo/video mode
+// void preview(0xc, 0);
 
 // sensor() commands
 #define SENSOR3 0xB6001010 // sensor preview info
 
+// Disables preview, gives info in syslog2
 // param1: &ret = 0-20
 // param2: 0
-#define SENSOR_MODE 0xB6001011 // Disables preview, gives info in syslog2
+#define SENSOR_MODE 0xB6001011
 
-#define SENSOR5 0xB6001064 // doesn't do anything
+// doesn't do anything
+#define SENSOR5 0xB6001064
 #define SENSOR6 0xB6001066
 #define SENSOR7 0xB6001090
 
@@ -66,38 +64,29 @@ void preview(); // ??
 // save sec 0 dump:d:\asd size = -1054550048
 #define SENSOR8 0xB6001027
 
-#define MAX_COMMAND_ID 0xB6001130
-
 // param1: 0-10
 // param2: 
 #define SENSOR_SPATIAL_FILTER 0xB6001130
 
-// Does not do anything in view photo/video mode
-// void preview(0xc, 0);
+// &id     0      &ret
+#define GET_WARP_CALIB 0xB600108D
+
+#define MAX_COMMAND_ID 0xB6001130
 
 void start(int *env, int argc, char *argv[]) {
-	long zero = 0;
-	memcpy((void*)MEM_PARAM, &env, sizeof(env));
+	//int *param = (int*)MEM_PARAM;
+	//*param = (long int)env;
 
-	int r = 10;
-	int r2 = set_sharpness(8, &r);
-	printf(env, "%d %d\n", r, r2);
+	char stack[1500];
 
-#if 0
-	// Sensor test
-	int ret = 2;
-	int ret2 = 1;
+	int a = rawinfo(stack);
+	printf(env, "Return: %x\n", a);
+	if (a != 0) {
+		raw(stack, 0, 0);
+	}
 
-	long a = sensor(SENSOR8, "d:\\asd", &ret2);
-	printf(env, "Return: %d\n", a);
-	printf(env, "Ret1: %x\n", ret);
-	printf(env, "Ret2: %x\n", ret2);
-#endif
-
-	memcpy((void*)MEM_PARAM, &zero, sizeof(env));
+	//*param = 0;
 }
-
-#endif
 
 /*
 Sensor modes, not sure what it does.

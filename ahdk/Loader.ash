@@ -5,8 +5,10 @@
 
 # Regular onboot loader
 [ifndef "FANCY"]
-	# Test memory code hijack
-	[writebin "hijack.o" HIJACK]
+	# Write a memory hijack, if specified
+	[ifdef "HIJACK"]
+		[writebin "hijack.o" HIJACK]
+	[end]
 		
 	# Be nice, allow other processes to load in
 	sleep 1
@@ -40,8 +42,12 @@
 		resume {P_CTRLMAN}
 	[end]
 
+	# Check A drive
+	#ls a:/ > log
+
 	# This runs copied reference to script
-	d:/ahdk/a.ash
+	#d:/ahdk/a.ash
+
 	#savebin d:\memdump.bin 0xC0000000 l 0x8000000
 [end]
 
