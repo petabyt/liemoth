@@ -1,4 +1,5 @@
 // Sensor research: a huge, unfinished mess
+// Model: Activeon DX
 // `make minimal file=rawtest.c d=... m=...`
 
 #include "ambarella.h"
@@ -6,6 +7,34 @@
 
 #include "ambarella.h"
 #include "ahdk.h"
+
+/*
+
+// Experiments
+
+//ROUTE raw 0xc024e39e
+//ROUTE raw 0xc024e3a0
+//ROUTE raw 0xc0360648 + 1
+
+ROUTE syslog 0xc026e0d4
+ROUTE syslog2 0xc026cf60
+
+ROUTE sensor 0xc04edd6c + 1
+ROUTE sensortramp 0xc0360648 + 1
+
+ROUTE imgalgo 0xc02073b0
+
+// void FUN_c01b7668(int param_1,undefined4 param_2)
+ROUTE preview 0xc01b7668
+
+ROUTE rawd 0xc024c138
+
+ROUTE set_sharpness 0xc0423c58
+
+ROUTE rawinfo 0xc03d0912
+ROUTE raw 0xc03d09d0
+
+*/
 
 // Save a live (compressed, small) buffer from memory.
 void savebuf() {

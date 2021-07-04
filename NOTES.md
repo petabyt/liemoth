@@ -1,7 +1,7 @@
 # SRE (Software Reverse Engineering)
-I would recommend using Ghirda. Here are some tips:
+I would recommend using Ghidra. Here are some tips:
 - To get a RAM dump: `savebin d:\memdump.bin 0xC0000000 l 0x8000000`  
-- In Ghirda, remember to set base address to `0xC0000000`.  
+- In Ghidra, remember to set base address to `0xC0000000`.  
 - For Ambarella A12, use `0xA0000000`
 - For A7, set architecture to Arm v6 little
 

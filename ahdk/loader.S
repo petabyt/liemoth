@@ -9,8 +9,6 @@ _start:
 	// Preserve parameters
 	push {r0, r1, r2}
 
-	// TODO: Can we read r1, r2 and "cardmgr" params?
-
 	#ifdef STANDALONE
 		// Alloc size
 		mov r0, #1

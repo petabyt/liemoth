@@ -126,34 +126,6 @@ ROUTE openDir AMB_OPENDIR
 ROUTE nextFile AMB_NEXTFILE
 //ROUTE remove AMB_REMOVE
 
-
-
-
-// Experiments
-
-//ROUTE raw 0xc024e39e
-//ROUTE raw 0xc024e3a0
-//ROUTE raw 0xc0360648 + 1
-
-ROUTE syslog 0xc026e0d4
-ROUTE syslog2 0xc026cf60
-
-ROUTE sensor 0xc04edd6c + 1
-ROUTE sensortramp 0xc0360648 + 1
-
-ROUTE imgalgo 0xc02073b0
-
-// void FUN_c01b7668(int param_1,undefined4 param_2)
-ROUTE preview 0xc01b7668
-
-ROUTE rawd 0xc024c138
-
-ROUTE set_sharpness 0xc0423c58
-
-ROUTE rawinfo 0xc03d0912
-ROUTE raw 0xc03d09d0
-
-
 // Experimental optional functions
 #ifdef AMB_MKDIR
 	ROUTE mkdir AMB_MKDIR
