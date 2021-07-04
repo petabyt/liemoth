@@ -1,5 +1,4 @@
-// This utility prints an Ambarella A7 screen buffer
-// Requires gfx.h
+// This utility prints an Ambarella A7 raw camera buffer.
 // wget https://raw.githubusercontent.com/petabyt/gfx/master/gfx.h
 // cc screen.c -lX11; ./a.out
 #include <stdio.h>
