@@ -60,7 +60,7 @@ int openDir(char *directory, char attribute, struct DirReader *data);
 int nextFile(struct DirReader *data);
 
 // This can be used to hijack all the "t *"
-// commands, not just set exposure.
+// commands, not just set exposure. (?)
 // TODO: Better name - what does "t" stand for?
 void setExp();
 

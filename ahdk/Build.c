@@ -1,6 +1,7 @@
 // Main AHDK Build system
 // Like a Makefile, but done through
 // sprintf() and system() calls
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -414,6 +415,7 @@ int main(int argc, char *argv[]) {
 		strcat(asmflags, " -D STANDALONE -fpie");
 	#endif
 
+	// Test memory hijacks (Activeon DX)
 	// Hijack syslog() to AMB_PRINTF
 	//hijack("SYSLOG", 0xc026e0d4);
 

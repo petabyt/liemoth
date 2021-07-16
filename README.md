@@ -50,7 +50,7 @@ Personally, I use [gcc-arm-none-eabi-5_4-2016q3](https://developer.arm.com/tools
 
 ## Other
 - My testing cameras are the Activeon DX and GoPro Hero 3+
-- Any help and/or questions are welcome . Just make an issue. 
+- Any help and/or questions are welcome. Just make an issue. 
 - No warranty - If you break it, you keep both pieces.
 
 ![Screen hacks](screen.jpg)

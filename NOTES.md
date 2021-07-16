@@ -46,5 +46,4 @@ done
 # TODO:
 - Understand the screen buffer system and make a new  
 buffer, not writing to some random one
-- Real time code execution (no restart)
 - Power saving options

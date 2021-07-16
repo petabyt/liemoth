@@ -9,7 +9,7 @@
 // Global env
 int *envg;
 
-// For some reason, global ints aren't working.
+// For some reason, global ints with preset values aren't working.
 // I don't care, so these are set to zero in main().
 int line;
 int sel;
@@ -27,7 +27,7 @@ int gpioStat(int id) {
 	b = (c & 0xff);
 
 	// On Activeon DX, Rec btn is opposite?
-	// 1 for up, 0 for down
+	// 1 for up, 0 for down.
 	if (id == P_RECBTN) {
 		return b;
 	}

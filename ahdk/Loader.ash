@@ -42,7 +42,7 @@
 		resume {P_CTRLMAN}
 	[end]
 
-	# Check A drive
+	# Log A drive contents
 	#ls a:/ > log
 
 	# This runs copied reference to script
