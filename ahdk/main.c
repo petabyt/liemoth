@@ -20,6 +20,11 @@ struct Font font[100];
 // General purpose buffer
 char buffer[100];
 
+// Run a command on linux
+void runLinux(char command[]) {
+	char *hijackLu[] = {"lu_util", "exec", command};
+}
+
 // Return GPIO status
 // May be platform specific.
 int gpioStat(int id) {
