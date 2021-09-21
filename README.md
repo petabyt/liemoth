@@ -1,4 +1,7 @@
 # Ambarella Hack Development Kit
+
+![Screen hacks](https://petabyt.dev/filedump/screen.jpg)
+
 Basically a CHDK/Magic Lantern clone for Ambarella based cameras.  
 Has a GUI, hacks, games, unofficial documentation. Don't expect anything  
 too polished at the moment.
@@ -9,6 +12,7 @@ Demonstration: https://www.youtube.com/watch?v=8iN3dRujXYc
 - [x] Magic Lantern/CHDK like GUI program loaded onto camera
 - [x] Ambsh preprocessor + minimizer
 - [x] Extensive Ambsh documentation
+- [ ] Module system
 - [ ] Raw photo taking
 - [ ] Raw video (?)
 
@@ -39,7 +43,6 @@ Personally, I use [gcc-arm-none-eabi-5_4-2016q3](https://developer.arm.com/tools
 
 # Help Needed
 - Porting to other models (A9, A12?)
-- Devising some kind of apps/modules system (?)
 - Reverse engineering sensor functions
 - New features
 
@@ -52,5 +55,9 @@ Personally, I use [gcc-arm-none-eabi-5_4-2016q3](https://developer.arm.com/tools
 - My testing cameras are the Activeon DX and GoPro Hero 3+
 - Any help and/or questions are welcome. Just make an issue. 
 - No warranty - If you break it, you keep both pieces.
+- There is some (possibly leaked) Ambarella source code out there.  
+I have decided to not use it, and contributors must not use it either.  
 
-![Screen hacks](screen.jpg)
+## Donations
+If you so desire, you can send me a donation:  
+https://petabyt.dev/donate.html  
