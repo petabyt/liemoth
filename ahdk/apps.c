@@ -74,7 +74,7 @@ int app_linux() {
 
 	// Start FTP server on 192.168.42.1:21
 	sprintf(buffer, "(tcpsvd -vE 0.0.0.0 21 ftpd -w /tmp/fuse_d/ahdk) &");
-	
+	lu(envg, 3, hijackLu);
 
 	// The camera must be sent into a waiting
 	// loop. This allows other tasks (like WiFi)
