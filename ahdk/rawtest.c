@@ -2,9 +2,7 @@
 // Model: Activeon DX
 // `make minimal file=rawtest.c d=... m=...`
 
-#include "ambarella.h"
-#include "ahdk.h"
-
+#include "stdio.h"
 #include "ambarella.h"
 #include "ahdk.h"
 

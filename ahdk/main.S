@@ -112,16 +112,19 @@ addr:
 	#endif
 #endif
 
+// POSIX
 ROUTE printf AMB_PRINTF
 ROUTE sprintf AMB_SPRINTF
 ROUTE fopen AMB_FOPEN
 ROUTE fread AMB_FREAD
 ROUTE fwrite AMB_FWRITE
 ROUTE fclose AMB_FCLOSE
-ROUTE gpio AMB_GPIO
-ROUTE _malloc AMB_ALLOC
-ROUTE _free AMB_FREE
 ROUTE msleep AMB_MSLEEP
+
+// Etc camera internals
+ROUTE gpio AMB_GPIO
+ROUTE ambaMalloc AMB_ALLOC
+ROUTE ambaFree AMB_FREE
 ROUTE openDir AMB_OPENDIR
 ROUTE nextFile AMB_NEXTFILE
 //ROUTE remove AMB_REMOVE

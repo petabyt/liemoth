@@ -1,3 +1,5 @@
+#include "ambarella.h"
+
 int divmod(int a, int b, int o) {
 	int di = 0;
 	int re = 0;
@@ -82,4 +84,14 @@ void *memset(void *dest, int val, int len) {
 	}
 	
 	return dest;
+}
+
+void *malloc(unsigned int size) {
+	void *addr;
+	ambaMalloc(1, size, &addr);
+	return addr;
+}
+
+void free(void *addr) {
+	ambaFree(1, addr);
 }

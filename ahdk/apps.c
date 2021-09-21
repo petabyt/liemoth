@@ -1,17 +1,63 @@
-// Main menu related functions
-// (don't clog up the main file)
-
+#include "stdlib.h"
 #include "ambarella.h"
 #include "ahdk.h"
 
-// AHDK can be compiled without
-// some apps.
+#include <stdint.h>
 
-//#define APP_LINUX
-//#define APP_TETRIS
-//#define APP_CINS
-//#define APP_BF
-//#define APP_EXPOSURE
+// AHDK can be compiled without
+// some menu options. This is
+// controlled by Build.c
+
+#ifdef APP_MODULES
+#include "modules.h"
+
+struct ModuleInfo funcs = {
+	MODULES_VERSION,
+	{
+		// Std funcs
+		{M_FUNC, "printf", AMB_PRINTF},
+		{M_FUNC, "msleep", AMB_MSLEEP},
+		{M_FUNC, "sprintf", AMB_SPRINTF},
+		{M_FUNC, "fopen", AMB_FOPEN},
+		{M_FUNC, "fclose", AMB_FCLOSE},
+		{M_FUNC, "fread", AMB_FREAD},
+		{M_FUNC, "fwrite", AMB_FWRITE},
+		{M_FUNC, "gpio", AMB_GPIO},
+
+		// AHDK provided functions
+		{M_FUNC, "waitButton", (uintptr_t)&waitButton},
+		{M_FUNC, "getButton", (uintptr_t)&getButton},
+		{M_FUNC, "drawString", (uintptr_t)&drawString},
+		{M_FUNC, "drawPixel", (uintptr_t)&drawPixel},
+		{M_FUNC, "malloc", (uintptr_t)&malloc},
+		{M_FUNC, "free", (uintptr_t)&free},
+
+		// Button defs
+		{M_VAR, "P_RECBTN", P_RECBTN},
+		{M_VAR, "P_MODEBTN", P_RECBTN},
+		{M_VAR, "P_SELBTN", P_SELBTN},
+		{0, 0, 0}
+	}
+};
+
+typedef void _moduleJump(struct ModuleInfo *funcs, uintptr_t address);
+
+int app_modules() {
+	char *codebuf = malloc(10000);
+	
+	FILE *f = fopen("d:/", "r");
+	fread(codebuf, 1, 10000, f);
+	fclose(f);
+
+	_moduleJump *moduleJump = (_moduleJump*)codebuf;
+
+	moduleJump(&funcs, (uintptr_t)codebuf);
+}
+#endif
+
+#ifndef APP_MODULES
+int app_modules() {return 0;}
+#endif
 
 #ifdef APP_LINUX
 void jumptest();
@@ -28,7 +74,7 @@ int app_linux() {
 
 	// Start FTP server on 192.168.42.1:21
 	sprintf(buffer, "(tcpsvd -vE 0.0.0.0 21 ftpd -w /tmp/fuse_d/ahdk) &");
-	lu(envg, 3, hijackLu);
+	
 
 	// The camera must be sent into a waiting
 	// loop. This allows other tasks (like WiFi)
@@ -63,15 +109,14 @@ int app_linux() {
 			fwrite("none", 1, 4, f);
 			fclose(f);
 
-			int *addr = 0;
-			int r = _malloc(1, 10000, &addr);
+			int *addr = malloc(10000);
 
 			FILE *t = fopen("d:/ahdk/test.bin", "r");
 			fread(addr, 1, 10000, t);
 			fclose(t);
 
 			jumptest(envg, addr);
-			_free(1, addr);
+			free(addr);
 		}
 
 		// Print log file

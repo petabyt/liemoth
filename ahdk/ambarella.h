@@ -16,10 +16,6 @@ struct DirReader {
 // Regular "ls" mode (?)
 #define NORMALDIR 0x7f
 
-typedef struct Ambarella_FILE {
-	// Unknown
-}FILE;
-
 // For now just use `int *env`
 // Pointer to where to route standard out, pipes,
 // IDs, etc.
@@ -27,25 +23,11 @@ typedef struct Env {
 	// Unknown
 }env;
 
-// # System
-void msleep(int ms);
-void printf(int *env, char *fmt, ...);
-void sprintf(char *string, char *fmt, ...);
-
 // addr contains the address to allocted memory
-// Not sure what "id" is, just put 1
-// These functions aren't POSIX so an underscore
-// is used.
-int _malloc(int id, int size, void *addr);
-void _free(int id, void *addr);
+// "id" may mean where to allocate. 1 is default value.
+int ambaMalloc(int id, int size, void *addr);
+void ambaFree(int id, void *addr);
 
-// # I/O
-FILE *fopen(char *filename, char *mode);
-
-// Note: fread doesn't add a null terminator.
-int fread(void *buffer, unsigned long size, unsigned long count, FILE *file);
-int fclose(FILE *file);
-int fwrite(void *buffer, int size, int count, FILE *file);
 int gpio(int id, int *b, int *c, int *d);
 
 // mkdir: Not used anywhere in the code yet, but useful when writing asm.

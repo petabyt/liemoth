@@ -1,10 +1,11 @@
+#include "stdlib.h"
 #include "ambarella.h"
 #include "ahdk.h"
 #include "apps.h"
 
 // Copy the screen before writing, and copy
 // it back after. Allocs 80k memory.
-//#define COPYSCREEN
+#define COPYSCREEN
 
 // Global env
 int *envg;
@@ -173,8 +174,8 @@ struct MenuItem mainMenu[] = {
 	{"About AHDK", app_info, ACTION, 0},
 	{"Manual", app_exposure, ACTION, 0},
 	{"Run Script", app_scripts, ACTION, 0},
-	{"BrainF", app_bf, ACTION, 0},
-	{"CrypticOS", app_cins, ACTION, 0},
+	//{"BrainF", app_bf, ACTION, 0},
+	//{"CrypticOS", app_cins, ACTION, 0},
 	{"Tetris", app_tetris, ACTION, 0},
 	{"Linux", app_linux, ACTION, 0},
 	{0}
@@ -188,8 +189,7 @@ void start(int *env, int argc, char *argv[]) {
 	}
 
 	#ifdef COPYSCREEN
-		int *oldScreen;
-		malloc(1, SCREEN_WIDTH * SCREEN_HEIGHT, &oldScreen);
+		int *oldScreen = malloc(SCREEN_WIDTH * SCREEN_HEIGHT);
 		char *screen = (char*)MEM_BUFFER;
 		memcpy(oldScreen, screen, SCREEN_WIDTH * SCREEN_HEIGHT);
 	#endif
@@ -214,6 +214,6 @@ void start(int *env, int argc, char *argv[]) {
 
 	#ifdef COPYSCREEN
 		memcpy(screen, oldScreen, SCREEN_WIDTH * SCREEN_HEIGHT);
-		free(1, oldScreen);
+		free(oldScreen);
 	#endif
 }

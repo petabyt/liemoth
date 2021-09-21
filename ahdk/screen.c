@@ -1,4 +1,5 @@
 // Screen/graphics related functions
+#include "stdlib.h"
 #include "ambarella.h"
 #include "ahdk.h"
 

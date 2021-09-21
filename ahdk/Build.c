@@ -430,8 +430,9 @@ int main(int argc, char *argv[]) {
 		write();
 		clean();
 	} else if (!strcmp(argv[1], "ahdk")) {
-		enableapp("tetris");
-		enableapp("linux");
+		//enableapp("tetris");
+		//enableapp("linux");
+		enableapp("modules");
 
 		loader();
 		ahdk();
