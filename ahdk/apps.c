@@ -11,47 +11,18 @@
 #ifdef APP_MODULES
 #include "modules.h"
 
-struct ModuleInfo funcs = {
-	MODULES_VERSION,
-	{
-		// Std funcs
-		{M_FUNC, "printf", AMB_PRINTF},
-		{M_FUNC, "msleep", AMB_MSLEEP},
-		{M_FUNC, "sprintf", AMB_SPRINTF},
-		{M_FUNC, "fopen", AMB_FOPEN},
-		{M_FUNC, "fclose", AMB_FCLOSE},
-		{M_FUNC, "fread", AMB_FREAD},
-		{M_FUNC, "fwrite", AMB_FWRITE},
-		{M_FUNC, "gpio", AMB_GPIO},
-
-		// AHDK provided functions
-		{M_FUNC, "waitButton", (uintptr_t)&waitButton},
-		{M_FUNC, "getButton", (uintptr_t)&getButton},
-		{M_FUNC, "drawString", (uintptr_t)&drawString},
-		{M_FUNC, "drawPixel", (uintptr_t)&drawPixel},
-		{M_FUNC, "malloc", (uintptr_t)&malloc},
-		{M_FUNC, "free", (uintptr_t)&free},
-
-		// Button defs
-		{M_VAR, "P_RECBTN", P_RECBTN},
-		{M_VAR, "P_MODEBTN", P_RECBTN},
-		{M_VAR, "P_SELBTN", P_SELBTN},
-		{0, 0, 0}
-	}
-};
-
 typedef void _moduleJump(struct ModuleInfo *funcs, uintptr_t address);
 
 int app_modules() {
 	char *codebuf = malloc(10000);
 	
-	FILE *f = fopen("d:/", "r");
+	FILE *f = fopen("d:/testmod", "r");
 	fread(codebuf, 1, 10000, f);
 	fclose(f);
 
 	_moduleJump *moduleJump = (_moduleJump*)codebuf;
 
-	moduleJump(&funcs, (uintptr_t)codebuf);
+	moduleJump(&moduleFuncs, (uintptr_t)codebuf);
 }
 #endif
 
