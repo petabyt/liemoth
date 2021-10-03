@@ -1,6 +1,7 @@
 // Quick custom hello world test.
 // `make minimal file=test.c`
 
+#include "stdlib.h"
 #include "ambarella.h"
 #include "ahdk.h"
 

@@ -23,6 +23,7 @@ char buffer[100];
 // Run a command on linux
 void runLinux(char command[]) {
 	char *hijackLu[] = {"lu_util", "exec", command};
+	lu(envg, 3, hijackLu);
 }
 
 // Return GPIO status

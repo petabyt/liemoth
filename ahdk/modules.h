@@ -34,7 +34,7 @@ struct ModuleInfo {
 };
 
 #ifndef NO_STRUCT
-static static struct ModuleInfo moduleFuncs = {
+static struct ModuleInfo moduleFuncs = {
 	MODULES_VERSION,
 	{
 		// Std funcs

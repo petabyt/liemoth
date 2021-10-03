@@ -320,7 +320,7 @@ int app_cins() {return 0;}
 
 int app_info() {
 	line = 0;
-	sprintf(buffer, "AHDK: Model: %s", P_NAME);
+	sprintf(buffer, "Model: %s", P_NAME);
 	print(buffer);
 	sprintf(buffer, "Built on: %s", __DATE__);
 	print(buffer);

@@ -31,7 +31,6 @@
 	# Default parameter
 	[ifdef "MEM_PARAM"]
 		writel {MEM_PARAM} 0
-		writeb {MEM_PARAM} 0
 	[end]
 
 	[ifndef "NOSTARTUP"]
