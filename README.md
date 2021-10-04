@@ -1,6 +1,6 @@
-# Ambarella Hack Development Kit
+# Liemoth
 
-**AHDK is a free and open source software add-on for Ambarella based devices.**
+**Liemoth (formerly AHDK) is a free and open source software add-on for Ambarella based devices.**
 
 Demonstration: https://www.youtube.com/watch?v=8iN3dRujXYc  
 Support my work: https://petabyt.dev/donate.html  
@@ -11,12 +11,12 @@ Support my work: https://petabyt.dev/donate.html
 - Run [Magic Lantern](https://www.magiclantern.fm/)/[CHDK](https://chdk.fandom.com/wiki/CHDK) like interactive menu loaded onto camera
 - Real time C/C++ code execution over WiFi
 - Run Linux shell commands
-- Grab real time image buffers
 - [Games](https://www.youtube.com/watch?v=w0OYA6yEK8c) :)
-- Also, has an [Ambsh preprocessor + minimizer](https://github.com/petabyt/ahdk/tree/master/ashp) and [Extensive Ambsh documentation](https://github.com/petabyt/ahdk/blob/master/AMBSH.md)
+- Also, has an [Ambsh preprocessor + minimizer](https://github.com/petabyt/liemoth/tree/master/ashp) and [Extensive Ambsh documentation](https://github.com/petabyt/liemoth/blob/master/AMBSH.md)
 
 ## Goals:
 - Module system
+- Motion detection photo (in progress)
 - Raw photos
 - Raw video (?)
 - Porting to other models (A9, A12?)
@@ -24,7 +24,7 @@ Support my work: https://petabyt.dev/donate.html
 - New features
 
 ## Building
-AHDK can be built on Windows and Linux.  
+Liemoth can be built on Windows and Linux.  
 Dependencies:  
 - Host GCC/TCC
 - Arm GCC
@@ -38,12 +38,12 @@ use it to compile apps that run on the camera's Linux system.
 [arm-none-linux-gnueabi](https://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2)  
 It's older (2009), so it will generate assembly around 2x the size of newer GCCs.  
 Personally, I use [gcc-arm-none-eabi-5_4-2016q3](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads/5-2016-q3-update), since it's the same compiler that  
-Magic Lantern uses.  
+[Magic Lantern](https://www.magiclantern.fm/) uses.  
 
 ## Thanks to
 - http://spritesmods.com/?art=zx3hack&page=4 for the work done back in 2010
 - The GoPrawn community https://www.goprawn.com/
-- The entire camera hacking/reverse engineering community
+- The entire hacking/reverse engineering community
 
 ## Other
 - My testing cameras are the Activeon DX and GoPro Hero 3+.
