@@ -42,10 +42,14 @@ CPU INFO:
 #define MEM_PARAM 0xc1745db0
 
 // Main display buffer shown on camera preview
-#define MEM_BUFFER 0xc2413880 + (SCREEN_HEIGHT * SCREEN_WIDTH)
+#define MEM_BUFFER2 0xc2413880 + (SCREEN_HEIGHT * SCREEN_WIDTH)
 
 // Secondary buffer shown in view photo/video menu
-#define MEM_BUFFER2 0xc2413880
+#define MEM_BUFFER 0xc2413880
+
+// low resolution live sensor buffer. Can be used for
+// motion detection, and other experiments
+#define MEM_SENSOR_BUFFER 0xc45a1a00
 
 // Run on command "cardmgr", a bunch of prints
 // including the strings, about 1.3k is free to use.

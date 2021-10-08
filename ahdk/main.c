@@ -178,12 +178,13 @@ int runMenu(struct MenuItem menu[]) {
 struct MenuItem mainMenu[] = {
 	{"Exit", 0, RETURN, 0},
 	{"About AHDK", app_info, ACTION, 0},
-	{"Manual", app_exposure, ACTION, 0},
-	{"Run Script", app_scripts, ACTION, 0},
+	{"Motion Detection", app_motion, ACTION, 0},
+	//{"Manual", app_exposure, ACTION, 0},
+	//{"Run Script", app_scripts, ACTION, 0},
 	//{"BrainF", app_bf, ACTION, 0},
 	//{"CrypticOS", app_cins, ACTION, 0},
-	{"Tetris", app_tetris, ACTION, 0},
-	{"Linux", app_linux, ACTION, 0},
+	//{"Tetris", app_tetris, ACTION, 0},
+	//{"Linux", app_linux, ACTION, 0},
 	{0}
 };
 

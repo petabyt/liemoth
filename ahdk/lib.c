@@ -55,8 +55,6 @@ int strlen(char *buffer) {
 	return a;
 }
 
-
-
 int strcmp(char *s1, char *s2) {
 	while(*s1 && (*s1 == *s2)) {
 		s1++;
@@ -65,7 +63,6 @@ int strcmp(char *s1, char *s2) {
 
 	return *(unsigned char*)s1 - *(unsigned char*)s2;
 }
-
 
 void *memcpy(void* dest, const void* src, int count) {
 	char* dst8 = (char*)dest;
@@ -86,6 +83,12 @@ void *memset(void *dest, int val, int len) {
 	return dest;
 }
 
+int abs(int i) {
+	return i < 0 ? -i : i;
+}
+
+
+#ifndef NOMALLOC
 void *malloc(unsigned int size) {
 	void *addr;
 	ambaMalloc(1, size, &addr);
@@ -95,3 +98,4 @@ void *malloc(unsigned int size) {
 void free(void *addr) {
 	ambaFree(1, addr);
 }
+#endif

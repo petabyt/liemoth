@@ -13,7 +13,8 @@ int main() {
 	// Open a new window for drawing.
 	struct gfx_window window = gfx_open(WIDTH, HEIGHT, "ahdk");
 
-	FILE *f = fopen("/media/daniel/8765-4321/myvideo.raw", "r");
+	FILE *f = fopen("/home/daniel/memdump.bin", "r");
+	fseek(f, 0x045a2a80, SEEK_SET);
 
 	// Ambarella display buffer is bottom left to top right
 	for (int y = 0; y < HEIGHT; y++) {

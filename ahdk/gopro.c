@@ -1,4 +1,5 @@
 // Special GoPro video test
+#include "stdlib.h"
 #include "ambarella.h"
 #include "ahdk.h"
 #include "gopro.h"

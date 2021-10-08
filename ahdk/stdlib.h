@@ -17,7 +17,6 @@ int fwrite(void *buffer, int size, int count, FILE *file);
 
 // Technically not POSIX but close enough
 void printf(int *env, char *fmt, ...);
-
 void sprintf(char *string, char *fmt, ...);
 
 #endif

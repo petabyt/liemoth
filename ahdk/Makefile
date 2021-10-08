@@ -5,7 +5,7 @@
 # These are default if not defined values
 # platform, directory, ashp flag
 p ?= activeondx
-d ?= /home/daniel/temp
+d ?= ~/temp
 f ?= SUSPEND LOG
 
 file := test.c

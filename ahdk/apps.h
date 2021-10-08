@@ -1,6 +1,7 @@
 #ifndef __APPS
 #define __APPS
 
+int app_motion();
 int app_exposure();
 int app_tetris();
 int app_bf();
