@@ -3,16 +3,17 @@
 #define NO_ADDR
 #include "../ahdk/modules.h"
 
-// TODO: Use assembly solution
-// TODO: Add strcmp
-
 int main() {
 	puts("#define NO_STRUCT");
 	puts("#include <stdint.h>");
 	puts("#include \"../ahdk/modules.h\"");
 
+	// TODO: better solution
 	puts("#define NOMALLOC");
 	puts("#include \"../ahdk/lib.c\"");
+
+	puts("#include \"../ahdk/stdlib.h\"");
+	puts("#include \"../ahdk/ambarella.h\"");
 
 	puts("int main();");
 
@@ -22,8 +23,9 @@ int main() {
 			continue;
 		}
 
-		printf("typedef void _%s();\n", moduleFuncs.funcs[i].name);
-		printf("_%s *%s = 0;\n", moduleFuncs.funcs[i].name, moduleFuncs.funcs[i].name);
+		printf("unsigned int _%s;\n", moduleFuncs.funcs[i].name);
+		printf("__asm__(\".global %s\\n%s:\\n\");", moduleFuncs.funcs[i].name, moduleFuncs.funcs[i].name);
+		printf("__asm__(\"ldr r11, =_%s\\nbx lr\\n\");", moduleFuncs.funcs[i].name);
 	}
 
 	// Main func loop
@@ -43,8 +45,7 @@ int main() {
 		}
 
 		printf("if (!strcmp(info->funcs[i].name, \"%s\"))\n", moduleFuncs.funcs[i].name);
-		printf("	%s = (_%s*)info->funcs[i].addr;\n",
-			moduleFuncs.funcs[i].name,
+		printf("	_%s = info->funcs[i].addr;\n",
 			moduleFuncs.funcs[i].name
 		);
 	}
