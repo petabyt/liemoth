@@ -22,25 +22,17 @@ endif
 
 COMP := ${CC} ${CFLAGS} Build.c -o build.o
 
-ahdk:
+ahdk clean font:
 	@${COMP}
-	@./build.o ahdk
+	@./build.o $@
 
 minimal:
 	@${COMP}
-	@./build.o minimal ${file}
+	@./build.o $@ ${file}
 
 minimalonly:
 	@${COMP} -D STANDALONE
-	@./build.o minimalonly ${file}
-
-clean:
-	@${COMP}
-	@./build.o clean
-
-font:
-	@${COMP}
-	@./build.o font
+	@./build.o $@ ${file}
 
 # Spit out log file
 log:
