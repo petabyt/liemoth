@@ -2,8 +2,7 @@
 
 **Liemoth (formerly AHDK) is a free and open source software add-on for Ambarella based devices.**
 
-Demonstration: https://www.youtube.com/watch?v=8iN3dRujXYc  
-Support my work: https://petabyt.dev/donate.html  
+Demonstration: https://www.youtube.com/watch?v=8iN3dRujXYc    
 
 ![Screen hacks](https://petabyt.dev/filedump/screen.jpg)
 
