@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: main test
 
 on:
   push:
@@ -14,6 +14,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: setup
-      run: sudo apt curl wget install gcc-arm-none-eabi gcc make; mkdir ~/temp
+      run: sudo apt install curl wget gcc-arm-none-eabi gcc make; mkdir ~/temp
     - name: compile activeon dx
       run: cd src; make init font ahdk p=activeondx d=~/temp
