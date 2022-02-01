@@ -4,8 +4,6 @@
 
 Demonstration: https://www.youtube.com/watch?v=8iN3dRujXYc    
 
-![Screen hacks](https://petabyt.dev/filedump/screen.jpg)
-
 ## What can it do?
 - Run [Magic Lantern](https://www.magiclantern.fm/)/[CHDK](https://chdk.fandom.com/wiki/CHDK) like interactive menu loaded onto camera
 - Real time C/C++ code execution over WiFi
@@ -50,3 +48,5 @@ Personally, I use [gcc-arm-none-eabi-5_4-2016q3](https://developer.arm.com/tools
 - **No warranty - If you break it, you keep both pieces.**
 - There is some (possibly leaked) Ambarella source code out there.  
 I have decided to not use it, and contributors must not use it either.  
+
+![Screen hacks](https://eggnog.theres.life/f/26-2ze1s4zszs9sev5j3np0sl46slrjfl.jpg)
