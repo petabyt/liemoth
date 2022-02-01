@@ -12,13 +12,14 @@ Demonstration: https://www.youtube.com/watch?v=8iN3dRujXYc
 - Also, has an [Ambsh preprocessor + minimizer](https://github.com/petabyt/liemoth/tree/master/ashp) and [Extensive Ambsh documentation](https://github.com/petabyt/liemoth/blob/master/AMBSH.md)
 
 ## Goals:
+- Long term stable timelapse, powered over USB
 - Module system
 - Motion detection photo (in progress)
 - Raw photos
 - Raw video (?)
 - Porting to other models (A9, A12?)
-- Reverse engineering sensor functions
-- New features
+- Reverse engineering sensor functions ([1](https://github.com/petabyt/liemoth/blob/raw-activeondx/src/rawtest.c))
+- Spiffy New features
 
 ## Building
 Liemoth can be built on Windows and Linux.  
@@ -31,7 +32,7 @@ Head into a directory and type `make help`.
 It should be pretty straightforward.  
 
 This is the compiler used by Ambarella (I think). You can also    
-use it to compile apps that run on the camera's Linux system.  
+use it to compile apps that run on the camera's Linux system:  
 [arm-none-linux-gnueabi](https://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2)  
 It's older (2009), so it will generate assembly around 2x the size of newer GCCs.  
 Personally, I use [gcc-arm-none-eabi-5_4-2016q3](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads/5-2016-q3-update), since it's the same compiler that  
