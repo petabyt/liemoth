@@ -1,3 +1,4 @@
+#ifdef P_GOPRO
 // Special GoPro video test
 #include "stdlib.h"
 #include "ambarella.h"
@@ -36,3 +37,4 @@ void start(int *env) {
 	printf(env, "Playing video on front panel...");
 	playVideo();
 }
+#endif

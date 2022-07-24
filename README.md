@@ -1,6 +1,7 @@
+*NOTE: Liemoth is currently being rewritten. Stable is in branch "old-system"*
 # Liemoth
 
-**Liemoth (formerly AHDK) is a free and open source software add-on for Ambarella based devices.**
+**Liemoth (formerly AHDK) is a free and open source software dev kit for Ambarella based devices.**
 
 Demonstration: https://www.youtube.com/watch?v=8iN3dRujXYc    
 

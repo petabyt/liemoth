@@ -68,27 +68,28 @@ CPU INFO:
 // From UI routine 0xc04199b6
 #define MEM_TRIGGER 0xc0419a40
 
-// Main required stubs
-#define AMB_PRINTF 0xc0272996
-#define AMB_MSLEEP 0xc026cc9c
-#define AMB_ATOI 0xc01a23ac
-#define AMB_SPRINTF 0xc02745c4
-#define AMB_FOPEN 0xc02749a4
-#define AMB_FCLOSE 0xc0274a92
-#define AMB_FREAD 0xc0274c22
-#define AMB_FWRITE 0xc0274bd8
-#define AMB_ALLOC 0xc0181a08
-#define AMB_HEAP 0xc03ac89c
-#define AMB_FREE 0xc026e4b8
-#define AMB_GPIO 0xc0276bea
+#ifdef STUBS
+	NSTUB(amb_printf, 0xc0272996)
+	NSTUB(amb_msleep, 0xc026cc9c)
+	NSTUB(amb_atoi, 0xc01a23ac)
+	NSTUB(amb_sprintf, 0xc02745c4)
+	NSTUB(amb_fopen, 0xc02749a4)
+	NSTUB(amb_fclose, 0xc0274a92)
+	NSTUB(amb_fread, 0xc0274c22)
+	NSTUB(amb_fwrite, 0xc0274bd8)
+	NSTUB(amb_alloc, 0xc0181a08)
+	NSTUB(amb_heap, 0xc03ac89c)
+	NSTUB(amb_free, 0xc026e4b8)
+	NSTUB(amb_gpio, 0xc0276bea)
 
-// Experimental/porting notes
-#define AMB_MKDIR 0xc0275804
-#define AMB_OPENDIR 0xc0274dd8
-#define AMB_NEXTFILE 0xc0274cbe
-#define AMB_EXP 0xc02d0204
-#define AMB_LU 0xc04b852c + 1 // Arm branch (blx)
-#define AMB_REMOVE 0xc0274b0a
+	// Experimental/porting notes
+	NSTUB(amb_mkdir, 0xc0275804)
+	NSTUB(amb_opendir, 0xc0274dd8)
+	NSTUB(amb_nextfile, 0xc0274cbe)
+	NSTUB(amb_exp, 0xc02d0204)
+	NSTUB(amd_lu, 0xc04b852c + 1)
+	NSTUB(amb_remove, 0xc0274b0a)
+#endif
 
 /*
 
